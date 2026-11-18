@@ -1,0 +1,42 @@
+
+name: Build El Clasico APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get project
+        uses: actions/checkout@v4
+
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Create Android platform
+        run: flutter create --platforms=android --org com.elclasico .
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --debug
+
+      - name: Save APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: el-clasico-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
