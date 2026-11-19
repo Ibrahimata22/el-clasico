@@ -16,23 +16,31 @@ nav a{color:white;text-decoration:none;margin:0 10px}
 .tag{color:#e5c46d;margin-bottom:18px}
 h1{font-size:48px;line-height:1.4;margin-bottom:18px}
 .hero p{font-size:18px;line-height:1.9;color:#ddd;margin-bottom:28px}
-.btn{display:inline-block;background:#d6b45b;color:#111;padding:15px 28px;border-radius:7px;text-decoration:none;font-weight:bold}
+.btn{display:inline-block;background:#d6b45b;color:#111;padding:15px 28px;border-radius:7px;text-decoration:none;font-weight:bold;border:0;cursor:pointer}
 section{padding:65px 8%;text-align:center}
 h2{font-size:30px;margin-bottom:15px;color:#e5c46d}
 .subtitle{color:#aaa;margin-bottom:35px}
-.features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.feature{background:#12221b;border:1px solid #294334;border-radius:12px;padding:30px 15px}
+.features,.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feature,.price{background:#12221b;border:1px solid #294334;border-radius:12px;padding:30px 15px}
 .feature span{font-size:35px}
-.feature h3{margin:15px 0;color:#e5c46d}
+.feature h3,.price h3{margin:15px 0;color:#e5c46d}
 .feature p{color:#bbb;line-height:1.7}
+.price strong{font-size:32px;color:white}
+.price p{color:#aaa;margin-top:10px}
 .booking{background:#0d1c15}
+.booking-form{max-width:500px;margin:auto;text-align:right}
+.booking-form label{display:block;margin:15px 0 7px}
+.booking-form input,.booking-form select{width:100%;padding:13px;border-radius:7px;border:1px solid #45614f;background:#102018;color:white;font-size:16px}
+.booking-form button{width:100%;margin-top:22px}
+.note{color:#aaa;font-size:13px;line-height:1.8;margin-top:15px}
+.whatsapp{position:fixed;bottom:20px;left:20px;background:#168b48;color:white;padding:15px 20px;border-radius:35px;text-decoration:none;font-weight:bold;box-shadow:0 4px 15px #0008}
 footer{padding:25px;text-align:center;background:#050b08;color:#aaa}
 @media(max-width:650px){
 header{flex-direction:column;gap:15px}
 nav a{margin:0 6px;font-size:14px}
 .hero{min-height:500px;padding:35px 7%}
 h1{font-size:35px}
-.features{grid-template-columns:1fr}
+.features,.prices{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -42,7 +50,8 @@ h1{font-size:35px}
 <nav>
 <a href="#home">الرئيسية</a>
 <a href="#features">مميزات الملعب</a>
-<a href="#booking">الحجز</a>
+<a href="#prices">الأسعار</a>
+<a href="#booking">احجز الآن</a>
 </nav>
 </header>
 
@@ -50,7 +59,7 @@ h1{font-size:35px}
 <div class="hero-content">
 <div class="tag">★ ملعب الكلاسيكو الرياضي ★</div>
 <h1>عيش أجواء الكورة<br>تحت الأضواء</h1>
-<p>مستني إيه؟ اجمع أصحابك واستمتع بماتش كورة في أجواء رياضية مميزة على ملعب الكلاسيكو.</p>
+<p>اجمع أصحابك واستمتع بماتش كورة في أجواء رياضية مميزة على ملعب الكلاسيكو.</p>
 <a class="btn" href="#booking">احجز ملعبك الآن</a>
 </div>
 </div>
@@ -65,11 +74,44 @@ h1{font-size:35px}
 </div>
 </section>
 
-<section class="booking" id="booking">
-<h2>جاهز للماتش؟</h2>
-<p class="subtitle">احجز موعدك واستعد للمنافسة</p>
-<a class="btn" href="mailto:">ابدأ الحجز</a>
+<section id="prices">
+<h2>أسعار حجز الملعب</h2>
+<p class="subtitle">أسعار الساعة الواحدة</p>
+<div class="prices">
+<div class="price"><h3>☀️ فترة النهار</h3><strong>140 جنيه</strong><p>للساعة الواحدة</p></div>
+<div class="price"><h3>🌙 فترة الليل</h3><strong>180 جنيه</strong><p>للساعة الواحدة</p></div>
+</div>
 </section>
+
+<section class="booking" id="booking">
+<h2>احجز ملعبك الآن</h2>
+<p class="subtitle">املأ بياناتك لبدء طلب الحجز</p>
+<form class="booking-form" onsubmit="event.preventDefault();alert('نموذج تجريبي فقط. سيتم تفعيل إرسال الحجز بعد ربط نظام الحجز وقاعدة البيانات.');">
+<label>الاسم بالكامل</label>
+<input type="text" placeholder="اكتب اسمك" required>
+<label>رقم الهاتف</label>
+<input type="tel" placeholder="01xxxxxxxxx" required>
+<label>تاريخ الحجز</label>
+<input type="date" required>
+<label>وقت اللعب</label>
+<select required>
+<option value="">اختر فترة اللعب</option>
+<option>النهار</option>
+<option>الليل</option>
+</select>
+<label>مدة اللعب</label>
+<select required>
+<option value="">اختر المدة</option>
+<option>ساعة واحدة</option>
+<option>ساعتان</option>
+<option>3 ساعات</option>
+</select>
+<button class="btn" type="submit">إرسال طلب الحجز</button>
+<p class="note">إرسال النموذج حاليًا تجريبي، ولا يُعد حجزًا مؤكدًا. سيتم تفعيل الحجز الفعلي بعد ربط النظام.</p>
+</form>
+</section>
+
+<a class="whatsapp" href="https://wa.me/201098257528?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D9%84%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D9%85%D9%84%D8%B9%D8%A8%20%D8%A7%D9%84%D9%83%D9%84%D8%A7%D8%B3%D9%8A%D9%83%D9%88" target="_blank">واتساب للاستفسار</a>
 
 <footer>© 2026 ملعب الكلاسيكو - El Clasico</footer>
 </body>
