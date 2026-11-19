@@ -1,1 +1,167 @@
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ملعب الكلاسيكو | El Clasico</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Tahoma,Arial,sans-serif;
+ background:#07130e;
+ color:white;
+}
+header{
+ background:#10251a;
+ padding:18px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ border-bottom:2px solid #c8a64b;
+}
+.logo{font-size:21px;font-weight:bold;color:#f4d477}
+nav a{color:white;text-decoration:none;margin:7px}
+.hero{
+ min-height:390px;
+ padding:75px 20px;
+ text-align:center;
+ background:linear-gradient(90deg,#06150bdc,#06150b99),
+ linear-gradient(135deg,#174d2d,#07130e);
+}
+.hero h1{font-size:36px;color:#f4d477}
+.hero p{font-size:18px;line-height:1.9}
+.btn{
+ display:inline-block;
+ background:#d1ad51;
+ color:#102015;
+ border:0;
+ padding:13px 25px;
+ border-radius:9px;
+ font-weight:bold;
+ cursor:pointer;
+ text-decoration:none;
+}
+section{padding:35px 18px;max-width:850px;margin:auto}
+h2{color:#f4d477;text-align:center}
+.card{
+ background:#13271c;
+ border:1px solid #45644c;
+ border-radius:14px;
+ padding:20px;
+ margin-top:18px;
+}
+label{display:block;margin:14px 0 7px}
+input,select{
+ width:100%;
+ padding:13px;
+ border-radius:8px;
+ border:1px solid #78917c;
+ background:#f5f5f5;
+ color:#111;
+ font-size:16px;
+}
+.price{
+ color:#f4d477;
+ font-size:20px;
+ font-weight:bold;
+ margin:18px 0;
+}
+.note{color:#cbd8ce;line-height:1.8}
+footer{
+ text-align:center;
+ padding:25px;
+ background:#10251a;
+ color:#d9c88e;
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">⚽ EL CLASICO</div>
+ <nav><a href="#home">الرئيسية</a><a href="#booking">الحجز</a></nav>
+</header>
+
+<div class="hero" id="home">
+ <h1>ملعب الكلاسيكو</h1>
+ <p>عيش متعة كرة القدم مع أصحابك<br>
+ واحجز موعدك بسهولة في ملعب الكلاسيكو</p>
+ <a class="btn" href="#booking">احجز ملعبك الآن</a>
+</div>
+
+<section>
+ <h2>مرحباً بك في ملعب الكلاسيكو</h2>
+ <div class="card">
+  <p class="note">
+   ملعبك المفضل لممارسة كرة القدم.
+   اختار موعدك وقدم طلب الحجز،
+   وسيتم تأكيده بعد مراجعة العربون.
+  </p>
+ </div>
+</section>
+
+<section id="booking">
+ <h2>احجز موعدك الآن ⚽</h2>
+ <div class="card">
+  <form id="bookingForm">
+   <label>الاسم بالكامل</label>
+   <input id="name" required placeholder="اكتب اسمك">
+
+   <label>رقم الهاتف</label>
+   <input id="phone" type="tel" required placeholder="01xxxxxxxxx">
+
+   <label>تاريخ الحجز</label>
+   <input id="date" type="date" required>
+
+   <label>موعد اللعب</label>
+   <select id="time" required>
+    <option value="">اختر الساعة</option>
+    <option>4:00 مساءً</option>
+    <option>5:00 مساءً</option>
+    <option>6:00 مساءً</option>
+    <option>7:00 مساءً</option>
+    <option>8:00 مساءً</option>
+    <option>9:00 مساءً</option>
+    <option>10:00 مساءً</option>
+   </select>
+
+   <label>مدة اللعب</label>
+   <select id="duration">
+    <option value="1">ساعة واحدة</option>
+    <option value="2">ساعتان</option>
+   </select>
+
+   <div class="price">قيمة العربون: سيتم تحديدها من الإدارة</div>
+
+   <label>رقم عملية تحويل فودافون كاش</label>
+   <input id="transfer" placeholder="اكتب رقم العملية بعد التحويل">
+
+   <p class="note">
+    بعد إرسال طلب الحجز، ستتم مراجعة التحويل
+    من إدارة الملعب، ولن يصبح الحجز مؤكداً إلا بعد الموافقة.
+   </p>
+
+   <button class="btn" type="submit">إرسال طلب الحجز</button>
+  </form>
+  <p id="message" class="note"></p>
+ </div>
+</section>
+
+<footer>
+ <p>ملعب الكلاسيكو – El Clasico</p>
+ <p>جميع الحقوق محفوظة © 2026</p>
+</footer>
+
+<script>
+document.getElementById("bookingForm").addEventListener("submit",function(e){
+ e.preventDefault();
+ document.getElementById("message").textContent =
+ "تم تجهيز طلبك تجريبياً. سيتم تفعيل إرسال الحجوزات للإدارة بعد ربط قاعدة البيانات.";
+});
+</script>
+
+</body>
+</html>
+
