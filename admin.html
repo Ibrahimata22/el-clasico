@@ -128,14 +128,19 @@ async function loadBookings() {
   }
 
   area.innerHTML = data.map(booking => `
-    <div style="background:#293946;padding:14px;margin:12px 0;border-radius:10px;text-align:right">
-      <p>الاسم: ${escapeHTML(booking.customer_name)}</p>
-      <p>الهاتف: ${escapeHTML(booking.phone)}</p>
-      <p>التاريخ: ${escapeHTML(booking.booking_date)}</p>
-      <p>الساعة: ${booking.start_hour}:00</p>
-      <p>السعر: ${booking.price} جنيه</p>
-      <p>الحالة: ${escapeHTML(booking.status)}</p>
-    </div>
+  <div style="background:#293946;padding:14px;margin:12px 0;border-radius:10px;text-align:right">
+    <p>الاسم: ${escapeHTML(booking.customer_name)}</p>
+    <p>الهاتف: ${escapeHTML(booking.phone)}</p>
+    <p>التاريخ: ${escapeHTML(booking.booking_date)}</p>
+    <p>الساعة: ${booking.start_hour}:00</p>
+    <p>السعر: ${booking.price} جنيه</p>
+    <p>الحالة: ${escapeHTML(booking.status)}</p>
+
+    ${booking.status === "pending" ? `
+      <button onclick="updateBooking(${booking.id}, 'confirmed')">تأكيد الحجز</button>
+      <button onclick="updateBooking(${booking.id}, 'rejected')">رفض الحجز</button>
+    ` : ""}
+  </div>
   `).join("");
 }
 
@@ -148,6 +153,24 @@ function escapeHTML(value) {
     "'": "&#39;"
   })[char]);
 }
+    window.updateBooking = async function(id, newStatus) {
+  const message = document.getElementById("bookings");
+  const { error } = await supabase
+    .from("bookings")
+    .update({ status: newStatus })
+    .eq("id", id);
+
+  if (error) {
+    alert("تعذر تحديث حالة الحجز");
+    return;
+  }
+
+  alert(newStatus === "confirmed"
+    ? "تم تأكيد الحجز بنجاح"
+    : "تم رفض الحجز بنجاح");
+
+  await loadBookings();
+};
   </script>
 </body>
 </html>
