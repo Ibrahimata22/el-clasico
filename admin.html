@@ -137,9 +137,11 @@ async function loadBookings() {
     <p>الحالة: ${escapeHTML(booking.status)}</p>
 
     ${booking.status === "pending" ? `
-      <button onclick="updateBooking(${booking.id}, 'confirmed')">تأكيد الحجز</button>
-      <button onclick="updateBooking(${booking.id}, 'rejected')">رفض الحجز</button>
-    ` : ""}
+  <button onclick="updateBooking(${booking.id}, 'confirmed')">تأكيد الحجز</button>
+  <button onclick="updateBooking(${booking.id}, 'rejected')">رفض الحجز</button>
+` : booking.status === "confirmed" ? `
+  <button onclick="updateBooking(${booking.id}, 'rejected')">إلغاء الحجز</button>
+` : ""}
   </div>
   `).join("");
 }
