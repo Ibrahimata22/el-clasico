@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دخول الإدارة - El Clasico</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #101820;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .login {
+      width: 100%;
+      max-width: 380px;
+      background: #1d2a35;
+      padding: 28px;
+      border-radius: 16px;
+      text-align: center;
+    }
+    h2 { color: #d6b35c; }
+    input, button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 14px;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    input { border: 1px solid #52616b; }
+    button {
+      border: 0;
+      background: #d6b35c;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #message { margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <div class="login">
+    <h2>El Clasico</h2>
+    <p>تسجيل دخول صاحب الملعب</p>
+
+    <input id="email" type="email" placeholder="البريد الإلكتروني">
+    <input id="password" type="password" placeholder="كلمة المرور">
+
+    <button id="loginBtn">تسجيل الدخول</button>
+    <p id="message"></p>
+  </div>
+
+  <script type="module">
+    import { createClient } from
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    const SUPABASE_URL = "https://rqcvjbpxntwqhoftupat.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_ynKIqc436PsqVFt620RgMw_b35h5KO0";
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const message = document.getElementById("message");
+
+    document.getElementById("loginBtn").addEventListener("click", async () => {
+      message.textContent = "جاري تسجيل الدخول...";
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) {
+        message.textContent = "بيانات الدخول غير صحيحة أو تعذر تسجيل الدخول.";
+        return;
+      }
+
+      const { data, error: adminError } = await supabase.rpc("is_admin");
+
+      if (adminError || data !== true) {
+        await supabase.auth.signOut();
+        message.textContent = "هذا الحساب ليس لديه صلاحيات الإدارة.";
+        return;
+      }
+
+      message.textContent = "تم تسجيل دخول صاحب الملعب بنجاح.";
+    });
+  </script>
+</body>
+</html>
