@@ -90,8 +90,64 @@
         return;
       }
 
-      message.textContent = "تم تسجيل دخول صاحب الملعب بنجاح.";
+      showDashboard();
     });
+    function showDashboard() {
+  document.querySelector(".login").innerHTML = `
+    <h2>لوحة تحكم ملعب الكلاسيكو</h2>
+    <p>مرحباً بك يا صاحب الملعب</p>
+    <div id="bookings">جاري تحميل الحجوزات...</div>
+    <button id="logoutBtn">تسجيل الخروج</button>
+  `;
+
+  loadBookings();
+
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
+    await supabase.auth.signOut();
+    location.reload();
+  });
+}
+
+async function loadBookings() {
+  const area = document.getElementById("bookings");
+
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*")
+    .order("booking_date", { ascending: true })
+    .order("start_hour", { ascending: true });
+
+  if (error) {
+    area.textContent = "تعذر تحميل الحجوزات.";
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    area.textContent = "لا توجد حجوزات حتى الآن.";
+    return;
+  }
+
+  area.innerHTML = data.map(booking => `
+    <div style="background:#293946;padding:14px;margin:12px 0;border-radius:10px;text-align:right">
+      <p>الاسم: ${escapeHTML(booking.customer_name)}</p>
+      <p>الهاتف: ${escapeHTML(booking.phone)}</p>
+      <p>التاريخ: ${escapeHTML(booking.booking_date)}</p>
+      <p>الساعة: ${booking.start_hour}:00</p>
+      <p>السعر: ${booking.price} جنيه</p>
+      <p>الحالة: ${escapeHTML(booking.status)}</p>
+    </div>
+  `).join("");
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
   </script>
 </body>
 </html>
