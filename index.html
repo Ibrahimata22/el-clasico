@@ -86,28 +86,60 @@ h1{font-size:35px}
 <section class="booking" id="booking">
 <h2>احجز ملعبك الآن</h2>
 <p class="subtitle">املأ بياناتك لبدء طلب الحجز</p>
-<form class="booking-form" onsubmit="event.preventDefault();alert('نموذج تجريبي فقط. سيتم تفعيل إرسال الحجز بعد ربط نظام الحجز وقاعدة البيانات.');">
-<label>الاسم بالكامل</label>
-<input type="text" placeholder="اكتب اسمك" required>
-<label>رقم الهاتف</label>
-<input type="tel" placeholder="01xxxxxxxxx" required>
-<label>تاريخ الحجز</label>
-<input type="date" required>
-<label>وقت اللعب</label>
-<select required>
-<option value="">اختر فترة اللعب</option>
-<option>النهار</option>
-<option>الليل</option>
-</select>
-<label>مدة اللعب</label>
-<select required>
-<option value="">اختر المدة</option>
-<option>ساعة واحدة</option>
-<option>ساعتان</option>
-<option>3 ساعات</option>
-</select>
-<button class="btn" type="submit">إرسال طلب الحجز</button>
-<p class="note">إرسال النموذج حاليًا تجريبي، ولا يُعد حجزًا مؤكدًا. سيتم تفعيل الحجز الفعلي بعد ربط النظام.</p>
+<form class="booking-form" id="bookingForm">
+
+  <label for="customer_name">الاسم بالكامل</label>
+  <input
+    type="text"
+    id="customer_name"
+    name="customer_name"
+    placeholder="اكتب اسمك"
+    required
+  >
+
+  <label for="phone">رقم الهاتف</label>
+  <input
+    type="tel"
+    id="phone"
+    name="phone"
+    placeholder="01xxxxxxxxx"
+    required
+  >
+
+  <label for="booking_date">تاريخ الحجز</label>
+  <input
+    type="date"
+    id="booking_date"
+    name="booking_date"
+    required
+  >
+
+  <label>الساعات المتاحة والمحجوزة</label>
+  <div id="hoursContainer">
+    اختر تاريخ الحجز أولاً لعرض الساعات
+  </div>
+
+  <input
+    type="hidden"
+    id="start_hour"
+    name="start_hour"
+    required
+  >
+
+  <label for="duration">مدة اللعب</label>
+  <select id="duration" name="duration" required>
+    <option value="">اختر المدة</option>
+    <option value="1">ساعة واحدة</option>
+    <option value="2">ساعتان</option>
+    <option value="3">3 ساعات</option>
+  </select>
+
+  <button class="btn" type="submit">إرسال طلب الحجز</button>
+
+  <p class="note">
+    الحجز لا يصبح مؤكدًا إلا بعد مراجعة الإدارة والموافقة عليه.
+  </p>
+
 </form>
 </section>
 
