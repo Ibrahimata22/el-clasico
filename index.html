@@ -31,7 +31,7 @@ h2{font-size:30px;margin-bottom:15px;color:#e5c46d}
 .booking{background:#0d1c15}
 .booking-form{max-width:500px;margin:auto;text-align:right}
 .booking-form label{display:block;margin:15px 0 7px}
-.booking-form input,.booking-form select{width:100%;padding:13px;border-radius:7px;border:1px solid #45614f;background:#102018;color:white;font-size:16px}
+.booking-form input{width:100%;padding:13px;border-radius:7px;border:1px solid #45614f;background:#102018;color:white;font-size:16px}
 .booking-form button[type="submit"]{width:100%;margin-top:22px}
 .note{color:#aaa;font-size:13px;line-height:1.8;margin-top:15px}
 .hours-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
@@ -39,17 +39,22 @@ h2{font-size:30px;margin-bottom:15px;color:#e5c46d}
 .hour-btn.available{border-color:#36b879;color:#70e5a8}
 .hour-btn.booked{background:#492323;color:#ffaaaa;border-color:#8e4444;cursor:not-allowed}
 .hour-btn.selected{background:#d6b45b;color:#111;border-color:#d6b45b;font-weight:bold}
-.hour-btn:disabled{opacity:.8;cursor:not-allowed}
+.hour-btn:disabled{opacity:.85;cursor:not-allowed}
 .hour-btn .check{font-size:19px;font-weight:bold;display:block}
 .legend{display:flex;gap:15px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:#ccc}
 .legend span{display:flex;align-items:center;gap:5px}
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
 .status-message{margin-top:12px;font-size:14px;line-height:1.7;color:#e5c46d}
-.next-day-box{margin-top:18px;padding:14px;border:1px solid #d6b45b;border-radius:9px;background:#17271d}
+.next-day-box,.price-box,.summary-box,.deposit-box{margin-top:18px;padding:16px;border:1px solid #d6b45b;border-radius:10px;background:#17271d}
 .next-day-title{color:#e5c46d;font-weight:bold;margin-bottom:10px}
-.price-box{margin-top:20px;padding:18px;border:1px solid #d6b45b;border-radius:10px;background:#17271d;text-align:center}
+.price-box,.summary-box{text-align:center}
 .price-box strong{display:block;color:#e5c46d;font-size:27px;margin-top:8px}
 .price-box small{display:block;color:#bbb;margin-top:7px;line-height:1.7}
+.summary-box strong{display:block;color:#e5c46d;margin-top:9px;line-height:1.9}
+.deposit-box{text-align:right;line-height:2}
+.deposit-box h3{color:#e5c46d;margin-bottom:8px}
+.wallet-number{font-size:23px;font-weight:bold;color:#70e5a8;direction:ltr;text-align:center;margin:10px 0}
+.deposit-warning{font-size:13px;color:#ddd;margin-top:8px}
 .whatsapp{position:fixed;bottom:20px;left:20px;background:#168b48;color:white;padding:15px 20px;border-radius:35px;text-decoration:none;font-weight:bold;box-shadow:0 4px 15px #0008}
 footer{padding:25px;text-align:center;background:#050b08;color:#aaa}
 @media(max-width:650px){
@@ -104,7 +109,7 @@ h1{font-size:35px}
 
 <section class="booking" id="booking">
 <h2>احجز ملعبك الآن</h2>
-<p class="subtitle">املأ بياناتك لبدء طلب الحجز</p>
+<p class="subtitle">اختار الساعات المتتالية اللي عايز تحجزها</p>
 
 <form class="booking-form" id="bookingForm">
 
@@ -117,7 +122,7 @@ h1{font-size:35px}
 <label for="booking_date">تاريخ الحجز</label>
 <input type="date" id="booking_date" name="booking_date" required>
 
-<label>الساعات المتاحة والمحجوزة</label>
+<label>اختار ساعة البداية ثم الساعات التالية بالترتيب</label>
 <div id="hoursContainer">اختر تاريخ الحجز أولاً لعرض الساعات</div>
 
 <div class="legend">
@@ -127,24 +132,30 @@ h1{font-size:35px}
 </div>
 
 <input type="hidden" id="start_hour" name="start_hour">
+<input type="hidden" id="duration" name="duration" value="0">
 
-<label for="duration">مدة اللعب</label>
-<select id="duration" name="duration" required>
-<option value="">اختر المدة</option>
-<option value="1">ساعة واحدة</option>
-<option value="2">ساعتان</option>
-<option value="3">3 ساعات</option>
-</select>
+<div class="summary-box">
+ملخص اختيارك
+<strong id="bookingSummary">لم يتم اختيار أي ساعة بعد</strong>
+</div>
 
-<div class="price-box" id="priceBox">
+<div class="price-box">
 السعر الإجمالي
 <strong id="totalPrice">-- جنيه</strong>
-<small id="priceDetails">اختر الساعة والمدة لمعرفة السعر</small>
+<small id="priceDetails">اختار الساعات لمعرفة السعر</small>
+</div>
+
+<div class="deposit-box">
+<h3>💳 عربون تأكيد طلب الحجز</h3>
+<p>يُرجى دفع مبلغ <strong>20 جنيهًا</strong> عبر فودافون كاش لتأكيد طلب الحجز.</p>
+<div class="wallet-number">01098257528</div>
+<p>بعد إرسال العربون، أرسل صورة التحويل للإدارة لمراجعة طلبك.</p>
+<p class="deposit-warning">ملحوظة: عند دفع باقي مبلغ الحجز يدويًا، سيتم خصم مبلغ العربون الذي تم إرساله إلى المحفظة من إجمالي الحساب.</p>
 </div>
 
 <button class="btn" id="submitButton" type="submit">إرسال طلب الحجز</button>
 
-<p class="note" id="formMessage">الحجز لا يصبح مؤكدًا إلا بعد مراجعة الإدارة والموافقة عليه.</p>
+<p class="note" id="formMessage">طلب الحجز لا يصبح مؤكدًا إلا بعد مراجعة الإدارة والتحقق من العربون والموافقة عليه.</p>
 
 </form>
 </section>
@@ -167,9 +178,10 @@ const formMessage = document.getElementById("formMessage");
 const submitButton = document.getElementById("submitButton");
 const totalPrice = document.getElementById("totalPrice");
 const priceDetails = document.getElementById("priceDetails");
+const bookingSummary = document.getElementById("bookingSummary");
 
 let bookings = [];
-let selectedHour = null;
+let selectedSlots = [];
 let loadingHours = false;
 
 function cairoToday() {
@@ -194,9 +206,12 @@ function dateHourValue(dateString, hour) {
   return Date.parse(dateString + "T00:00:00Z") + hour * 3600000;
 }
 
-function nextDate(dateString, days) {
-  const time = Date.parse(dateString + "T00:00:00Z") + days * 86400000;
-  return new Date(time).toISOString().slice(0, 10);
+function dateFromTimestamp(timestamp) {
+  return new Date(timestamp).toISOString().slice(0, 10);
+}
+
+function hourFromTimestamp(timestamp) {
+  return new Date(timestamp).getUTCHours();
 }
 
 function formatDate(dateString) {
@@ -223,87 +238,143 @@ function isHourBooked(dateString, hour) {
   });
 }
 
-function isDurationAvailable(dateString, hour, duration) {
-  for (let i = 0; i < duration; i++) {
-    const time = dateHourValue(dateString, hour) + i * 3600000;
-    const date = new Date(time).toISOString().slice(0, 10);
-    const currentHour = new Date(time).getUTCHours();
-
-    if (isHourBooked(date, currentHour)) {
-      return false;
-    }
-  }
-  return true;
+function isSlotBooked(timestamp) {
+  const date = dateFromTimestamp(timestamp);
+  const hour = hourFromTimestamp(timestamp);
+  return isHourBooked(date, hour);
 }
 
-function calculatePrice(dateString, hour, duration) {
+function calculatePrice(slots) {
   let price = 0;
 
-  for (let i = 0; i < duration; i++) {
-    const currentHour = (hour + i) % 24;
-    price += currentHour >= 6 && currentHour < 17 ? 140 : 180;
-  }
+  slots.forEach(timestamp => {
+    const hour = hourFromTimestamp(timestamp);
+    price += hour >= 6 && hour < 17 ? 140 : 180;
+  });
 
   return price;
 }
 
-function updatePrice() {
-  const duration = Number(durationInput.value);
+function getSelectedDuration() {
+  return selectedSlots.length;
+}
 
-  if (selectedHour === null || !duration || !dateInput.value) {
-    totalPrice.textContent = "-- جنيه";
-    priceDetails.textContent = "اختر الساعة والمدة لمعرفة السعر";
-    return;
-  }
+function updateHiddenFields() {
+  durationInput.value = String(getSelectedDuration());
 
-  const price = calculatePrice(dateInput.value, selectedHour, duration);
-  totalPrice.textContent = price + " جنيه";
-
-  const endTime = dateHourValue(dateInput.value, selectedHour) + duration * 3600000;
-  const endDate = new Date(endTime).toISOString().slice(0, 10);
-  const endHour = new Date(endTime).getUTCHours();
-
-  if (endDate !== dateInput.value) {
-    priceDetails.textContent =
-      "مدة الحجز تمتد إلى " + formatDate(endDate) +
-      " وتنتهي الساعة " + hourLabel(endHour);
+  if (selectedSlots.length) {
+    const firstSlot = selectedSlots[0];
+    startHourInput.value = String(hourFromTimestamp(firstSlot));
   } else {
-    priceDetails.textContent = "السعر محسوب حسب مواعيد اللعب المختارة";
+    startHourInput.value = "";
   }
 }
 
-function createHourButton(dateString, hour, isSelected, isBooked, isAvailable) {
+function updateSummaryAndPrice() {
+  updateHiddenFields();
+
+  if (!selectedSlots.length) {
+    bookingSummary.textContent = "لم يتم اختيار أي ساعة بعد";
+    totalPrice.textContent = "-- جنيه";
+    priceDetails.textContent = "اختار الساعات لمعرفة السعر";
+    return;
+  }
+
+  const firstSlot = selectedSlots[0];
+  const lastSlotEnd = selectedSlots[selectedSlots.length - 1] + 3600000;
+
+  const startDate = dateFromTimestamp(firstSlot);
+  const startHour = hourFromTimestamp(firstSlot);
+  const endDate = dateFromTimestamp(lastSlotEnd);
+  const endHour = hourFromTimestamp(lastSlotEnd);
+
+  const selectedLabels = selectedSlots.map(timestamp => {
+    return hourLabel(hourFromTimestamp(timestamp));
+  });
+
+  const periodText =
+    "من " + hourLabel(startHour) +
+    " إلى " + hourLabel(endHour);
+
+  let summary =
+    "تم اختيار " + selectedLabels.join(" و ") +
+    " — المدة " + selectedSlots.length + " ساعة";
+
+  if (startDate !== endDate) {
+    summary += " — ينتهي الحجز يوم " + formatDate(endDate) +
+      " الساعة " + hourLabel(endHour);
+  } else {
+    summary += " — " + periodText;
+  }
+
+  bookingSummary.textContent = summary;
+
+  const price = calculatePrice(selectedSlots);
+  totalPrice.textContent = price + " جنيه";
+
+  priceDetails.textContent =
+    "عدد الساعات: " + selectedSlots.length +
+    " | العربون المطلوب: 20 جنيه" +
+    " | المتبقي بعد خصم العربون: " + (price - 20) + " جنيه";
+}
+
+function createHourButton(timestamp) {
+  const date = dateFromTimestamp(timestamp);
+  const hour = hourFromTimestamp(timestamp);
   const button = document.createElement("button");
   button.type = "button";
   button.className = "hour-btn";
-  button.textContent = hourLabel(hour);
+
+  const isSelected = selectedSlots.includes(timestamp);
+  const isBooked = isSlotBooked(timestamp);
 
   if (isBooked) {
     button.classList.add("booked");
-    button.textContent += " - محجوز";
+    button.textContent = hourLabel(hour) + " - محجوز";
     button.disabled = true;
-  } else if (!isAvailable) {
-    button.classList.add("booked");
-    button.textContent += " - غير متاح للمدة";
-    button.disabled = true;
+    return button;
+  }
+
+  if (isSelected) {
+    button.classList.add("selected");
+    button.innerHTML = "✓ " + hourLabel(hour);
+    button.disabled = false;
   } else {
     button.classList.add("available");
+    button.textContent = hourLabel(hour) + " - متاح";
+  }
 
-    if (isSelected) {
-      button.classList.add("selected");
-      button.innerHTML = "✓ " + hourLabel(hour) + '<span class="check">✓</span>';
-    } else {
-      button.textContent += " - متاح";
+  button.addEventListener("click", () => {
+    if (loadingHours) return;
+
+    if (isSlotBooked(timestamp)) {
+      formMessage.textContent = "هذه الساعة محجوزة بالفعل.";
+      return;
     }
 
-    button.addEventListener("click", () => {
-      selectedHour = hour;
-      startHourInput.value = String(hour);
-      renderHours();
-      updatePrice();
-      formMessage.textContent = "تم اختيار الساعة " + hourLabel(hour);
-    });
-  }
+    if (!selectedSlots.length) {
+      selectedSlots = [timestamp];
+    } else {
+      const lastSlot = selectedSlots[selectedSlots.length - 1];
+      const nextSlot = lastSlot + 3600000;
+
+      if (timestamp === nextSlot && selectedSlots.length < 3) {
+        if (isSlotBooked(timestamp)) {
+          formMessage.textContent = "الساعة التالية محجوزة، لا يمكن إضافتها.";
+          return;
+        }
+        selectedSlots.push(timestamp);
+      } else if (selectedSlots.includes(timestamp)) {
+        selectedSlots = [timestamp];
+      } else {
+        selectedSlots = [timestamp];
+      }
+    }
+
+    formMessage.textContent = "";
+    updateSummaryAndPrice();
+    renderHours();
+  });
 
   return button;
 }
@@ -320,57 +391,31 @@ function renderHours() {
   const grid = document.createElement("div");
   grid.className = "hours-grid";
 
-  const duration = Number(durationInput.value || 1);
-
   for (let hour = 0; hour < 24; hour++) {
-    const booked = isHourBooked(date, hour);
-    const available = isDurationAvailable(date, hour, duration);
-    const isSelected = selectedHour === hour;
-
-    grid.appendChild(
-      createHourButton(date, hour, isSelected, booked, available)
-    );
+    const timestamp = dateHourValue(date, hour);
+    grid.appendChild(createHourButton(timestamp));
   }
 
   hoursContainer.appendChild(grid);
 
-  if (selectedHour !== null && duration > 1) {
-    const selectedEnd = dateHourValue(date, selectedHour) + duration * 3600000;
-    const selectedEndDate = new Date(selectedEnd).toISOString().slice(0, 10);
+  if (selectedSlots.length) {
+    const lastSlot = selectedSlots[selectedSlots.length - 1];
+    const nextSlot = lastSlot + 3600000;
+    const nextDate = dateFromTimestamp(nextSlot);
 
-    if (selectedEndDate !== date) {
+    if (nextDate !== date && selectedSlots.length < 3) {
       const nextDayBox = document.createElement("div");
       nextDayBox.className = "next-day-box";
 
       const title = document.createElement("div");
       title.className = "next-day-title";
-      title.textContent = "الساعات التابعة للحجز في اليوم التالي";
+      title.textContent =
+        "اختار الساعة التالية من اليوم التالي: " + formatDate(nextDate);
 
       nextDayBox.appendChild(title);
-
       const nextGrid = document.createElement("div");
       nextGrid.className = "hours-grid";
-
-      for (let i = 0; i < duration; i++) {
-        const time = dateHourValue(date, selectedHour) + i * 3600000;
-        const currentDate = new Date(time).toISOString().slice(0, 10);
-        const currentHour = new Date(time).getUTCHours();
-
-        if (currentDate !== date) {
-          const button = document.createElement("button");
-          button.type = "button";
-          button.className = "hour-btn selected";
-          button.disabled = true;
-          button.innerHTML =
-            "✓ " + hourLabel(currentHour) +
-            '<span class="check">✓</span>';
-          nextGrid.appendChild(button);
-        }
-      }
-
-      nextDayBox.appendChild(
-        document.createTextNode("التاريخ: " + formatDate(selectedEndDate))
-      );
+      nextGrid.appendChild(createHourButton(nextSlot));
       nextDayBox.appendChild(nextGrid);
       hoursContainer.appendChild(nextDayBox);
     }
@@ -380,10 +425,9 @@ function renderHours() {
 async function loadBookings() {
   const date = dateInput.value;
 
-  selectedHour = null;
-  startHourInput.value = "";
+  selectedSlots = [];
   bookings = [];
-  updatePrice();
+  updateSummaryAndPrice();
 
   if (!date) {
     renderHours();
@@ -424,7 +468,8 @@ async function loadBookings() {
 
   } catch (error) {
     console.error(error);
-    hoursContainer.textContent = "حدث خطأ أثناء تحميل المواعيد. حاول مرة أخرى.";
+    hoursContainer.textContent =
+      "حدث خطأ أثناء تحميل المواعيد. حاول مرة أخرى.";
   } finally {
     loadingHours = false;
   }
@@ -432,39 +477,35 @@ async function loadBookings() {
 
 dateInput.addEventListener("change", loadBookings);
 
-durationInput.addEventListener("change", () => {
-  if (selectedHour !== null) {
-    const duration = Number(durationInput.value || 1);
-
-    if (!isDurationAvailable(dateInput.value, selectedHour, duration)) {
-      selectedHour = null;
-      startHourInput.value = "";
-      formMessage.textContent = "المدة المختارة تتعارض مع حجز آخر. اختر ساعة أخرى.";
-    }
-  }
-
-  renderHours();
-  updatePrice();
-});
-
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  const customer_name = document.getElementById("customer_name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
+  const customer_name =
+    document.getElementById("customer_name").value.trim();
+  const phone =
+    document.getElementById("phone").value.trim();
   const booking_date = dateInput.value;
-  const start_hour = selectedHour;
-  const duration = Number(durationInput.value);
 
-  if (start_hour === null || !duration) {
-    formMessage.textContent = "اختر تاريخًا وساعة ومدة اللعب أولاً.";
+  if (!selectedSlots.length) {
+    formMessage.textContent = "اختار ساعة واحدة على الأقل.";
     return;
   }
 
-  if (!isDurationAvailable(booking_date, start_hour, duration)) {
-    formMessage.textContent = "الموعد غير متاح لهذه المدة. اختر موعدًا آخر.";
-    await loadBookings();
+  if (selectedSlots.length > 3) {
+    formMessage.textContent = "الحد الأقصى للحجز 3 ساعات.";
     return;
+  }
+
+  const start_hour = hourFromTimestamp(selectedSlots[0]);
+  const duration = selectedSlots.length;
+
+  for (const timestamp of selectedSlots) {
+    if (isSlotBooked(timestamp)) {
+      formMessage.textContent =
+        "إحدى الساعات التي اخترتها أصبحت محجوزة. اختار موعدًا آخر.";
+      await loadBookings();
+      return;
+    }
   }
 
   submitButton.disabled = true;
@@ -495,12 +536,11 @@ form.addEventListener("submit", async (event) => {
     }
 
     formMessage.textContent =
-      "تم استلام طلب الحجز بنجاح. الطلب الآن قيد مراجعة الإدارة.";
+      "تم استلام طلب الحجز بنجاح. الطلب قيد مراجعة الإدارة، وسيتم تأكيده بعد التحقق من العربون.";
 
     form.reset();
-    selectedHour = null;
-    startHourInput.value = "";
-    updatePrice();
+    selectedSlots = [];
+    updateSummaryAndPrice();
     await loadBookings();
 
   } catch (error) {
@@ -512,7 +552,8 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
-updatePrice();
+updateSummaryAndPrice();
+renderHours();
 </script>
 
 </body>
