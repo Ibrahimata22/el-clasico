@@ -38,8 +38,9 @@ h2{font-size:30px;margin-bottom:15px;color:#e5c46d}
 .hour-btn{padding:12px 5px;border:1px solid #45614f;border-radius:7px;background:#183326;color:white;cursor:pointer;font-size:14px;line-height:1.7}
 .hour-btn.available{border-color:#36b879;color:#70e5a8}
 .hour-btn.booked{background:#492323;color:#ffaaaa;border-color:#8e4444;cursor:not-allowed}
+.hour-btn.pending{background:#49351b;color:#ffd18a;border-color:#b98436;cursor:not-allowed}
 .hour-btn.selected{background:#d6b45b;color:#111;border-color:#d6b45b;font-weight:bold}
-.hour-btn:disabled{opacity:.85;cursor:not-allowed}
+.hour-btn:disabled{opacity:.9;cursor:not-allowed}
 .hour-btn .check{font-size:19px;font-weight:bold;display:block}
 .legend{display:flex;gap:15px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:#ccc}
 .legend span{display:flex;align-items:center;gap:5px}
@@ -127,6 +128,7 @@ h1{font-size:35px}
 
 <div class="legend">
 <span><i class="dot" style="background:#36b879"></i> متاح</span>
+<span><i class="dot" style="background:#d69a43"></i> تحت المراجعة</span>
 <span><i class="dot" style="background:#b94b4b"></i> محجوز</span>
 <span><i class="dot" style="background:#d6b45b"></i> اختيارك ✓</span>
 </div>
@@ -223,19 +225,33 @@ function formatDate(dateString) {
   }).format(new Date(dateString + "T00:00:00Z"));
 }
 
-function isHourBooked(dateString, hour) {
+/* إرجاع الحجز الفعّال الذي يتداخل مع الساعة المحددة */
+function getBookingForHour(dateString, hour) {
   const slotStart = dateHourValue(dateString, hour);
   const slotEnd = slotStart + 3600000;
 
-  return bookings.some(booking => {
+  return bookings.find(booking => {
+    const status = String(booking.status || "").toLowerCase();
+
+    // الطلبات المرفوضة أو الملغاة لا تمنع الحجز
+    if (status !== "pending" && status !== "confirmed") {
+      return false;
+    }
+
     const bookingStart = dateHourValue(
       booking.booking_date,
       Number(booking.start_hour)
     );
-    const bookingEnd = bookingStart + Number(booking.duration) * 3600000;
+
+    const bookingEnd =
+      bookingStart + Number(booking.duration) * 3600000;
 
     return bookingStart < slotEnd && bookingEnd > slotStart;
-  });
+  }) || null;
+}
+
+function isHourBooked(dateString, hour) {
+  return getBookingForHour(dateString, hour) !== null;
 }
 
 function isSlotBooked(timestamp) {
@@ -326,9 +342,18 @@ function createHourButton(timestamp) {
   button.className = "hour-btn";
 
   const isSelected = selectedSlots.includes(timestamp);
-  const isBooked = isSlotBooked(timestamp);
+  const booking = getBookingForHour(date, hour);
 
-  if (isBooked) {
+  // حالة الطلب المعلّق: تحت المراجعة
+  if (booking && booking.status === "pending") {
+    button.classList.add("pending");
+    button.textContent = hourLabel(hour) + " - تحت المراجعة";
+    button.disabled = true;
+    return button;
+  }
+
+  // حالة الطلب الموافق عليه: محجوز
+  if (booking && booking.status === "confirmed") {
     button.classList.add("booked");
     button.textContent = hourLabel(hour) + " - محجوز";
     button.disabled = true;
@@ -348,7 +373,7 @@ function createHourButton(timestamp) {
     if (loadingHours) return;
 
     if (isSlotBooked(timestamp)) {
-      formMessage.textContent = "هذه الساعة محجوزة بالفعل.";
+      formMessage.textContent = "هذه الساعة غير متاحة حاليًا.";
       return;
     }
 
@@ -360,7 +385,7 @@ function createHourButton(timestamp) {
 
       if (timestamp === nextSlot && selectedSlots.length < 3) {
         if (isSlotBooked(timestamp)) {
-          formMessage.textContent = "الساعة التالية محجوزة، لا يمكن إضافتها.";
+          formMessage.textContent = "الساعة التالية غير متاحة، لا يمكن إضافتها.";
           return;
         }
         selectedSlots.push(timestamp);
@@ -502,7 +527,7 @@ form.addEventListener("submit", async (event) => {
   for (const timestamp of selectedSlots) {
     if (isSlotBooked(timestamp)) {
       formMessage.textContent =
-        "إحدى الساعات التي اخترتها أصبحت محجوزة. اختار موعدًا آخر.";
+        "إحدى الساعات التي اخترتها أصبحت غير متاحة. اختار موعدًا آخر.";
       await loadBookings();
       return;
     }
@@ -536,7 +561,7 @@ form.addEventListener("submit", async (event) => {
     }
 
     formMessage.textContent =
-      "تم استلام طلب الحجز بنجاح. الطلب قيد مراجعة الإدارة، وسيتم تأكيده بعد التحقق من العربون.";
+      "تم استلام طلب الحجز بنجاح. الطلب تحت مراجعة الإدارة، وسيتم تأكيده بعد التحقق من العربون والموافقة عليه.";
 
     form.reset();
     selectedSlots = [];
