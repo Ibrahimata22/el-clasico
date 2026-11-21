@@ -35,15 +35,21 @@ h2{font-size:30px;margin-bottom:15px;color:#e5c46d}
 .booking-form button[type="submit"]{width:100%;margin-top:22px}
 .note{color:#aaa;font-size:13px;line-height:1.8;margin-top:15px}
 .hours-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
-.hour-btn{padding:12px 5px;border:1px solid #45614f;border-radius:7px;background:#183326;color:white;cursor:pointer;font-size:14px}
+.hour-btn{padding:12px 5px;border:1px solid #45614f;border-radius:7px;background:#183326;color:white;cursor:pointer;font-size:14px;line-height:1.7}
 .hour-btn.available{border-color:#36b879;color:#70e5a8}
 .hour-btn.booked{background:#492323;color:#ffaaaa;border-color:#8e4444;cursor:not-allowed}
 .hour-btn.selected{background:#d6b45b;color:#111;border-color:#d6b45b;font-weight:bold}
-.hour-btn:disabled{opacity:.8}
+.hour-btn:disabled{opacity:.8;cursor:not-allowed}
+.hour-btn .check{font-size:19px;font-weight:bold;display:block}
 .legend{display:flex;gap:15px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:#ccc}
 .legend span{display:flex;align-items:center;gap:5px}
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
 .status-message{margin-top:12px;font-size:14px;line-height:1.7;color:#e5c46d}
+.next-day-box{margin-top:18px;padding:14px;border:1px solid #d6b45b;border-radius:9px;background:#17271d}
+.next-day-title{color:#e5c46d;font-weight:bold;margin-bottom:10px}
+.price-box{margin-top:20px;padding:18px;border:1px solid #d6b45b;border-radius:10px;background:#17271d;text-align:center}
+.price-box strong{display:block;color:#e5c46d;font-size:27px;margin-top:8px}
+.price-box small{display:block;color:#bbb;margin-top:7px;line-height:1.7}
 .whatsapp{position:fixed;bottom:20px;left:20px;background:#168b48;color:white;padding:15px 20px;border-radius:35px;text-decoration:none;font-weight:bold;box-shadow:0 4px 15px #0008}
 footer{padding:25px;text-align:center;background:#050b08;color:#aaa}
 @media(max-width:650px){
@@ -117,7 +123,7 @@ h1{font-size:35px}
 <div class="legend">
 <span><i class="dot" style="background:#36b879"></i> متاح</span>
 <span><i class="dot" style="background:#b94b4b"></i> محجوز</span>
-<span><i class="dot" style="background:#d6b45b"></i> اختيارك</span>
+<span><i class="dot" style="background:#d6b45b"></i> اختيارك ✓</span>
 </div>
 
 <input type="hidden" id="start_hour" name="start_hour">
@@ -129,6 +135,12 @@ h1{font-size:35px}
 <option value="2">ساعتان</option>
 <option value="3">3 ساعات</option>
 </select>
+
+<div class="price-box" id="priceBox">
+السعر الإجمالي
+<strong id="totalPrice">-- جنيه</strong>
+<small id="priceDetails">اختر الساعة والمدة لمعرفة السعر</small>
+</div>
 
 <button class="btn" id="submitButton" type="submit">إرسال طلب الحجز</button>
 
@@ -153,6 +165,8 @@ const durationInput = document.getElementById("duration");
 const form = document.getElementById("bookingForm");
 const formMessage = document.getElementById("formMessage");
 const submitButton = document.getElementById("submitButton");
+const totalPrice = document.getElementById("totalPrice");
+const priceDetails = document.getElementById("priceDetails");
 
 let bookings = [];
 let selectedHour = null;
@@ -178,6 +192,20 @@ function hourLabel(hour) {
 
 function dateHourValue(dateString, hour) {
   return Date.parse(dateString + "T00:00:00Z") + hour * 3600000;
+}
+
+function nextDate(dateString, days) {
+  const time = Date.parse(dateString + "T00:00:00Z") + days * 86400000;
+  return new Date(time).toISOString().slice(0, 10);
+}
+
+function formatDate(dateString) {
+  return new Intl.DateTimeFormat("ar-EG", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC"
+  }).format(new Date(dateString + "T00:00:00Z"));
 }
 
 function isHourBooked(dateString, hour) {
@@ -208,6 +236,78 @@ function isDurationAvailable(dateString, hour, duration) {
   return true;
 }
 
+function calculatePrice(dateString, hour, duration) {
+  let price = 0;
+
+  for (let i = 0; i < duration; i++) {
+    const currentHour = (hour + i) % 24;
+    price += currentHour >= 6 && currentHour < 17 ? 140 : 180;
+  }
+
+  return price;
+}
+
+function updatePrice() {
+  const duration = Number(durationInput.value);
+
+  if (selectedHour === null || !duration || !dateInput.value) {
+    totalPrice.textContent = "-- جنيه";
+    priceDetails.textContent = "اختر الساعة والمدة لمعرفة السعر";
+    return;
+  }
+
+  const price = calculatePrice(dateInput.value, selectedHour, duration);
+  totalPrice.textContent = price + " جنيه";
+
+  const endTime = dateHourValue(dateInput.value, selectedHour) + duration * 3600000;
+  const endDate = new Date(endTime).toISOString().slice(0, 10);
+  const endHour = new Date(endTime).getUTCHours();
+
+  if (endDate !== dateInput.value) {
+    priceDetails.textContent =
+      "مدة الحجز تمتد إلى " + formatDate(endDate) +
+      " وتنتهي الساعة " + hourLabel(endHour);
+  } else {
+    priceDetails.textContent = "السعر محسوب حسب مواعيد اللعب المختارة";
+  }
+}
+
+function createHourButton(dateString, hour, isSelected, isBooked, isAvailable) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "hour-btn";
+  button.textContent = hourLabel(hour);
+
+  if (isBooked) {
+    button.classList.add("booked");
+    button.textContent += " - محجوز";
+    button.disabled = true;
+  } else if (!isAvailable) {
+    button.classList.add("booked");
+    button.textContent += " - غير متاح للمدة";
+    button.disabled = true;
+  } else {
+    button.classList.add("available");
+
+    if (isSelected) {
+      button.classList.add("selected");
+      button.innerHTML = "✓ " + hourLabel(hour) + '<span class="check">✓</span>';
+    } else {
+      button.textContent += " - متاح";
+    }
+
+    button.addEventListener("click", () => {
+      selectedHour = hour;
+      startHourInput.value = String(hour);
+      renderHours();
+      updatePrice();
+      formMessage.textContent = "تم اختيار الساعة " + hourLabel(hour);
+    });
+  }
+
+  return button;
+}
+
 function renderHours() {
   const date = dateInput.value;
   hoursContainer.innerHTML = "";
@@ -220,43 +320,61 @@ function renderHours() {
   const grid = document.createElement("div");
   grid.className = "hours-grid";
 
+  const duration = Number(durationInput.value || 1);
+
   for (let hour = 0; hour < 24; hour++) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "hour-btn";
-
     const booked = isHourBooked(date, hour);
-    const duration = Number(durationInput.value || 1);
     const available = isDurationAvailable(date, hour, duration);
+    const isSelected = selectedHour === hour;
 
-    button.textContent = hourLabel(hour);
-
-    if (booked || !available) {
-      button.classList.add("booked");
-      button.textContent += " - محجوز";
-      button.disabled = true;
-    } else {
-      button.classList.add("available");
-
-      if (selectedHour === hour) {
-        button.classList.add("selected");
-        button.textContent += " - اختيارك";
-      } else {
-        button.textContent += " - متاح";
-      }
-
-      button.addEventListener("click", () => {
-        selectedHour = hour;
-        startHourInput.value = String(hour);
-        renderHours();
-        formMessage.textContent = "تم اختيار الساعة " + hourLabel(hour);
-      });
-    }
-
-    grid.appendChild(button);
+    grid.appendChild(
+      createHourButton(date, hour, isSelected, booked, available)
+    );
   }
 
   hoursContainer.appendChild(grid);
+
+  if (selectedHour !== null && duration > 1) {
+    const selectedEnd = dateHourValue(date, selectedHour) + duration * 3600000;
+    const selectedEndDate = new Date(selectedEnd).toISOString().slice(0, 10);
+
+    if (selectedEndDate !== date) {
+      const nextDayBox = document.createElement("div");
+      nextDayBox.className = "next-day-box";
+
+      const title = document.createElement("div");
+      title.className = "next-day-title";
+      title.textContent = "الساعات التابعة للحجز في اليوم التالي";
+
+      nextDayBox.appendChild(title);
+
+      const nextGrid = document.createElement("div");
+      nextGrid.className = "hours-grid";
+
+      for (let i = 0; i < duration; i++) {
+        const time = dateHourValue(date, selectedHour) + i * 3600000;
+        const currentDate = new Date(time).toISOString().slice(0, 10);
+        const currentHour = new Date(time).getUTCHours();
+
+        if (currentDate !== date) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "hour-btn selected";
+          button.disabled = true;
+          button.innerHTML =
+            "✓ " + hourLabel(currentHour) +
+            '<span class="check">✓</span>';
+          nextGrid.appendChild(button);
+        }
+      }
+
+      nextDayBox.appendChild(
+        document.createTextNode("التاريخ: " + formatDate(selectedEndDate))
+      );
+      nextDayBox.appendChild(nextGrid);
+      hoursContainer.appendChild(nextDayBox);
+    }
+  }
 }
 
 async function loadBookings() {
@@ -265,6 +383,7 @@ async function loadBookings() {
   selectedHour = null;
   startHourInput.value = "";
   bookings = [];
+  updatePrice();
 
   if (!date) {
     renderHours();
@@ -325,6 +444,7 @@ durationInput.addEventListener("change", () => {
   }
 
   renderHours();
+  updatePrice();
 });
 
 form.addEventListener("submit", async (event) => {
@@ -380,6 +500,7 @@ form.addEventListener("submit", async (event) => {
     form.reset();
     selectedHour = null;
     startHourInput.value = "";
+    updatePrice();
     await loadBookings();
 
   } catch (error) {
@@ -390,6 +511,8 @@ form.addEventListener("submit", async (event) => {
     submitButton.textContent = "إرسال طلب الحجز";
   }
 });
+
+updatePrice();
 </script>
 
 </body>
