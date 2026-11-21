@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -94,29 +94,19 @@
       font-weight: bold;
     }
 
-    .status {
-      font-weight: bold;
-    }
-
+    .status { font-weight: bold; }
     .status.pending { color: #ffbd59; }
     .status.confirmed { color: #ff7373; }
     .status.rejected { color: #75d69a; }
 
-    .action-btn {
-      margin-top: 10px;
-    }
+    .action-btn { margin-top: 10px; }
 
     .confirm-btn {
       background: #248b55;
       color: white;
     }
 
-    .reject-btn {
-      background: #b83b3b;
-      color: white;
-    }
-
-    .cancel-btn {
+    .reject-btn, .cancel-btn {
       background: #b83b3b;
       color: white;
     }
@@ -147,6 +137,84 @@
     .refresh-btn {
       background: #40596b;
       color: white;
+    }
+
+    /* الإحصائيات */
+    .statistics-section {
+      background: #1d2a35;
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 24px;
+      text-align: right;
+    }
+
+    .statistics-section h3 {
+      color: #d6b35c;
+      text-align: center;
+      margin-top: 5px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .stat-card {
+      background: #293946;
+      border-radius: 10px;
+      padding: 14px 8px;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .stat-card .stat-name {
+      color: #ccc;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .stat-card .stat-value {
+      font-size: 23px;
+      font-weight: bold;
+      overflow-wrap: anywhere;
+    }
+
+    .stat-confirmed .stat-value { color: #75d69a; }
+    .stat-rejected .stat-value { color: #ff7373; }
+    .stat-pending .stat-value { color: #ffbd59; }
+    .stat-cancelled .stat-value { color: #c29cff; }
+    .stat-revenue .stat-value { color: #d6b35c; }
+
+    .stat-revenue {
+      grid-column: 1 / -1;
+    }
+
+    .statistics-info {
+      color: #bbb;
+      font-size: 13px;
+      line-height: 1.7;
+      margin-top: 12px;
+    }
+
+    .stats-loading {
+      text-align: center;
+      color: #ddd;
+      padding: 15px;
+    }
+
+    .stats-error {
+      color: #ff9999;
+      text-align: center;
+      padding: 12px;
+    }
+
+    @media (max-width: 380px) {
+      body { padding: 10px; }
+      .stats-grid { gap: 7px; }
+      .stat-card { padding: 12px 5px; }
+      .stat-card .stat-value { font-size: 19px; }
     }
   </style>
 </head>
@@ -182,6 +250,12 @@
     let selectedDay = "";
     let lastTodayKey = getEgyptDateKey();
 
+    let weeklyHistory = [];
+    let monthlyHistory = [];
+
+    let selectedWeek = "";
+    let selectedMonth = "";
+
     // التاريخ الحالي حسب توقيت مصر
     function getEgyptDateKey(date = new Date()) {
       const parts = new Intl.DateTimeFormat("en-GB", {
@@ -200,11 +274,23 @@
       return `${values.year}-${values.month}-${values.day}`;
     }
 
-    // عرض التاريخ بالعربية حسب توقيت مصر
-    function formatDate(dateKey) {
+    function dateObject(dateKey) {
       const [year, month, day] = dateKey.split("-").map(Number);
+      return new Date(Date.UTC(year, month - 1, day));
+    }
 
-      const date = new Date(Date.UTC(year, month - 1, day));
+    function dateKeyFromObject(date) {
+      return date.toISOString().slice(0, 10);
+    }
+
+    function addDays(dateKey, days) {
+      const date = dateObject(dateKey);
+      date.setUTCDate(date.getUTCDate() + days);
+      return dateKeyFromObject(date);
+    }
+
+    function formatDate(dateKey) {
+      const date = dateObject(dateKey);
 
       return new Intl.DateTimeFormat("ar-EG", {
         weekday: "long",
@@ -215,7 +301,28 @@
       }).format(date);
     }
 
-    // عرض وقت وصول الطلب بتوقيت مصر
+    function getCurrentWeekStart() {
+      const today = getEgyptDateKey();
+      const day = dateObject(today).getUTCDay();
+
+      // السبت = 6
+      const daysSinceSaturday = (day + 1) % 7;
+
+      return addDays(today, -daysSinceSaturday);
+    }
+
+    function getCurrentMonthStart() {
+      const today = getEgyptDateKey();
+      return today.slice(0, 7) + "-01";
+    }
+
+    function getMonthEnd(start) {
+      const date = dateObject(start);
+      date.setUTCMonth(date.getUTCMonth() + 1);
+      date.setUTCDate(0);
+      return dateKeyFromObject(date);
+    }
+
     function formatReceivedTime(timestamp) {
       if (!timestamp) return "غير متوفر";
 
@@ -227,7 +334,6 @@
       }).format(new Date(timestamp));
     }
 
-    // تحويل الساعة إلى نظام 12 ساعة
     function formatHour(hour) {
       const h = Number(hour);
 
@@ -244,14 +350,10 @@
 
     function getStatusText(status) {
       switch (String(status).toLowerCase()) {
-        case "pending":
-          return "تحت المراجعة";
-        case "confirmed":
-          return "مؤكد - محجوز";
-        case "rejected":
-          return "مرفوض";
-        default:
-          return status || "غير معروف";
+        case "pending": return "تحت المراجعة";
+        case "confirmed": return "مؤكد - محجوز";
+        case "rejected": return "مرفوض";
+        default: return status || "غير معروف";
       }
     }
 
@@ -265,46 +367,67 @@
       return "";
     }
 
-    document.getElementById("loginBtn").addEventListener("click", async () => {
-      message.textContent = "جاري تسجيل الدخول...";
+    document.getElementById("loginBtn").addEventListener(
+      "click",
+      async () => {
+        message.textContent = "جاري تسجيل الدخول...";
 
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
 
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
 
-      if (error) {
-        message.textContent =
-          "بيانات الدخول غير صحيحة أو تعذر تسجيل الدخول.";
-        return;
+        if (error) {
+          message.textContent =
+            "بيانات الدخول غير صحيحة أو تعذر تسجيل الدخول.";
+          return;
+        }
+
+        const { data, error: adminError } =
+          await supabase.rpc("is_admin");
+
+        if (adminError || data !== true) {
+          await supabase.auth.signOut();
+          message.textContent =
+            "هذا الحساب ليس لديه صلاحيات الإدارة.";
+          return;
+        }
+
+        showDashboard();
       }
-
-      const { data, error: adminError } =
-        await supabase.rpc("is_admin");
-
-      if (adminError || data !== true) {
-        await supabase.auth.signOut();
-        message.textContent =
-          "هذا الحساب ليس لديه صلاحيات الإدارة.";
-        return;
-      }
-
-      showDashboard();
-    });
+    );
 
     function showDashboard() {
       document.querySelector(".login").innerHTML = `
         <h2>لوحة تحكم ملعب الكلاسيكو</h2>
         <p>مرحباً بك يا صاحب الملعب</p>
 
+        <div class="statistics-section">
+          <h3>الإحصائيات الأسبوعية</h3>
+          <p class="section-label">اختر الأسبوع</p>
+          <select id="weekSelect"></select>
+          <div id="weeklyStats" class="stats-loading">
+            جاري تحميل الإحصائيات...
+          </div>
+        </div>
+
+        <div class="statistics-section">
+          <h3>الإحصائيات الشهرية</h3>
+          <p class="section-label">اختر الشهر</p>
+          <select id="monthSelect"></select>
+          <div id="monthlyStats" class="stats-loading">
+            جاري تحميل الإحصائيات...
+          </div>
+        </div>
+
         <p class="section-label">اختر يوم مراجعة الطلبات</p>
         <select id="daySelect"></select>
 
         <button class="refresh-btn" id="refreshBtn">
-          تحديث الحجوزات
+          تحديث الحجوزات والإحصائيات
         </button>
 
         <div id="bookings">جاري تحميل الحجوزات...</div>
@@ -322,9 +445,28 @@
         }
       );
 
+      document.getElementById("weekSelect").addEventListener(
+        "change",
+        event => {
+          selectedWeek = event.target.value;
+          loadOneStatistics("weekly", selectedWeek, "weeklyStats");
+        }
+      );
+
+      document.getElementById("monthSelect").addEventListener(
+        "change",
+        event => {
+          selectedMonth = event.target.value;
+          loadOneStatistics("monthly", selectedMonth, "monthlyStats");
+        }
+      );
+
       document.getElementById("refreshBtn").addEventListener(
         "click",
-        loadBookings
+        async () => {
+          await loadBookings();
+          await loadStatistics();
+        }
       );
 
       document.getElementById("logoutBtn").addEventListener(
@@ -336,8 +478,9 @@
       );
 
       loadBookings();
+      loadStatistics();
 
-      // الانتقال تلقائيًا لليوم الجديد عند منتصف الليل في مصر
+      // الانتقال تلقائيًا لليوم الجديد بتوقيت مصر
       setInterval(() => {
         const today = getEgyptDateKey();
 
@@ -351,6 +494,7 @@
           }
 
           loadBookings();
+          loadStatistics();
         }
       }, 30000);
     }
@@ -390,7 +534,6 @@
       if (!select) return;
 
       const today = getEgyptDateKey();
-
       const days = new Set([today]);
 
       allBookings.forEach(booking => {
@@ -448,7 +591,6 @@
 
       area.innerHTML = heading + dayBookings.map(booking => {
         const status = String(booking.status || "").toLowerCase();
-
         const receivedTime = formatReceivedTime(booking.created_at);
 
         const appointment = formatAppointmentDate(
@@ -515,6 +657,219 @@
       }).join("");
     }
 
+    // تحميل الفترات المحفوظة
+    async function loadStatistics() {
+      const weeklyArea = document.getElementById("weeklyStats");
+      const monthlyArea = document.getElementById("monthlyStats");
+
+      if (!weeklyArea || !monthlyArea) return;
+
+      weeklyArea.textContent = "جاري تحميل الإحصائيات...";
+      monthlyArea.textContent = "جاري تحميل الإحصائيات...";
+
+      const { data, error } = await supabase
+        .from("booking_statistics")
+        .select("*")
+        .order("period_start", { ascending: false });
+
+      if (error) {
+        weeklyArea.innerHTML =
+          '<div class="stats-error">تعذر تحميل الإحصائيات الأسبوعية.</div>';
+        monthlyArea.innerHTML =
+          '<div class="stats-error">تعذر تحميل الإحصائيات الشهرية.</div>';
+        return;
+      }
+
+      const records = data || [];
+
+      weeklyHistory = records.filter(
+        item => item.period_type === "weekly"
+      );
+
+      monthlyHistory = records.filter(
+        item => item.period_type === "monthly"
+      );
+
+      const currentWeek = getCurrentWeekStart();
+      const currentMonth = getCurrentMonthStart();
+
+      selectedWeek = selectedWeek || currentWeek;
+      selectedMonth = selectedMonth || currentMonth;
+
+      renderStatisticsOptions();
+
+      await Promise.all([
+        loadOneStatistics("weekly", selectedWeek, "weeklyStats"),
+        loadOneStatistics("monthly", selectedMonth, "monthlyStats")
+      ]);
+    }
+
+    function renderStatisticsOptions() {
+      const weekSelect = document.getElementById("weekSelect");
+      const monthSelect = document.getElementById("monthSelect");
+
+      if (!weekSelect || !monthSelect) return;
+
+      const currentWeek = getCurrentWeekStart();
+      const currentMonth = getCurrentMonthStart();
+
+      const weekOptions = new Map();
+      weekOptions.set(currentWeek, "الأسبوع الحالي");
+
+      weeklyHistory.forEach(item => {
+        const label =
+          `${formatDate(item.period_start)} إلى ${formatDate(item.period_end)}`;
+        weekOptions.set(item.period_start, label);
+      });
+
+      const monthOptions = new Map();
+      monthOptions.set(currentMonth, "الشهر الحالي");
+
+      monthlyHistory.forEach(item => {
+        const label = formatDate(item.period_start);
+        monthOptions.set(item.period_start, label);
+      });
+
+      if (!weekOptions.has(selectedWeek)) {
+        selectedWeek = currentWeek;
+      }
+
+      if (!monthOptions.has(selectedMonth)) {
+        selectedMonth = currentMonth;
+      }
+
+      weekSelect.innerHTML = Array.from(weekOptions.entries())
+        .map(([value, label]) => `
+          <option value="${value}" ${value === selectedWeek ? "selected" : ""}>
+            ${escapeHTML(label)}
+          </option>
+        `).join("");
+
+      monthSelect.innerHTML = Array.from(monthOptions.entries())
+        .map(([value, label]) => `
+          <option value="${value}" ${value === selectedMonth ? "selected" : ""}>
+            ${escapeHTML(label)}
+          </option>
+        `).join("");
+    }
+
+    async function loadOneStatistics(type, start, areaId) {
+      const area = document.getElementById(areaId);
+
+      if (!area || !start) return;
+
+      area.textContent = "جاري تحميل الإحصائيات...";
+
+      const isWeekly = type === "weekly";
+
+      const currentStart = isWeekly
+        ? getCurrentWeekStart()
+        : getCurrentMonthStart();
+
+      const isCurrent = start === currentStart;
+
+      let stats = null;
+
+      if (isCurrent) {
+        const end = isWeekly
+          ? addDays(start, 6)
+          : getMonthEnd(start);
+
+        const { data, error } = await supabase.rpc(
+          "calculate_booking_statistics",
+          {
+            p_period_type: type,
+            p_period_start: start,
+            p_period_end: end
+          }
+        );
+
+        if (error) {
+          area.innerHTML =
+            '<div class="stats-error">تعذر حساب الإحصائيات الحالية.</div>';
+          return;
+        }
+
+        stats = Array.isArray(data) ? data[0] : data;
+      } else {
+        const history = isWeekly ? weeklyHistory : monthlyHistory;
+
+        const record = history.find(
+          item => item.period_start === start
+        );
+
+        if (record) {
+          stats = {
+            confirmed_count: record.confirmed_count,
+            rejected_count: record.rejected_count,
+            pending_count: record.pending_count,
+            cancelled_count: record.cancelled_count,
+            confirmed_revenue: record.confirmed_revenue
+          };
+        }
+      }
+
+      if (!stats) {
+        area.innerHTML = `
+          <div class="empty">
+            لا توجد إحصائيات محفوظة لهذه الفترة.
+          </div>
+        `;
+        return;
+      }
+
+      renderStatistics(area, stats, isCurrent);
+    }
+
+    function renderStatistics(area, stats, isCurrent) {
+      const confirmed = Number(stats.confirmed_count || 0);
+      const rejected = Number(stats.rejected_count || 0);
+      const pending = Number(stats.pending_count || 0);
+      const cancelled = Number(stats.cancelled_count || 0);
+      const revenue = Number(stats.confirmed_revenue || 0);
+
+      area.innerHTML = `
+        <div class="stats-grid">
+
+          <div class="stat-card stat-confirmed">
+            <div class="stat-name">الحجوزات المؤكدة</div>
+            <div class="stat-value">${confirmed}</div>
+          </div>
+
+          <div class="stat-card stat-rejected">
+            <div class="stat-name">الطلبات المرفوضة</div>
+            <div class="stat-value">${rejected}</div>
+          </div>
+
+          <div class="stat-card stat-pending">
+            <div class="stat-name">تحت المراجعة</div>
+            <div class="stat-value">${pending}</div>
+          </div>
+
+          <div class="stat-card stat-cancelled">
+            <div class="stat-name">الحجوزات الملغاة</div>
+            <div class="stat-value">${cancelled}</div>
+          </div>
+
+          <div class="stat-card stat-revenue">
+            <div class="stat-name">إجمالي الإيرادات من المؤكد فقط</div>
+            <div class="stat-value">${revenue.toLocaleString("en-US")} جنيه</div>
+          </div>
+
+        </div>
+
+        <div class="statistics-info">
+          ${
+            isCurrent
+              ? "إحصائيات الفترة الحالية، ويتم تحديثها من الحجوزات المسجلة."
+              : "إحصائيات محفوظة للفترة السابقة، ولا تتغير عند تعديل حالات الحجوزات لاحقًا."
+          }
+          <br>
+          الإيرادات محسوبة بالسعر الكامل قبل خصم العربون.
+        </div>
+      `;
+    }
+
     function escapeHTML(value) {
       return String(value ?? "").replace(/[&<>"']/g, char => ({
         "&": "&amp;",
@@ -543,8 +898,10 @@
       );
 
       await loadBookings();
+      await loadStatistics();
     };
   </script>
 
 </body>
 </html>
+```
