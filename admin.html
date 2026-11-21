@@ -4,46 +4,155 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>دخول الإدارة - El Clasico</title>
+  <title>لوحة إدارة ملعب الكلاسيكو</title>
+
   <style>
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       min-height: 100vh;
-      display: grid;
-      place-items: center;
       background: #101820;
       color: white;
       font-family: Arial, sans-serif;
       padding: 20px;
     }
+
     .login {
       width: 100%;
-      max-width: 380px;
+      max-width: 650px;
+      margin: 30px auto;
       background: #1d2a35;
-      padding: 28px;
+      padding: 24px;
       border-radius: 16px;
       text-align: center;
     }
+
     h2 { color: #d6b35c; }
-    input, button {
+
+    input, button, select {
       width: 100%;
       padding: 14px;
       margin-top: 14px;
       border-radius: 8px;
       font-size: 16px;
     }
-    input { border: 1px solid #52616b; }
+
+    input, select {
+      border: 1px solid #52616b;
+      background: #fff;
+      color: #111;
+    }
+
     button {
       border: 0;
       background: #d6b35c;
+      color: #101820;
       font-weight: bold;
       cursor: pointer;
     }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     #message { margin-top: 16px; }
+
+    .day-title {
+      background: #d6b35c;
+      color: #101820;
+      padding: 14px;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .booking {
+      background: #293946;
+      padding: 16px;
+      margin: 12px 0;
+      border-radius: 10px;
+      text-align: right;
+      border-right: 4px solid #d6b35c;
+    }
+
+    .booking p {
+      margin: 9px 0;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .received {
+      color: #d6b35c;
+      font-weight: bold;
+    }
+
+    .appointment {
+      color: #9ed8ff;
+      font-weight: bold;
+    }
+
+    .status {
+      font-weight: bold;
+    }
+
+    .status.pending { color: #ffbd59; }
+    .status.confirmed { color: #ff7373; }
+    .status.rejected { color: #75d69a; }
+
+    .action-btn {
+      margin-top: 10px;
+    }
+
+    .confirm-btn {
+      background: #248b55;
+      color: white;
+    }
+
+    .reject-btn {
+      background: #b83b3b;
+      color: white;
+    }
+
+    .cancel-btn {
+      background: #b83b3b;
+      color: white;
+    }
+
+    .empty {
+      background: #1d2a35;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 15px;
+      color: #ddd;
+    }
+
+    .section-label {
+      text-align: right;
+      color: #d6b35c;
+      margin-top: 22px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .logout-btn {
+      background: #52616b;
+      color: white;
+      margin-top: 25px;
+    }
+
+    .refresh-btn {
+      background: #40596b;
+      color: white;
+    }
   </style>
 </head>
+
 <body>
+
   <div class="login">
     <h2>El Clasico</h2>
     <p>تسجيل دخول صاحب الملعب</p>
@@ -59,12 +168,102 @@
     import { createClient } from
       "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-    const SUPABASE_URL = "https://rqcvjbpxntwqhoftupat.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_ynKIqc436PsqVFt620RgMw_b35h5KO0";
+    const SUPABASE_URL =
+      "https://rqcvjbpxntwqhoftupat.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_ynKIqc436PsqVFt620RgMw_b35h5KO0";
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const message = document.getElementById("message");
+
+    let allBookings = [];
+    let selectedDay = "";
+    let lastTodayKey = getEgyptDateKey();
+
+    // التاريخ الحالي حسب توقيت مصر
+    function getEgyptDateKey(date = new Date()) {
+      const parts = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Africa/Cairo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).formatToParts(date);
+
+      const values = {};
+
+      parts.forEach(part => {
+        values[part.type] = part.value;
+      });
+
+      return `${values.year}-${values.month}-${values.day}`;
+    }
+
+    // عرض التاريخ بالعربية حسب توقيت مصر
+    function formatDate(dateKey) {
+      const [year, month, day] = dateKey.split("-").map(Number);
+
+      const date = new Date(Date.UTC(year, month - 1, day));
+
+      return new Intl.DateTimeFormat("ar-EG", {
+        weekday: "long",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        timeZone: "UTC"
+      }).format(date);
+    }
+
+    // عرض وقت وصول الطلب بتوقيت مصر
+    function formatReceivedTime(timestamp) {
+      if (!timestamp) return "غير متوفر";
+
+      return new Intl.DateTimeFormat("ar-EG", {
+        timeZone: "Africa/Cairo",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true
+      }).format(new Date(timestamp));
+    }
+
+    // تحويل الساعة إلى نظام 12 ساعة
+    function formatHour(hour) {
+      const h = Number(hour);
+
+      if (h === 0) return "12:00 صباحًا";
+      if (h < 12) return `${h}:00 صباحًا`;
+      if (h === 12) return "12:00 ظهرًا";
+
+      return `${h - 12}:00 مساءً`;
+    }
+
+    function formatAppointmentDate(dateKey, hour) {
+      return `${formatDate(dateKey)} - ${formatHour(hour)}`;
+    }
+
+    function getStatusText(status) {
+      switch (String(status).toLowerCase()) {
+        case "pending":
+          return "تحت المراجعة";
+        case "confirmed":
+          return "مؤكد - محجوز";
+        case "rejected":
+          return "مرفوض";
+        default:
+          return status || "غير معروف";
+      }
+    }
+
+    function getStatusClass(status) {
+      const value = String(status).toLowerCase();
+
+      if (value === "pending") return "pending";
+      if (value === "confirmed") return "confirmed";
+      if (value === "rejected") return "rejected";
+
+      return "";
+    }
 
     document.getElementById("loginBtn").addEventListener("click", async () => {
       message.textContent = "جاري تسجيل الدخول...";
@@ -78,101 +277,274 @@
       });
 
       if (error) {
-        message.textContent = "بيانات الدخول غير صحيحة أو تعذر تسجيل الدخول.";
+        message.textContent =
+          "بيانات الدخول غير صحيحة أو تعذر تسجيل الدخول.";
         return;
       }
 
-      const { data, error: adminError } = await supabase.rpc("is_admin");
+      const { data, error: adminError } =
+        await supabase.rpc("is_admin");
 
       if (adminError || data !== true) {
         await supabase.auth.signOut();
-        message.textContent = "هذا الحساب ليس لديه صلاحيات الإدارة.";
+        message.textContent =
+          "هذا الحساب ليس لديه صلاحيات الإدارة.";
         return;
       }
 
       showDashboard();
     });
+
     function showDashboard() {
-  document.querySelector(".login").innerHTML = `
-    <h2>لوحة تحكم ملعب الكلاسيكو</h2>
-    <p>مرحباً بك يا صاحب الملعب</p>
-    <div id="bookings">جاري تحميل الحجوزات...</div>
-    <button id="logoutBtn">تسجيل الخروج</button>
-  `;
+      document.querySelector(".login").innerHTML = `
+        <h2>لوحة تحكم ملعب الكلاسيكو</h2>
+        <p>مرحباً بك يا صاحب الملعب</p>
 
-  loadBookings();
+        <p class="section-label">اختر يوم مراجعة الطلبات</p>
+        <select id="daySelect"></select>
 
-  document.getElementById("logoutBtn").addEventListener("click", async () => {
-    await supabase.auth.signOut();
-    location.reload();
-  });
-}
+        <button class="refresh-btn" id="refreshBtn">
+          تحديث الحجوزات
+        </button>
 
-async function loadBookings() {
-  const area = document.getElementById("bookings");
+        <div id="bookings">جاري تحميل الحجوزات...</div>
 
-  const { data, error } = await supabase
-    .from("bookings")
-    .select("*")
-    .order("booking_date", { ascending: true })
-    .order("start_hour", { ascending: true });
+        <button class="logout-btn" id="logoutBtn">
+          تسجيل الخروج
+        </button>
+      `;
 
-  if (error) {
-    area.textContent = "تعذر تحميل الحجوزات.";
-    return;
-  }
+      document.getElementById("daySelect").addEventListener(
+        "change",
+        event => {
+          selectedDay = event.target.value;
+          renderBookings();
+        }
+      );
 
-  if (!data || data.length === 0) {
-    area.textContent = "لا توجد حجوزات حتى الآن.";
-    return;
-  }
+      document.getElementById("refreshBtn").addEventListener(
+        "click",
+        loadBookings
+      );
 
-  area.innerHTML = data.map(booking => `
-  <div style="background:#293946;padding:14px;margin:12px 0;border-radius:10px;text-align:right">
-    <p>الاسم: ${escapeHTML(booking.customer_name)}</p>
-    <p>الهاتف: ${escapeHTML(booking.phone)}</p>
-    <p>التاريخ: ${escapeHTML(booking.booking_date)}</p>
-    <p>الساعة: ${booking.start_hour}:00</p>
-    <p>السعر: ${booking.price} جنيه</p>
-    <p>الحالة: ${escapeHTML(booking.status)}</p>
+      document.getElementById("logoutBtn").addEventListener(
+        "click",
+        async () => {
+          await supabase.auth.signOut();
+          location.reload();
+        }
+      );
 
-    ${booking.status === "pending" ? `
-  <button onclick="updateBooking(${booking.id}, 'confirmed')">تأكيد الحجز</button>
-  <button onclick="updateBooking(${booking.id}, 'rejected')">رفض الحجز</button>
-` : booking.status === "confirmed" ? `
-  <button onclick="updateBooking(${booking.id}, 'rejected')">إلغاء الحجز</button>
-` : ""}
-  </div>
-  `).join("");
-}
+      loadBookings();
 
-function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[char]);
-}
+      // الانتقال تلقائيًا لليوم الجديد عند منتصف الليل في مصر
+      setInterval(() => {
+        const today = getEgyptDateKey();
+
+        if (today !== lastTodayKey) {
+          const wasShowingToday = selectedDay === lastTodayKey;
+
+          lastTodayKey = today;
+
+          if (wasShowingToday) {
+            selectedDay = today;
+          }
+
+          loadBookings();
+        }
+      }, 30000);
+    }
+
+    async function loadBookings() {
+      const area = document.getElementById("bookings");
+
+      if (!area) return;
+
+      area.textContent = "جاري تحميل الحجوزات...";
+
+      const { data, error } = await supabase
+        .from("bookings")
+        .select("*")
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        area.textContent = "تعذر تحميل الحجوزات.";
+        return;
+      }
+
+      allBookings = data || [];
+
+      const today = getEgyptDateKey();
+
+      if (!selectedDay) {
+        selectedDay = today;
+      }
+
+      renderDayOptions();
+      renderBookings();
+    }
+
+    function renderDayOptions() {
+      const select = document.getElementById("daySelect");
+
+      if (!select) return;
+
+      const today = getEgyptDateKey();
+
+      const days = new Set([today]);
+
+      allBookings.forEach(booking => {
+        if (booking.created_at) {
+          days.add(getEgyptDateKey(new Date(booking.created_at)));
+        }
+      });
+
+      const sortedDays = Array.from(days).sort().reverse();
+
+      if (!days.has(selectedDay)) {
+        selectedDay = today;
+      }
+
+      select.innerHTML = sortedDays.map(day => `
+        <option value="${day}" ${day === selectedDay ? "selected" : ""}>
+          ${escapeHTML(formatDate(day))}
+          ${day === today ? " - اليوم الحالي" : ""}
+        </option>
+      `).join("");
+    }
+
+    function renderBookings() {
+      const area = document.getElementById("bookings");
+
+      if (!area) return;
+
+      const today = getEgyptDateKey();
+
+      const dayBookings = allBookings
+        .filter(booking => {
+          if (!booking.created_at) return false;
+
+          return getEgyptDateKey(new Date(booking.created_at)) === selectedDay;
+        })
+        .sort((a, b) => {
+          return new Date(a.created_at) - new Date(b.created_at);
+        });
+
+      const heading = `
+        <div class="day-title">
+          طلبات يوم ${escapeHTML(formatDate(selectedDay))}
+          ${selectedDay === today ? " - اليوم الحالي" : ""}
+        </div>
+      `;
+
+      if (dayBookings.length === 0) {
+        area.innerHTML = heading + `
+          <div class="empty">
+            لا توجد طلبات حجز وصلت في هذا اليوم.
+          </div>
+        `;
+        return;
+      }
+
+      area.innerHTML = heading + dayBookings.map(booking => {
+        const status = String(booking.status || "").toLowerCase();
+
+        const receivedTime = formatReceivedTime(booking.created_at);
+
+        const appointment = formatAppointmentDate(
+          booking.booking_date,
+          booking.start_hour
+        );
+
+        let buttons = "";
+
+        if (status === "pending") {
+          buttons = `
+            <button class="action-btn confirm-btn"
+              onclick="updateBooking(${Number(booking.id)}, 'confirmed')">
+              تأكيد الحجز
+            </button>
+
+            <button class="action-btn reject-btn"
+              onclick="updateBooking(${Number(booking.id)}, 'rejected')">
+              رفض الحجز
+            </button>
+          `;
+        } else if (status === "confirmed") {
+          buttons = `
+            <button class="action-btn cancel-btn"
+              onclick="updateBooking(${Number(booking.id)}, 'rejected')">
+              إلغاء الحجز
+            </button>
+          `;
+        }
+
+        return `
+          <div class="booking">
+            <p class="received">
+              وقت وصول الطلب: ${escapeHTML(receivedTime)}
+            </p>
+
+            <p>
+              الاسم: ${escapeHTML(booking.customer_name)}
+            </p>
+
+            <p>
+              الهاتف: ${escapeHTML(booking.phone)}
+            </p>
+
+            <p class="appointment">
+              موعد الحجز المطلوب: ${escapeHTML(appointment)}
+            </p>
+
+            <p>
+              المدة: ${Number(booking.duration || 1)} ساعة
+            </p>
+
+            <p>
+              السعر: ${Number(booking.price)} جنيه
+            </p>
+
+            <p class="status ${getStatusClass(status)}">
+              الحالة: ${escapeHTML(getStatusText(status))}
+            </p>
+
+            ${buttons}
+          </div>
+        `;
+      }).join("");
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
     window.updateBooking = async function(id, newStatus) {
-  const message = document.getElementById("bookings");
-  const { error } = await supabase
-    .from("bookings")
-    .update({ status: newStatus })
-    .eq("id", id);
+      const { error } = await supabase
+        .from("bookings")
+        .update({ status: newStatus })
+        .eq("id", id);
 
-  if (error) {
-    alert("تعذر تحديث حالة الحجز");
-    return;
-  }
+      if (error) {
+        alert("تعذر تحديث حالة الحجز");
+        return;
+      }
 
-  alert(newStatus === "confirmed"
-    ? "تم تأكيد الحجز بنجاح"
-    : "تم رفض الحجز بنجاح");
+      alert(
+        newStatus === "confirmed"
+          ? "تم تأكيد الحجز بنجاح"
+          : "تم رفض الحجز أو إلغاء الحجز بنجاح"
+      );
 
-  await loadBookings();
-};
+      await loadBookings();
+    };
   </script>
+
 </body>
 </html>
