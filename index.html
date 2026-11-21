@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ملعب الكلاسيكو | El Clasico</title>
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#07110e;color:white}
@@ -31,8 +32,18 @@ h2{font-size:30px;margin-bottom:15px;color:#e5c46d}
 .booking-form{max-width:500px;margin:auto;text-align:right}
 .booking-form label{display:block;margin:15px 0 7px}
 .booking-form input,.booking-form select{width:100%;padding:13px;border-radius:7px;border:1px solid #45614f;background:#102018;color:white;font-size:16px}
-.booking-form button{width:100%;margin-top:22px}
+.booking-form button[type="submit"]{width:100%;margin-top:22px}
 .note{color:#aaa;font-size:13px;line-height:1.8;margin-top:15px}
+.hours-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
+.hour-btn{padding:12px 5px;border:1px solid #45614f;border-radius:7px;background:#183326;color:white;cursor:pointer;font-size:14px}
+.hour-btn.available{border-color:#36b879;color:#70e5a8}
+.hour-btn.booked{background:#492323;color:#ffaaaa;border-color:#8e4444;cursor:not-allowed}
+.hour-btn.selected{background:#d6b45b;color:#111;border-color:#d6b45b;font-weight:bold}
+.hour-btn:disabled{opacity:.8}
+.legend{display:flex;gap:15px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:#ccc}
+.legend span{display:flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.status-message{margin-top:12px;font-size:14px;line-height:1.7;color:#e5c46d}
 .whatsapp{position:fixed;bottom:20px;left:20px;background:#168b48;color:white;padding:15px 20px;border-radius:35px;text-decoration:none;font-weight:bold;box-shadow:0 4px 15px #0008}
 footer{padding:25px;text-align:center;background:#050b08;color:#aaa}
 @media(max-width:650px){
@@ -41,9 +52,11 @@ nav a{margin:0 6px;font-size:14px}
 .hero{min-height:500px;padding:35px 7%}
 h1{font-size:35px}
 .features,.prices{grid-template-columns:1fr}
+.hours-grid{grid-template-columns:repeat(3,1fr)}
 }
 </style>
 </head>
+
 <body>
 <header>
 <div class="logo">⚽ EL CLASICO</div>
@@ -86,59 +99,40 @@ h1{font-size:35px}
 <section class="booking" id="booking">
 <h2>احجز ملعبك الآن</h2>
 <p class="subtitle">املأ بياناتك لبدء طلب الحجز</p>
+
 <form class="booking-form" id="bookingForm">
 
-  <label for="customer_name">الاسم بالكامل</label>
-  <input
-    type="text"
-    id="customer_name"
-    name="customer_name"
-    placeholder="اكتب اسمك"
-    required
-  >
+<label for="customer_name">الاسم بالكامل</label>
+<input type="text" id="customer_name" name="customer_name" placeholder="اكتب اسمك" required>
 
-  <label for="phone">رقم الهاتف</label>
-  <input
-    type="tel"
-    id="phone"
-    name="phone"
-    placeholder="01xxxxxxxxx"
-    required
-  >
+<label for="phone">رقم الهاتف</label>
+<input type="tel" id="phone" name="phone" placeholder="01xxxxxxxxx" required>
 
-  <label for="booking_date">تاريخ الحجز</label>
-  <input
-    type="date"
-    id="booking_date"
-    name="booking_date"
-    required
-  >
+<label for="booking_date">تاريخ الحجز</label>
+<input type="date" id="booking_date" name="booking_date" required>
 
-  <label>الساعات المتاحة والمحجوزة</label>
-  <div id="hoursContainer">
-    اختر تاريخ الحجز أولاً لعرض الساعات
-  </div>
+<label>الساعات المتاحة والمحجوزة</label>
+<div id="hoursContainer">اختر تاريخ الحجز أولاً لعرض الساعات</div>
 
-  <input
-    type="hidden"
-    id="start_hour"
-    name="start_hour"
-    required
-  >
+<div class="legend">
+<span><i class="dot" style="background:#36b879"></i> متاح</span>
+<span><i class="dot" style="background:#b94b4b"></i> محجوز</span>
+<span><i class="dot" style="background:#d6b45b"></i> اختيارك</span>
+</div>
 
-  <label for="duration">مدة اللعب</label>
-  <select id="duration" name="duration" required>
-    <option value="">اختر المدة</option>
-    <option value="1">ساعة واحدة</option>
-    <option value="2">ساعتان</option>
-    <option value="3">3 ساعات</option>
-  </select>
+<input type="hidden" id="start_hour" name="start_hour">
 
-  <button class="btn" type="submit">إرسال طلب الحجز</button>
+<label for="duration">مدة اللعب</label>
+<select id="duration" name="duration" required>
+<option value="">اختر المدة</option>
+<option value="1">ساعة واحدة</option>
+<option value="2">ساعتان</option>
+<option value="3">3 ساعات</option>
+</select>
 
-  <p class="note">
-    الحجز لا يصبح مؤكدًا إلا بعد مراجعة الإدارة والموافقة عليه.
-  </p>
+<button class="btn" id="submitButton" type="submit">إرسال طلب الحجز</button>
+
+<p class="note" id="formMessage">الحجز لا يصبح مؤكدًا إلا بعد مراجعة الإدارة والموافقة عليه.</p>
 
 </form>
 </section>
@@ -146,5 +140,257 @@ h1{font-size:35px}
 <a class="whatsapp" href="https://wa.me/201098257528?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D9%84%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D9%85%D9%84%D8%B9%D8%A8%20%D8%A7%D9%84%D9%83%D9%84%D8%A7%D8%B3%D9%8A%D9%83%D9%88" target="_blank">واتساب للاستفسار</a>
 
 <footer>© 2026 ملعب الكلاسيكو - El Clasico</footer>
+
+<script>
+const SUPABASE_URL = "https://rqcvjbpxntwqhoftupat.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_ynKIqc436PsqVFt620RgMw_b35h5KO0";
+const FUNCTION_URL = SUPABASE_URL + "/functions/v1/hyper-endpoint";
+
+const dateInput = document.getElementById("booking_date");
+const hoursContainer = document.getElementById("hoursContainer");
+const startHourInput = document.getElementById("start_hour");
+const durationInput = document.getElementById("duration");
+const form = document.getElementById("bookingForm");
+const formMessage = document.getElementById("formMessage");
+const submitButton = document.getElementById("submitButton");
+
+let bookings = [];
+let selectedHour = null;
+let loadingHours = false;
+
+function cairoToday() {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Africa/Cairo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).format(new Date());
+}
+
+dateInput.min = cairoToday();
+
+function hourLabel(hour) {
+  if (hour === 0) return "12:00 صباحًا";
+  if (hour < 12) return hour + ":00 صباحًا";
+  if (hour === 12) return "12:00 ظهرًا";
+  return (hour - 12) + ":00 مساءً";
+}
+
+function dateHourValue(dateString, hour) {
+  return Date.parse(dateString + "T00:00:00Z") + hour * 3600000;
+}
+
+function isHourBooked(dateString, hour) {
+  const slotStart = dateHourValue(dateString, hour);
+  const slotEnd = slotStart + 3600000;
+
+  return bookings.some(booking => {
+    const bookingStart = dateHourValue(
+      booking.booking_date,
+      Number(booking.start_hour)
+    );
+    const bookingEnd = bookingStart + Number(booking.duration) * 3600000;
+
+    return bookingStart < slotEnd && bookingEnd > slotStart;
+  });
+}
+
+function isDurationAvailable(dateString, hour, duration) {
+  for (let i = 0; i < duration; i++) {
+    const time = dateHourValue(dateString, hour) + i * 3600000;
+    const date = new Date(time).toISOString().slice(0, 10);
+    const currentHour = new Date(time).getUTCHours();
+
+    if (isHourBooked(date, currentHour)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function renderHours() {
+  const date = dateInput.value;
+  hoursContainer.innerHTML = "";
+
+  if (!date) {
+    hoursContainer.textContent = "اختر تاريخ الحجز أولاً لعرض الساعات";
+    return;
+  }
+
+  const grid = document.createElement("div");
+  grid.className = "hours-grid";
+
+  for (let hour = 0; hour < 24; hour++) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "hour-btn";
+
+    const booked = isHourBooked(date, hour);
+    const duration = Number(durationInput.value || 1);
+    const available = isDurationAvailable(date, hour, duration);
+
+    button.textContent = hourLabel(hour);
+
+    if (booked || !available) {
+      button.classList.add("booked");
+      button.textContent += " - محجوز";
+      button.disabled = true;
+    } else {
+      button.classList.add("available");
+
+      if (selectedHour === hour) {
+        button.classList.add("selected");
+        button.textContent += " - اختيارك";
+      } else {
+        button.textContent += " - متاح";
+      }
+
+      button.addEventListener("click", () => {
+        selectedHour = hour;
+        startHourInput.value = String(hour);
+        renderHours();
+        formMessage.textContent = "تم اختيار الساعة " + hourLabel(hour);
+      });
+    }
+
+    grid.appendChild(button);
+  }
+
+  hoursContainer.appendChild(grid);
+}
+
+async function loadBookings() {
+  const date = dateInput.value;
+
+  selectedHour = null;
+  startHourInput.value = "";
+  bookings = [];
+
+  if (!date) {
+    renderHours();
+    return;
+  }
+
+  if (date < cairoToday()) {
+    hoursContainer.textContent = "لا يمكن اختيار تاريخ سابق";
+    return;
+  }
+
+  loadingHours = true;
+  hoursContainer.textContent = "جاري تحميل المواعيد...";
+  formMessage.textContent = "";
+
+  try {
+    const response = await fetch(FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": "Bearer " + SUPABASE_ANON_KEY
+      },
+      body: JSON.stringify({
+        action: "availability",
+        booking_date: date
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "تعذر تحميل المواعيد");
+    }
+
+    bookings = result.bookings || [];
+    renderHours();
+
+  } catch (error) {
+    console.error(error);
+    hoursContainer.textContent = "حدث خطأ أثناء تحميل المواعيد. حاول مرة أخرى.";
+  } finally {
+    loadingHours = false;
+  }
+}
+
+dateInput.addEventListener("change", loadBookings);
+
+durationInput.addEventListener("change", () => {
+  if (selectedHour !== null) {
+    const duration = Number(durationInput.value || 1);
+
+    if (!isDurationAvailable(dateInput.value, selectedHour, duration)) {
+      selectedHour = null;
+      startHourInput.value = "";
+      formMessage.textContent = "المدة المختارة تتعارض مع حجز آخر. اختر ساعة أخرى.";
+    }
+  }
+
+  renderHours();
+});
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const customer_name = document.getElementById("customer_name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const booking_date = dateInput.value;
+  const start_hour = selectedHour;
+  const duration = Number(durationInput.value);
+
+  if (start_hour === null || !duration) {
+    formMessage.textContent = "اختر تاريخًا وساعة ومدة اللعب أولاً.";
+    return;
+  }
+
+  if (!isDurationAvailable(booking_date, start_hour, duration)) {
+    formMessage.textContent = "الموعد غير متاح لهذه المدة. اختر موعدًا آخر.";
+    await loadBookings();
+    return;
+  }
+
+  submitButton.disabled = true;
+  submitButton.textContent = "جاري إرسال طلب الحجز...";
+  formMessage.textContent = "";
+
+  try {
+    const response = await fetch(FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": "Bearer " + SUPABASE_ANON_KEY
+      },
+      body: JSON.stringify({
+        customer_name,
+        phone,
+        booking_date,
+        start_hour,
+        duration
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "تعذر تسجيل الحجز");
+    }
+
+    formMessage.textContent =
+      "تم استلام طلب الحجز بنجاح. الطلب الآن قيد مراجعة الإدارة.";
+
+    form.reset();
+    selectedHour = null;
+    startHourInput.value = "";
+    await loadBookings();
+
+  } catch (error) {
+    formMessage.textContent = error.message;
+    await loadBookings();
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = "إرسال طلب الحجز";
+  }
+});
+</script>
+
 </body>
 </html>
