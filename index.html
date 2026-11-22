@@ -1,585 +1,193 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07110e">
+<meta name="description" content="احجز ملعب الكلاسيكو بسهولة، واختر موعدك وتابع الأسعار والمواعيد المتاحة.">
 <title>ملعب الكلاسيكو | El Clasico</title>
-
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#07110e;color:white}
-header{padding:20px 7%;display:flex;justify-content:space-between;align-items:center;background:#08130f}
-.logo{font-size:24px;font-weight:bold;color:#d6b45b}
-nav a{color:white;text-decoration:none;margin:0 10px}
-.hero{min-height:570px;display:flex;align-items:center;padding:55px 8%;background:linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.3)),url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1600') center/cover}
-.hero-content{max-width:600px}
-.tag{color:#e5c46d;margin-bottom:18px}
-h1{font-size:48px;line-height:1.4;margin-bottom:18px}
-.hero p{font-size:18px;line-height:1.9;color:#ddd;margin-bottom:28px}
-.btn{display:inline-block;background:#d6b45b;color:#111;padding:15px 28px;border-radius:7px;text-decoration:none;font-weight:bold;border:0;cursor:pointer}
-section{padding:65px 8%;text-align:center}
-h2{font-size:30px;margin-bottom:15px;color:#e5c46d}
-.subtitle{color:#aaa;margin-bottom:35px}
-.features,.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.feature,.price{background:#12221b;border:1px solid #294334;border-radius:12px;padding:30px 15px}
-.feature span{font-size:35px}
-.feature h3,.price h3{margin:15px 0;color:#e5c46d}
-.feature p{color:#bbb;line-height:1.7}
-.price strong{font-size:32px;color:white}
-.price p{color:#aaa;margin-top:10px}
-.booking{background:#0d1c15}
-.booking-form{max-width:500px;margin:auto;text-align:right}
-.booking-form label{display:block;margin:15px 0 7px}
-.booking-form input{width:100%;padding:13px;border-radius:7px;border:1px solid #45614f;background:#102018;color:white;font-size:16px}
-.booking-form button[type="submit"]{width:100%;margin-top:22px}
-.note{color:#aaa;font-size:13px;line-height:1.8;margin-top:15px}
-.hours-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
-.hour-btn{padding:12px 5px;border:1px solid #45614f;border-radius:7px;background:#183326;color:white;cursor:pointer;font-size:14px;line-height:1.7}
-.hour-btn.available{border-color:#36b879;color:#70e5a8}
-.hour-btn.booked{background:#492323;color:#ffaaaa;border-color:#8e4444;cursor:not-allowed}
-.hour-btn.pending{background:#49351b;color:#ffd18a;border-color:#b98436;cursor:not-allowed}
-.hour-btn.selected{background:#d6b45b;color:#111;border-color:#d6b45b;font-weight:bold}
+:root{--bg:#07110e;--panel:#102219;--gold:#e5c46d;--green:#35c27c;--muted:#aebbb2;--line:#294b38}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:Tahoma,Arial,sans-serif;background:var(--bg);color:#fff;line-height:1.7}
+header{position:sticky;top:0;z-index:20;padding:13px 6%;display:flex;justify-content:space-between;align-items:center;gap:15px;background:#08130ff2;border-bottom:1px solid #20392b;backdrop-filter:blur(12px)}
+.logo{font-size:22px;font-weight:900;color:var(--gold);white-space:nowrap}nav{display:flex;gap:17px;flex-wrap:wrap}nav a{text-decoration:none;color:#e8eee9;font-size:14px}nav a:hover{color:var(--gold)}
+.hero{min-height:510px;display:flex;align-items:center;padding:55px 8%;background:linear-gradient(90deg,rgba(0,0,0,.9),rgba(0,0,0,.35)),url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1600') center/cover}
+.hero-content{max-width:650px}.tag{color:var(--gold);font-weight:bold;margin-bottom:12px}h1{font-size:clamp(34px,5vw,54px);line-height:1.35;margin-bottom:15px}.hero p{font-size:18px;color:#e0e6e1;margin-bottom:25px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--gold);color:#111;padding:13px 23px;border-radius:9px;text-decoration:none;font-weight:bold;border:0;cursor:pointer;transition:.2s}.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.btn-outline{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+section{padding:62px 7%;text-align:center}h2{font-size:clamp(25px,3vw,34px);margin-bottom:9px;color:var(--gold)}.subtitle{color:var(--muted);margin-bottom:30px}
+.features,.prices,.cards-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.feature,.price,.content-card,.tournament-card,.match-card{background:linear-gradient(145deg,#14291f,#0e1c15);border:1px solid var(--line);border-radius:15px;padding:24px 18px}
+.feature span{font-size:34px}.feature h3,.price h3,.content-card h3,.tournament-card h3{margin:10px 0;color:var(--gold)}.feature p,.content-card p,.tournament-card p{color:#c1ccc4}
+.price strong{font-size:30px;color:#fff}.price p{color:var(--muted);margin-top:5px}
+.dynamic-section{background:#0a1711}.dynamic-section:nth-child(even){background:#0d1c15}
+.booking{background:radial-gradient(ellipse at top,#153324 0,#0b1912 55%,#07110e 100%)}
+.booking-wrap{max-width:950px;margin:auto;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(240px,.8fr);gap:20px;text-align:right}
+.booking-form,.booking-side{background:#102219;border:1px solid var(--line);border-radius:16px;padding:22px}
+.booking-form label{display:block;margin:13px 0 6px;font-weight:bold;color:#e7eee9}
+.booking-form input{width:100%;padding:13px;border-radius:8px;border:1px solid #45614f;background:#09170f;color:white;font-size:16px;outline:none}
+.booking-form input:focus{border-color:var(--gold);box-shadow:0 0 0 3px #d6b45b22}
+.hours-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.hour-btn{padding:10px 4px;border:1px solid #45614f;border-radius:8px;background:#183326;color:white;cursor:pointer;font-size:13px;line-height:1.6;min-height:58px}
+.hour-btn.available{border-color:#36b879;color:#8aefb7}.hour-btn.booked{background:#492323;color:#ffb0b0;border-color:#8e4444;cursor:not-allowed}.hour-btn.pending{background:#49351b;color:#ffd18a;border-color:#b98436;cursor:not-allowed}.hour-btn.selected{background:var(--gold);color:#111;border-color:var(--gold);font-weight:bold}
 .hour-btn:disabled{opacity:.9;cursor:not-allowed}
-.hour-btn .check{font-size:19px;font-weight:bold;display:block}
-.legend{display:flex;gap:15px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:#ccc}
-.legend span{display:flex;align-items:center;gap:5px}
-.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
-.status-message{margin-top:12px;font-size:14px;line-height:1.7;color:#e5c46d}
-.next-day-box,.price-box,.summary-box,.deposit-box{margin-top:18px;padding:16px;border:1px solid #d6b45b;border-radius:10px;background:#17271d}
-.next-day-title{color:#e5c46d;font-weight:bold;margin-bottom:10px}
-.price-box,.summary-box{text-align:center}
-.price-box strong{display:block;color:#e5c46d;font-size:27px;margin-top:8px}
-.price-box small{display:block;color:#bbb;margin-top:7px;line-height:1.7}
-.summary-box strong{display:block;color:#e5c46d;margin-top:9px;line-height:1.9}
-.deposit-box{text-align:right;line-height:2}
-.deposit-box h3{color:#e5c46d;margin-bottom:8px}
-.wallet-number{font-size:23px;font-weight:bold;color:#70e5a8;direction:ltr;text-align:center;margin:10px 0}
-.deposit-warning{font-size:13px;color:#ddd;margin-top:8px}
-.whatsapp{position:fixed;bottom:20px;left:20px;background:#168b48;color:white;padding:15px 20px;border-radius:35px;text-decoration:none;font-weight:bold;box-shadow:0 4px 15px #0008}
-footer{padding:25px;text-align:center;background:#050b08;color:#aaa}
-@media(max-width:650px){
-header{flex-direction:column;gap:15px}
-nav a{margin:0 6px;font-size:14px}
-.hero{min-height:500px;padding:35px 7%}
-h1{font-size:35px}
-.features,.prices{grid-template-columns:1fr}
-.hours-grid{grid-template-columns:repeat(3,1fr)}
-}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:#cbd5ce}.legend span{display:flex;align-items:center;gap:5px}.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.status-message{margin-top:12px;font-size:14px;line-height:1.7;color:var(--gold);min-height:24px}
+.next-day-box,.price-box,.summary-box,.deposit-box{margin-top:15px;padding:15px;border:1px solid #9b8144;border-radius:11px;background:#17271d}
+.next-day-title{color:var(--gold);font-weight:bold;margin-bottom:9px}.price-box,.summary-box{text-align:center}.price-box strong{display:block;color:var(--gold);font-size:27px;margin-top:5px}.price-box small{display:block;color:#c0c9c2;margin-top:6px}.summary-box strong{display:block;color:var(--gold);margin-top:7px;line-height:1.9}
+.deposit-box{text-align:center;line-height:2}.deposit-box h3{color:var(--gold);margin-bottom:7px}.wallet-number{font-size:23px;font-weight:bold;color:#70e5a8;direction:ltr;text-align:center;margin:7px 0}.deposit-warning{font-size:12px;color:#c8d0ca;margin-top:7px}
+.booking-side{align-self:start;position:sticky;top:90px}.side-title{color:var(--gold);font-size:19px;margin-bottom:10px}.steps{padding-right:20px;color:#d2dbd4;font-size:14px}.steps li{margin:9px 0}
+.info-pill{display:inline-block;padding:5px 10px;border:1px solid #42634e;border-radius:30px;color:#9fe2b8;font-size:12px;margin:3px}.closed-banner{padding:14px;border:1px solid #a34d4d;background:#3a1d1d;color:#ffbaba;border-radius:10px;margin:12px 0;text-align:center}
+.matches-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.match-card{text-align:center}.match-teams{display:flex;justify-content:space-around;align-items:center;gap:10px;font-weight:bold}.match-score{font-size:22px;color:var(--gold);white-space:nowrap}.match-meta{font-size:13px;color:var(--muted);margin-top:9px}
+.whatsapp{position:fixed;bottom:18px;left:18px;z-index:30;background:#168b48;color:white;padding:13px 18px;border-radius:35px;text-decoration:none;font-weight:bold;box-shadow:0 4px 15px #0008}
+footer{padding:26px 15px;text-align:center;background:#050b08;color:#aeb8b0;border-top:1px solid #1d3025}footer strong{display:block;color:var(--gold);font-size:16px;margin-top:5px}
+.toast{position:fixed;top:85px;left:15px;right:15px;max-width:480px;margin:auto;padding:12px 16px;background:#173c29;border:1px solid #3c9663;border-radius:10px;z-index:50;text-align:center;display:none}.empty-state{color:var(--muted);padding:20px;border:1px dashed #46614f;border-radius:12px}
+@media(max-width:760px){header{flex-direction:column;padding:12px 4%}nav{justify-content:center;gap:12px}nav a{font-size:13px}.hero{min-height:440px;padding:35px 7%}section{padding:48px 5%}.features,.prices,.cards-grid{grid-template-columns:1fr}.booking-wrap{grid-template-columns:1fr}.booking-side{position:static;grid-row:1}.hours-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.matches-grid{grid-template-columns:1fr}}
+@media(min-width:761px) and (max-width:1050px){.hours-grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
-
 <body>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <header>
-<div class="logo">⚽ EL CLASICO</div>
-<nav>
-<a href="#home">الرئيسية</a>
-<a href="#features">مميزات الملعب</a>
-<a href="#prices">الأسعار</a>
-<a href="#booking">احجز الآن</a>
-</nav>
+ <div class="logo">⚽ EL CLASICO</div>
+ <nav aria-label="القائمة الرئيسية"><a href="#home">الرئيسية</a><a href="#features">المميزات</a><a href="#prices">الأسعار</a><a href="#booking">الحجز</a><a href="#tournaments">البطولات</a></nav>
 </header>
-
-<div class="hero" id="home">
-<div class="hero-content">
-<div class="tag">★ ملعب الكلاسيكو الرياضي ★</div>
-<h1>عيش أجواء الكورة<br>تحت الأضواء</h1>
-<p>اجمع أصحابك واستمتع بماتش كورة في أجواء رياضية مميزة على ملعب الكلاسيكو.</p>
-<a class="btn" href="#booking">احجز ملعبك الآن</a>
-</div>
-</div>
-
-<section id="features">
-<h2>ليه تختار الكلاسيكو؟</h2>
-<p class="subtitle">كل اللي تحتاجه لماتش كورة ممتع</p>
-<div class="features">
-<div class="feature"><span>💡</span><h3>إضاءة احترافية</h3><p>أجواء لعب مميزة تحت كشافات الملعب.</p></div>
-<div class="feature"><span>🌱</span><h3>أرضية مميزة</h3><p>مساحة مجهزة للاستمتاع باللعب.</p></div>
-<div class="feature"><span>⚽</span><h3>متعة المنافسة</h3><p>اجمع فريقك واستمتع بأحلى المباريات.</p></div>
-</div>
-</section>
-
-<section id="prices">
-<h2>أسعار حجز الملعب</h2>
-<p class="subtitle">أسعار الساعة الواحدة</p>
-<div class="prices">
-<div class="price"><h3>☀️ فترة النهار</h3><strong>140 جنيه</strong><p>للساعة الواحدة</p></div>
-<div class="price"><h3>🌙 فترة الليل</h3><strong>180 جنيه</strong><p>للساعة الواحدة</p></div>
-</div>
-</section>
-
-<section class="booking" id="booking">
-<h2>احجز ملعبك الآن</h2>
-<p class="subtitle">اختار الساعات المتتالية اللي عايز تحجزها</p>
-
+<main>
+<div class="hero" id="home"><div class="hero-content"><div class="tag">★ ملعب الكلاسيكو الرياضي ★</div><h1>عيش أجواء الكورة<br>تحت الأضواء</h1><p id="heroDescription">اجمع أصحابك واستمتع بماتش كورة في أجواء رياضية مميزة على ملعب الكلاسيكو.</p><a class="btn" href="#booking">⚽ احجز ملعبك الآن</a></div></div>
+<section id="features"><h2>ليه تختار الكلاسيكو؟</h2><p class="subtitle">كل اللي تحتاجه لماتش كورة ممتع</p><div class="features" id="featuresContainer">
+<div class="feature"><span>💡</span><h3>إضاءة احترافية</h3><p>أجواء لعب مميزة تحت كشافات الملعب.</p></div><div class="feature"><span>🌱</span><h3>أرضية مميزة</h3><p>مساحة مجهزة للاستمتاع باللعب.</p></div><div class="feature"><span>⚽</span><h3>متعة المنافسة</h3><p>اجمع فريقك واستمتع بأحلى المباريات.</p></div></div></section>
+<div id="dynamicSections"></div>
+<section id="prices"><h2>أسعار حجز الملعب</h2><p class="subtitle">السعر بيتحسب تلقائيًا حسب توقيت كل ساعة</p><div class="prices" id="pricesContainer">
+<div class="price"><h3>☀️ فترة النهار</h3><strong id="dayPrice">-- جنيه</strong><p id="dayHours">حسب مواعيد الإدارة</p></div><div class="price"><h3>🌙 فترة الليل</h3><strong id="nightPrice">-- جنيه</strong><p id="nightHours">حسب مواعيد الإدارة</p></div></div></section>
+<section id="tournaments" class="dynamic-section"><h2>البطولات والدورات</h2><p class="subtitle">تابع أحدث البطولات المعلنة في ملعب الكلاسيكو</p><div class="cards-grid" id="tournamentsContainer"><div class="empty-state">جاري تحميل البطولات...</div></div></section>
+<section id="matches" class="dynamic-section" style="display:none"><h2>جدول المباريات</h2><p class="subtitle">مواعيد ونتائج المباريات</p><div class="matches-grid" id="matchesContainer"></div></section>
+<section class="booking" id="booking"><h2>احجز ملعبك الآن</h2><p class="subtitle">اختار تاريخك وساعة البداية، وتقدر تحجز حتى 3 ساعات متتالية</p>
+<div class="booking-wrap">
 <form class="booking-form" id="bookingForm">
-
-<label for="customer_name">الاسم بالكامل</label>
-<input type="text" id="customer_name" name="customer_name" placeholder="اكتب اسمك" required>
-
-<label for="phone">رقم الهاتف</label>
-<input type="tel" id="phone" name="phone" placeholder="01xxxxxxxxx" required>
-
-<label for="booking_date">تاريخ الحجز</label>
-<input type="date" id="booking_date" name="booking_date" required>
-
-<label>اختار ساعة البداية ثم الساعات التالية بالترتيب</label>
-<div id="hoursContainer">اختر تاريخ الحجز أولاً لعرض الساعات</div>
-
-<div class="legend">
-<span><i class="dot" style="background:#36b879"></i> متاح</span>
-<span><i class="dot" style="background:#d69a43"></i> تحت المراجعة</span>
-<span><i class="dot" style="background:#b94b4b"></i> محجوز</span>
-<span><i class="dot" style="background:#d6b45b"></i> اختيارك ✓</span>
-</div>
-
-<input type="hidden" id="start_hour" name="start_hour">
-<input type="hidden" id="duration" name="duration" value="0">
-
-<div class="summary-box">
-ملخص اختيارك
-<strong id="bookingSummary">لم يتم اختيار أي ساعة بعد</strong>
-</div>
-
-<div class="price-box">
-السعر الإجمالي
-<strong id="totalPrice">-- جنيه</strong>
-<small id="priceDetails">اختار الساعات لمعرفة السعر</small>
-</div>
-
-<div class="deposit-box">
-<h3>💳 عربون تأكيد طلب الحجز</h3>
-<p>يُرجى دفع مبلغ <strong>20 جنيهًا</strong> عبر فودافون كاش لتأكيد طلب الحجز.</p>
-<div class="wallet-number">01098257528</div>
-<p>بعد إرسال العربون، أرسل صورة التحويل للإدارة لمراجعة طلبك.</p>
-<p class="deposit-warning">ملحوظة: عند دفع باقي مبلغ الحجز يدويًا، سيتم خصم مبلغ العربون الذي تم إرساله إلى المحفظة من إجمالي الحساب.</p>
-</div>
-
-<button class="btn" id="submitButton" type="submit">إرسال طلب الحجز</button>
-
-<p class="note" id="formMessage">طلب الحجز لا يصبح مؤكدًا إلا بعد مراجعة الإدارة والتحقق من العربون والموافقة عليه.</p>
-
+<label for="customer_name">الاسم بالكامل</label><input type="text" id="customer_name" name="customer_name" placeholder="اكتب اسمك بالكامل" minlength="2" maxlength="100" autocomplete="name" required>
+<label for="phone">رقم الهاتف</label><input type="tel" id="phone" name="phone" placeholder="01xxxxxxxxx" minlength="7" maxlength="20" autocomplete="tel" required>
+<label for="booking_date">تاريخ الحجز</label><input type="date" id="booking_date" name="booking_date" required>
+<label>اختار ساعة البداية ثم الساعات التالية بالترتيب (حتى 3 ساعات)</label><div id="hoursContainer"><div class="empty-state">اختر تاريخ الحجز أولاً لعرض الساعات</div></div>
+<div class="legend"><span><i class="dot" style="background:#36b879"></i> متاح</span><span><i class="dot" style="background:#d69a43"></i> تحت المراجعة</span><span><i class="dot" style="background:#b94b4b"></i> محجوز</span><span><i class="dot" style="background:#d6b45b"></i> اختيارك</span></div>
+<input type="hidden" id="start_hour" name="start_hour"><input type="hidden" id="duration" name="duration" value="0">
+<div class="summary-box">ملخص اختيارك<strong id="bookingSummary">لم يتم اختيار أي ساعة بعد</strong></div>
+<div class="price-box">السعر الإجمالي<strong id="totalPrice">-- جنيه</strong><small id="priceDetails">اختار الساعات لمعرفة السعر</small></div>
+<div class="deposit-box"><h3>💳 عربون تأكيد طلب الحجز</h3><p>العربون المطلوب: <strong id="depositAmount">-- جنيه</strong></p><div class="wallet-number" id="walletNumber">01098257528</div><p>بعد التحويل ابعت صورة الإيصال للإدارة على واتساب.</p><p class="deposit-warning">العربون جزء من إجمالي الحساب، وسيتم خصمه من المبلغ المتبقي عند الدفع.</p></div>
+<button class="btn" id="submitButton" type="submit" style="width:100%;margin-top:20px">إرسال طلب الحجز</button><p class="status-message" id="formMessage" aria-live="polite">طلب الحجز يظل تحت المراجعة حتى موافقة الإدارة والتحقق من العربون.</p>
 </form>
-</section>
-
-<a class="whatsapp" href="https://wa.me/201098257528?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D9%84%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D9%85%D9%84%D8%B9%D8%A8%20%D8%A7%D9%84%D9%83%D9%84%D8%A7%D8%B3%D9%8A%D9%83%D9%88" target="_blank">واتساب للاستفسار</a>
-
-<footer>© 2026 ملعب الكلاسيكو - El Clasico</footer>
-
+<aside class="booking-side"><h3 class="side-title">خطوات الحجز</h3><ol class="steps"><li>اكتب اسمك ورقم هاتفك.</li><li>اختار تاريخ الحجز.</li><li>اختار ساعة البداية، ويمكنك إضافة ساعتين بعدها.</li><li>راجع السعر والعربون قبل الإرسال.</li><li>حوّل العربون وتواصل مع الإدارة لإرسال الإيصال.</li></ol><hr style="border:0;border-top:1px solid #34513f;margin:18px 0"><div class="side-title">حالة الملعب</div><div id="openStatus" class="info-pill">جاري التحقق...</div><p style="color:#aebbb2;font-size:13px;margin-top:10px">الساعات الخضراء متاحة وقت آخر تحديث. قد يتغير التوفر إذا استقبلنا حجزًا آخر.</p><a class="btn btn-outline" id="sideWhatsapp" href="https://wa.me/201098257528" target="_blank" rel="noopener" style="width:100%;margin-top:15px">تواصل مع الإدارة</a></aside>
+</div></section>
+</main>
+<a class="whatsapp" id="whatsappLink" href="https://wa.me/201098257528" target="_blank" rel="noopener">واتساب للاستفسار</a>
+<footer>© <span id="yearNow">2026</span> ملعب الكلاسيكو - El Clasico<strong>تحت إدارة الكابتن هاني فنحي</strong></footer>
 <script>
-const SUPABASE_URL = "https://rqcvjbpxntwqhoftupat.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_ynKIqc436PsqVFt620RgMw_b35h5KO0";
-const FUNCTION_URL = SUPABASE_URL + "/functions/v1/hyper-endpoint";
-
-const dateInput = document.getElementById("booking_date");
-const hoursContainer = document.getElementById("hoursContainer");
-const startHourInput = document.getElementById("start_hour");
-const durationInput = document.getElementById("duration");
-const form = document.getElementById("bookingForm");
-const formMessage = document.getElementById("formMessage");
-const submitButton = document.getElementById("submitButton");
-const totalPrice = document.getElementById("totalPrice");
-const priceDetails = document.getElementById("priceDetails");
-const bookingSummary = document.getElementById("bookingSummary");
-
-let bookings = [];
-let selectedSlots = [];
-let loadingHours = false;
-
-function cairoToday() {
-  return new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Africa/Cairo",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit"
-  }).format(new Date());
+"use strict";
+const SUPABASE_URL="https://rqcvjbpxntwqhoftupat.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_ynKIqc436PsqVFt620RgMw_b35h5KO0";
+const FUNCTION_URL=SUPABASE_URL+"/functions/v1/hyper-endpoint";
+const REST_HEADERS={apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+SUPABASE_ANON_KEY};
+const $=id=>document.getElementById(id);
+const dateInput=$("booking_date"),hoursContainer=$("hoursContainer"),startHourInput=$("start_hour"),durationInput=$("duration"),form=$("bookingForm"),formMessage=$("formMessage"),submitButton=$("submitButton"),totalPrice=$("totalPrice"),priceDetails=$("priceDetails"),bookingSummary=$("bookingSummary");
+let bookings=[],selectedSlots=[],loadingHours=false,siteSettings=null,lastContentSignature="";
+const defaultSettings={deposit:20,whatsapp:"+201098257528",day_price:150,day_start:6,night_price:180,night_start:17,open_24_hours:true,vodafone_cash:"01098257528"};
+function cairoToday(){return new Intl.DateTimeFormat("en-CA",{timeZone:"Africa/Cairo",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());}
+dateInput.min=cairoToday();$("yearNow").textContent=new Date().getFullYear();
+function showToast(message){const t=$("toast");t.textContent=message;t.style.display="block";clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>t.style.display="none",3500);}
+function hourLabel(hour){if(hour===0)return "12:00 صباحًا";if(hour<12)return hour+":00 صباحًا";if(hour===12)return "12:00 ظهرًا";return (hour-12)+":00 مساءً";}
+function dateHourValue(dateString,hour){return Date.parse(dateString+"T00:00:00Z")+hour*3600000;}
+function dateFromTimestamp(timestamp){return new Date(timestamp).toISOString().slice(0,10);}
+function hourFromTimestamp(timestamp){return new Date(timestamp).getUTCHours();}
+function formatDate(dateString){return new Intl.DateTimeFormat("ar-EG",{day:"numeric",month:"long",year:"numeric",timeZone:"UTC"}).format(new Date(dateString+"T00:00:00Z"));}
+function normalizePhone(phone){return String(phone||"").replace(/[^\d]/g,"").replace(/^00/,"");}
+function whatsappUrl(){const number=normalizePhone(siteSettings?.whatsapp||defaultSettings.whatsapp).replace(/^0/,"20");return "https://wa.me/"+number+"?text="+encodeURIComponent("مرحبًا، لدي استفسار عن ملعب الكلاسيكو.");}
+function applySettings(settings){
+ if(!settings||typeof settings!=="object")return;siteSettings={...defaultSettings,...settings};
+ $("dayPrice").textContent=Number(siteSettings.day_price)+" جنيه";$("nightPrice").textContent=Number(siteSettings.night_price)+" جنيه";
+ $("dayHours").textContent="من "+hourLabel(Number(siteSettings.day_start))+" إلى "+hourLabel(Number(siteSettings.night_start));
+ $("nightHours").textContent="من "+hourLabel(Number(siteSettings.night_start))+" إلى "+hourLabel(Number(siteSettings.day_start));
+ $("depositAmount").textContent=Number(siteSettings.deposit)+" جنيه";$("walletNumber").textContent=siteSettings.vodafone_cash||defaultSettings.vodafone_cash;
+ const closed=siteSettings.open_24_hours===false;$("openStatus").textContent=closed?"مغلق حاليًا":"مفتوح لاستقبال الحجوزات";
+ $("openStatus").style.color=closed?"#ffaaaa":"#9fe2b8";$("whatsappLink").href=whatsappUrl();$("sideWhatsapp").href=whatsappUrl();submitButton.disabled=closed;
+ if(closed){formMessage.textContent="الملعب متوقف حاليًا عن استقبال الحجوزات. تواصل مع الإدارة للاستفسار.";hoursContainer.innerHTML='<div class="closed-banner">نعتذر، الحجز متوقف حاليًا بقرار الإدارة.</div>';selectedSlots=[];updateSummaryAndPrice();}
+ else if(dateInput.value&&!loadingHours)renderHours();
 }
-
-dateInput.min = cairoToday();
-
-function hourLabel(hour) {
-  if (hour === 0) return "12:00 صباحًا";
-  if (hour < 12) return hour + ":00 صباحًا";
-  if (hour === 12) return "12:00 ظهرًا";
-  return (hour - 12) + ":00 مساءً";
+function isDayHour(hour){const s=Number(siteSettings?.day_start??6),n=Number(siteSettings?.night_start??17);return s<n?(hour>=s&&hour<n):(hour>=s||hour<n);}
+function getBookingForHour(dateString,hour){
+ const slotStart=dateHourValue(dateString,hour),slotEnd=slotStart+3600000;
+ return bookings.find(b=>{const status=String(b.status||"").toLowerCase();if(status!=="pending"&&status!=="confirmed")return false;const start=dateHourValue(b.booking_date,Number(b.start_hour));const end=start+Number(b.duration||1)*3600000;return start<slotEnd&&end>slotStart;})||null;
 }
-
-function dateHourValue(dateString, hour) {
-  return Date.parse(dateString + "T00:00:00Z") + hour * 3600000;
+function isSlotBooked(timestamp){return !!getBookingForHour(dateFromTimestamp(timestamp),hourFromTimestamp(timestamp));}
+function calculatePrice(slots){return slots.reduce((sum,ts)=>sum+(isDayHour(hourFromTimestamp(ts))?Number(siteSettings?.day_price??150):Number(siteSettings?.night_price??180)),0);}
+function updateHiddenFields(){durationInput.value=String(selectedSlots.length);startHourInput.value=selectedSlots.length?String(hourFromTimestamp(selectedSlots[0])):"";}
+function updateSummaryAndPrice(){
+ updateHiddenFields();if(!selectedSlots.length){bookingSummary.textContent="لم يتم اختيار أي ساعة بعد";totalPrice.textContent="-- جنيه";priceDetails.textContent="اختار الساعات لمعرفة السعر";return;}
+ const first=selectedSlots[0],end=selectedSlots[selectedSlots.length-1]+3600000,endDate=dateFromTimestamp(end),endHour=hourFromTimestamp(end);
+ bookingSummary.textContent="من "+formatDate(dateFromTimestamp(first))+" الساعة "+hourLabel(hourFromTimestamp(first))+" إلى "+formatDate(endDate)+" الساعة "+hourLabel(endHour)+" — "+selectedSlots.length+" ساعة";
+ const price=calculatePrice(selectedSlots),deposit=Number(siteSettings?.deposit??20);totalPrice.textContent=price+" جنيه";
+ priceDetails.textContent="عدد الساعات: "+selectedSlots.length+" | العربون: "+deposit+" جنيه | المتبقي: "+Math.max(0,price-deposit)+" جنيه";
 }
-
-function dateFromTimestamp(timestamp) {
-  return new Date(timestamp).toISOString().slice(0, 10);
+function createHourButton(timestamp){
+   const date=dateFromTimestamp(timestamp),hour=hourFromTimestamp(timestamp),button=document.createElement("button");button.type="button";button.className="hour-btn";
+ const booking=getBookingForHour(date,hour),selected=selectedSlots.includes(timestamp);
+ if(booking&&booking.status==="pending"){button.classList.add("pending");button.textContent=hourLabel(hour)+" • تحت المراجعة";button.disabled=true;return button;}
+ if(booking&&booking.status==="confirmed"){button.classList.add("booked");button.textContent=hourLabel(hour)+" • محجوز";button.disabled=true;return button;}
+ if(selected){button.classList.add("selected");button.textContent="✓ "+hourLabel(hour);}else{button.classList.add("available");button.textContent=hourLabel(hour)+" • متاح";}
+ button.addEventListener("click",()=>{if(loadingHours||siteSettings?.open_24_hours===false)return;if(isSlotBooked(timestamp)){formMessage.textContent="هذه الساعة لم تعد متاحة. حدّث المواعيد واختار غيرها.";return;}
+ if(!selectedSlots.length)selectedSlots=[timestamp];else{const last=selectedSlots[selectedSlots.length-1],next=last+3600000;if(timestamp===next&&selectedSlots.length<3){if(isSlotBooked(timestamp)){formMessage.textContent="الساعة التالية غير متاحة.";return;}selectedSlots.push(timestamp);}else if(selectedSlots.includes(timestamp))selectedSlots=[timestamp];else selectedSlots=[timestamp];}
+ formMessage.textContent="";updateSummaryAndPrice();renderHours();});return button;
 }
-
-function hourFromTimestamp(timestamp) {
-  return new Date(timestamp).getUTCHours();
+function renderHours(){
+ const date=dateInput.value;hoursContainer.innerHTML="";if(siteSettings?.open_24_hours===false){hoursContainer.innerHTML='<div class="closed-banner">الحجز متوقف حاليًا.</div>';return;}
+ if(!date){hoursContainer.textContent="اختر تاريخ الحجز أولاً لعرض الساعات";return;}
+ const grid=document.createElement("div");grid.className="hours-grid";for(let h=0;h<24;h++)grid.appendChild(createHourButton(dateHourValue(date,h)));hoursContainer.appendChild(grid);
+ if(selectedSlots.length){const next=selectedSlots[selectedSlots.length-1]+3600000,nextDate=dateFromTimestamp(next);if(nextDate!==date&&selectedSlots.length<3){const box=document.createElement("div");box.className="next-day-box";const title=document.createElement("div");title.className="next-day-title";title.textContent="الساعة التالية من اليوم التالي: "+formatDate(nextDate);box.appendChild(title);const g=document.createElement("div");g.className="hours-grid";g.appendChild(createHourButton(next));box.appendChild(g);hoursContainer.appendChild(box);}}
 }
-
-function formatDate(dateString) {
-  return new Intl.DateTimeFormat("ar-EG", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC"
-  }).format(new Date(dateString + "T00:00:00Z"));
+async function postFunction(payload){const response=await fetch(FUNCTION_URL,{method:"POST",headers:{"Content-Type":"application/json",...REST_HEADERS},body:JSON.stringify(payload)});const result=await response.json();if(!response.ok)throw new Error(result.error||"حدث خطأ في الاتصال");return result;}
+async function loadBookings(){
+ const date=dateInput.value;selectedSlots=[];bookings=[];updateSummaryAndPrice();if(!date){renderHours();return;}if(date<cairoToday()){hoursContainer.textContent="لا يمكن اختيار تاريخ سابق";return;}if(siteSettings?.open_24_hours===false){renderHours();return;}
+ loadingHours=true;hoursContainer.textContent="جاري تحميل المواعيد...";formMessage.textContent="";
+ try{const result=await postFunction({action:"availability",booking_date:date});bookings=result.bookings||[];if(result.settings)applySettings(result.settings);renderHours();}
+ catch(error){console.error(error);hoursContainer.textContent="تعذر تحميل المواعيد. حاول مرة أخرى.";}finally{loadingHours=false;}
 }
-
-/* إرجاع الحجز الفعّال الذي يتداخل مع الساعة المحددة */
-function getBookingForHour(dateString, hour) {
-  const slotStart = dateHourValue(dateString, hour);
-  const slotEnd = slotStart + 3600000;
-
-  return bookings.find(booking => {
-    const status = String(booking.status || "").toLowerCase();
-
-    // الطلبات المرفوضة أو الملغاة لا تمنع الحجز
-    if (status !== "pending" && status !== "confirmed") {
-      return false;
-    }
-
-    const bookingStart = dateHourValue(
-      booking.booking_date,
-      Number(booking.start_hour)
-    );
-
-    const bookingEnd =
-      bookingStart + Number(booking.duration) * 3600000;
-
-    return bookingStart < slotEnd && bookingEnd > slotStart;
-  }) || null;
+dateInput.addEventListener("change",loadBookings);
+function safeText(value){return String(value??"");}
+async function getPublicRows(table,query){const response=await fetch(SUPABASE_URL+"/rest/v1/"+table+"?"+query,{headers:REST_HEADERS});if(!response.ok)throw new Error("تعذر تحميل "+table);return response.json();}
+function renderSections(rows){
+ const host=$("dynamicSections");host.innerHTML="";
+ (rows||[]).filter(x=>x.is_visible!==false).forEach(section=>{const wrapper=document.createElement("section");wrapper.className="dynamic-section";const h=document.createElement("h2");h.textContent=safeText(section.title);wrapper.appendChild(h);const content=section.content||{};const p=document.createElement("p");p.className="subtitle";p.textContent=safeText(content.description||content.text||"");wrapper.appendChild(p);host.appendChild(wrapper);});
 }
-
-function isHourBooked(dateString, hour) {
-  return getBookingForHour(dateString, hour) !== null;
+function renderTournaments(rows){
+ const host=$("tournamentsContainer");host.innerHTML="";if(!rows.length){host.innerHTML='<div class="empty-state">لا توجد بطولات معلنة حاليًا. تابعنا لمعرفة الجديد.</div>';return;}
+ rows.forEach(t=>{const card=document.createElement("article");card.className="tournament-card";const h=document.createElement("h3");h.textContent=safeText(t.title);const d=document.createElement("p");d.textContent=safeText(t.description);card.append(h,d);
+ if(t.rules){const r=document.createElement("p");r.style.marginTop="8px";r.textContent="الشروط: "+safeText(t.rules);card.appendChild(r);}
+ if(t.subscription_fee!==null&&t.subscription_fee!==undefined){const f=document.createElement("p");f.style.color="var(--gold)";f.style.marginTop="8px";f.textContent="اشتراك البطولة: "+t.subscription_fee+" جنيه";card.appendChild(f);}
+ if(t.prize_details){const p=document.createElement("p");p.style.marginTop="6px";p.textContent="الجوائز: "+safeText(t.prize_details);card.appendChild(p);}host.appendChild(card);});
 }
-
-function isSlotBooked(timestamp) {
-  const date = dateFromTimestamp(timestamp);
-  const hour = hourFromTimestamp(timestamp);
-  return isHourBooked(date, hour);
+function renderMatches(matches,tournaments){
+ const ids=new Set(tournaments.map(t=>String(t.id))),list=(matches||[]).filter(m=>ids.has(String(m.tournament_id))),section=$("matches"),host=$("matchesContainer");host.innerHTML="";
+ if(!list.length){section.style.display="none";return;}section.style.display="block";
+ list.forEach(m=>{const card=document.createElement("article");card.className="match-card";const teams=document.createElement("div");teams.className="match-teams";const a=document.createElement("span");a.textContent=safeText(m.team_a);const score=document.createElement("span");score.className="match-score";score.textContent=(m.team_a_score??"-")+" : "+(m.team_b_score??"-");const b=document.createElement("span");b.textContent=safeText(m.team_b);teams.append(a,score,b);card.appendChild(teams);const meta=document.createElement("div");meta.className="match-meta";meta.textContent=[m.match_date,m.match_time,m.venue,m.status==="live"?"مباشر":m.status==="finished"?"انتهت":m.status==="postponed"?"مؤجلة":"قادمة"].filter(Boolean).join(" • ");card.appendChild(meta);host.appendChild(card);});
 }
-
-function calculatePrice(slots) {
-  let price = 0;
-
-  slots.forEach(timestamp => {
-    const hour = hourFromTimestamp(timestamp);
-    price += hour >= 6 && hour < 17 ? 140 : 180;
-  });
-
-  return price;
+async function loadPublicContent(){
+ try{const [sections,tournaments,matches]=await Promise.all([getPublicRows("site_sections","select=*&is_visible=eq.true&order=display_order.asc"),getPublicRows("tournaments","select=*&is_visible=eq.true&order=created_at.desc"),getPublicRows("tournament_matches","select=*&order=display_order.asc,match_date.asc")]);
+ const signature=JSON.stringify([sections,tournaments,matches]);if(signature===lastContentSignature)return;lastContentSignature=signature;renderSections(sections);renderTournaments(tournaments);renderMatches(matches,tournaments);
+ }catch(error){console.warn("Public content:",error);}
 }
-
-function getSelectedDuration() {
-  return selectedSlots.length;
-}
-
-function updateHiddenFields() {
-  durationInput.value = String(getSelectedDuration());
-
-  if (selectedSlots.length) {
-    const firstSlot = selectedSlots[0];
-    startHourInput.value = String(hourFromTimestamp(firstSlot));
-  } else {
-    startHourInput.value = "";
-  }
-}
-
-function updateSummaryAndPrice() {
-  updateHiddenFields();
-
-  if (!selectedSlots.length) {
-    bookingSummary.textContent = "لم يتم اختيار أي ساعة بعد";
-    totalPrice.textContent = "-- جنيه";
-    priceDetails.textContent = "اختار الساعات لمعرفة السعر";
-    return;
-  }
-
-  const firstSlot = selectedSlots[0];
-  const lastSlotEnd = selectedSlots[selectedSlots.length - 1] + 3600000;
-
-  const startDate = dateFromTimestamp(firstSlot);
-  const startHour = hourFromTimestamp(firstSlot);
-  const endDate = dateFromTimestamp(lastSlotEnd);
-  const endHour = hourFromTimestamp(lastSlotEnd);
-
-  const selectedLabels = selectedSlots.map(timestamp => {
-    return hourLabel(hourFromTimestamp(timestamp));
-  });
-
-  const periodText =
-    "من " + hourLabel(startHour) +
-    " إلى " + hourLabel(endHour);
-
-  let summary =
-    "تم اختيار " + selectedLabels.join(" و ") +
-    " — المدة " + selectedSlots.length + " ساعة";
-
-  if (startDate !== endDate) {
-    summary += " — ينتهي الحجز يوم " + formatDate(endDate) +
-      " الساعة " + hourLabel(endHour);
-  } else {
-    summary += " — " + periodText;
-  }
-
-  bookingSummary.textContent = summary;
-
-  const price = calculatePrice(selectedSlots);
-  totalPrice.textContent = price + " جنيه";
-
-  priceDetails.textContent =
-    "عدد الساعات: " + selectedSlots.length +
-    " | العربون المطلوب: 20 جنيه" +
-    " | المتبقي بعد خصم العربون: " + (price - 20) + " جنيه";
-}
-
-function createHourButton(timestamp) {
-  const date = dateFromTimestamp(timestamp);
-  const hour = hourFromTimestamp(timestamp);
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "hour-btn";
-
-  const isSelected = selectedSlots.includes(timestamp);
-  const booking = getBookingForHour(date, hour);
-
-  // حالة الطلب المعلّق: تحت المراجعة
-  if (booking && booking.status === "pending") {
-    button.classList.add("pending");
-    button.textContent = hourLabel(hour) + " - تحت المراجعة";
-    button.disabled = true;
-    return button;
-  }
-
-  // حالة الطلب الموافق عليه: محجوز
-  if (booking && booking.status === "confirmed") {
-    button.classList.add("booked");
-    button.textContent = hourLabel(hour) + " - محجوز";
-    button.disabled = true;
-    return button;
-  }
-
-  if (isSelected) {
-    button.classList.add("selected");
-    button.innerHTML = "✓ " + hourLabel(hour);
-    button.disabled = false;
-  } else {
-    button.classList.add("available");
-    button.textContent = hourLabel(hour) + " - متاح";
-  }
-
-  button.addEventListener("click", () => {
-    if (loadingHours) return;
-
-    if (isSlotBooked(timestamp)) {
-      formMessage.textContent = "هذه الساعة غير متاحة حاليًا.";
-      return;
-    }
-
-    if (!selectedSlots.length) {
-      selectedSlots = [timestamp];
-    } else {
-      const lastSlot = selectedSlots[selectedSlots.length - 1];
-      const nextSlot = lastSlot + 3600000;
-
-      if (timestamp === nextSlot && selectedSlots.length < 3) {
-        if (isSlotBooked(timestamp)) {
-          formMessage.textContent = "الساعة التالية غير متاحة، لا يمكن إضافتها.";
-          return;
-        }
-        selectedSlots.push(timestamp);
-      } else if (selectedSlots.includes(timestamp)) {
-        selectedSlots = [timestamp];
-      } else {
-        selectedSlots = [timestamp];
-      }
-    }
-
-    formMessage.textContent = "";
-    updateSummaryAndPrice();
-    renderHours();
-  });
-
-  return button;
-}
-
-function renderHours() {
-  const date = dateInput.value;
-  hoursContainer.innerHTML = "";
-
-  if (!date) {
-    hoursContainer.textContent = "اختر تاريخ الحجز أولاً لعرض الساعات";
-    return;
-  }
-
-  const grid = document.createElement("div");
-  grid.className = "hours-grid";
-
-  for (let hour = 0; hour < 24; hour++) {
-    const timestamp = dateHourValue(date, hour);
-    grid.appendChild(createHourButton(timestamp));
-  }
-
-  hoursContainer.appendChild(grid);
-
-  if (selectedSlots.length) {
-    const lastSlot = selectedSlots[selectedSlots.length - 1];
-    const nextSlot = lastSlot + 3600000;
-    const nextDate = dateFromTimestamp(nextSlot);
-
-    if (nextDate !== date && selectedSlots.length < 3) {
-      const nextDayBox = document.createElement("div");
-      nextDayBox.className = "next-day-box";
-
-      const title = document.createElement("div");
-      title.className = "next-day-title";
-      title.textContent =
-        "اختار الساعة التالية من اليوم التالي: " + formatDate(nextDate);
-
-      nextDayBox.appendChild(title);
-      const nextGrid = document.createElement("div");
-      nextGrid.className = "hours-grid";
-      nextGrid.appendChild(createHourButton(nextSlot));
-      nextDayBox.appendChild(nextGrid);
-      hoursContainer.appendChild(nextDayBox);
-    }
-  }
-}
-
-async function loadBookings() {
-  const date = dateInput.value;
-
-  selectedSlots = [];
-  bookings = [];
-  updateSummaryAndPrice();
-
-  if (!date) {
-    renderHours();
-    return;
-  }
-
-  if (date < cairoToday()) {
-    hoursContainer.textContent = "لا يمكن اختيار تاريخ سابق";
-    return;
-  }
-
-  loadingHours = true;
-  hoursContainer.textContent = "جاري تحميل المواعيد...";
-  formMessage.textContent = "";
-
-  try {
-    const response = await fetch(FUNCTION_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": "Bearer " + SUPABASE_ANON_KEY
-      },
-      body: JSON.stringify({
-        action: "availability",
-        booking_date: date
-      })
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.error || "تعذر تحميل المواعيد");
-    }
-
-    bookings = result.bookings || [];
-    renderHours();
-
-  } catch (error) {
-    console.error(error);
-    hoursContainer.textContent =
-      "حدث خطأ أثناء تحميل المواعيد. حاول مرة أخرى.";
-  } finally {
-    loadingHours = false;
-  }
-}
-
-dateInput.addEventListener("change", loadBookings);
-
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const customer_name =
-    document.getElementById("customer_name").value.trim();
-  const phone =
-    document.getElementById("phone").value.trim();
-  const booking_date = dateInput.value;
-
-  if (!selectedSlots.length) {
-    formMessage.textContent = "اختار ساعة واحدة على الأقل.";
-    return;
-  }
-
-  if (selectedSlots.length > 3) {
-    formMessage.textContent = "الحد الأقصى للحجز 3 ساعات.";
-    return;
-  }
-
-  const start_hour = hourFromTimestamp(selectedSlots[0]);
-  const duration = selectedSlots.length;
-
-  for (const timestamp of selectedSlots) {
-    if (isSlotBooked(timestamp)) {
-      formMessage.textContent =
-        "إحدى الساعات التي اخترتها أصبحت غير متاحة. اختار موعدًا آخر.";
-      await loadBookings();
-      return;
-    }
-  }
-
-  submitButton.disabled = true;
-  submitButton.textContent = "جاري إرسال طلب الحجز...";
-  formMessage.textContent = "";
-
-  try {
-    const response = await fetch(FUNCTION_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": "Bearer " + SUPABASE_ANON_KEY
-      },
-      body: JSON.stringify({
-        customer_name,
-        phone,
-        booking_date,
-        start_hour,
-        duration
-      })
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.error || "تعذر تسجيل الحجز");
-    }
-
-    formMessage.textContent =
-      "تم استلام طلب الحجز بنجاح. الطلب تحت مراجعة الإدارة، وسيتم تأكيده بعد التحقق من العربون والموافقة عليه.";
-
-    form.reset();
-    selectedSlots = [];
-    updateSummaryAndPrice();
-    await loadBookings();
-
-  } catch (error) {
-    formMessage.textContent = error.message;
-    await loadBookings();
-  } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = "إرسال طلب الحجز";
-  }
+async function loadSettings(){try{const result=await postFunction({action:"settings"});if(result.settings)applySettings(result.settings);}catch(error){console.warn("Settings:",error);}}
+async function refreshSite(){await loadSettings();await loadPublicContent();if(dateInput.value&&!loadingHours)await loadBookings();}
+form.addEventListener("submit",async event=>{
+ event.preventDefault();const customer_name=$("customer_name").value.trim(),phone=$("phone").value.trim(),booking_date=dateInput.value;
+ if(siteSettings?.open_24_hours===false){formMessage.textContent="الملعب متوقف عن استقبال الحجوزات حاليًا.";return;}
+ if(!selectedSlots.length){formMessage.textContent="اختار ساعة واحدة على الأقل.";return;}if(selectedSlots.length>3){formMessage.textContent="الحد الأقصى للحجز 3 ساعات.";return;}if(booking_date<cairoToday()){formMessage.textContent="اختار تاريخ اليوم أو تاريخًا قادمًا.";return;}
+ const start_hour=hourFromTimestamp(selectedSlots[0]),duration=selectedSlots.length;
+ for(const ts of selectedSlots){if(isSlotBooked(ts)){formMessage.textContent="إحدى الساعات أصبحت غير متاحة. جاري تحديث المواعيد.";await loadBookings();return;}}
+ submitButton.disabled=true;submitButton.textContent="جاري إرسال الطلب...";
+ try{await postFunction({customer_name,phone,booking_date,start_hour,duration});formMessage.textContent="تم استلام طلبك بنجاح. الطلب تحت مراجعة الإدارة، وسيتم تأكيده بعد التحقق من العربون والموافقة عليه.";showToast("تم إرسال طلب الحجز بنجاح");form.reset();selectedSlots=[];updateSummaryAndPrice();await loadBookings();}
+ catch(error){formMessage.textContent=error.message||"تعذر إرسال طلب الحجز";await loadBookings();}
+ finally{submitButton.disabled=siteSettings?.open_24_hours===false;submitButton.textContent="إرسال طلب الحجز";}
 });
-
-updateSummaryAndPrice();
-renderHours();
+updateSummaryAndPrice();renderHours();refreshSite();setInterval(()=>{loadSettings();loadPublicContent();},60000);
 </script>
-
 </body>
 </html>
