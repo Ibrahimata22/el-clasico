@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -128,7 +129,7 @@ function updateSummaryAndPrice(){
  priceDetails.textContent="عدد الساعات: "+selectedSlots.length+" | العربون: "+deposit+" جنيه | المتبقي: "+Math.max(0,price-deposit)+" جنيه";
 }
 function createHourButton(timestamp){
-   const date=dateFromTimestamp(timestamp),hour=hourFromTimestamp(timestamp),button=document.createElement("button");button.type="button";button.className="hour-btn";
+ const date=dateFromTimestamp(timestamp),hour=hourFromTimestamp(timestamp),button=document.createElement("button");button.type="button";button.className="hour-btn";
  const booking=getBookingForHour(date,hour),selected=selectedSlots.includes(timestamp);
  if(booking&&booking.status==="pending"){button.classList.add("pending");button.textContent=hourLabel(hour)+" • تحت المراجعة";button.disabled=true;return button;}
  if(booking&&booking.status==="confirmed"){button.classList.add("booked");button.textContent=hourLabel(hour)+" • محجوز";button.disabled=true;return button;}
@@ -175,7 +176,32 @@ async function loadPublicContent(){
  }catch(error){console.warn("Public content:",error);}
 }
 async function loadSettings(){try{const result=await postFunction({action:"settings"});if(result.settings)applySettings(result.settings);}catch(error){console.warn("Settings:",error);}}
-async function refreshSite(){await loadSettings();await loadPublicContent();if(dateInput.value&&!loadingHours)await loadBookings();}
+async function refreshSite(){
+ const previousSlots=[...selectedSlots];
+
+ await loadSettings();
+ await loadPublicContent();
+
+ if(dateInput.value&&!loadingHours){
+  await loadBookings();
+
+  const stillAvailable=previousSlots.every(ts=>!isSlotBooked(ts));
+  const isContinuous=previousSlots.every((ts,i)=>
+   i===0 || ts===previousSlots[i-1]+3600000
+  );
+
+  if(
+   previousSlots.length>0 &&
+   stillAvailable &&
+   isContinuous &&
+   siteSettings?.open_24_hours!==false
+  ){
+   selectedSlots=previousSlots;
+   updateSummaryAndPrice();
+   renderHours();
+  }
+ }
+}
 form.addEventListener("submit",async event=>{
  event.preventDefault();const customer_name=$("customer_name").value.trim(),phone=$("phone").value.trim(),booking_date=dateInput.value;
  if(siteSettings?.open_24_hours===false){formMessage.textContent="الملعب متوقف عن استقبال الحجوزات حاليًا.";return;}
@@ -187,7 +213,10 @@ form.addEventListener("submit",async event=>{
  catch(error){formMessage.textContent=error.message||"تعذر إرسال طلب الحجز";await loadBookings();}
  finally{submitButton.disabled=siteSettings?.open_24_hours===false;submitButton.textContent="إرسال طلب الحجز";}
 });
-updateSummaryAndPrice();renderHours();refreshSite();setInterval(()=>{loadSettings();loadPublicContent();},60000);
+updateSummaryAndPrice();renderHours();refreshSite();
+setInterval(()=>{
+ if(!document.hidden)refreshSite();
+},60000);
 </script>
 </body>
 </html>
