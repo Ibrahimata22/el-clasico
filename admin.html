@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -187,6 +188,26 @@ input[type="checkbox"]{width:auto;accent-color:var(--gold)}
   align-items:center;gap:10px;flex-wrap:wrap
 }
 
+/* الحجز اليدوي */
+.manual-booking-form{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  margin-top:16px
+}
+.manual-booking-form h3{color:var(--gold);margin-top:0}
+.manual-tag{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  background:#4b3d20;
+  color:#ffdc83;
+  font-size:12px;
+  font-weight:bold;
+  margin:5px 0
+}
+
 /* العناصر */
 .item-card{
   background:var(--panel2);border:1px solid var(--border);
@@ -331,6 +352,54 @@ hr{border:0;border-top:1px solid var(--border);margin:20px 0}
           <label>اختر يوم وصول الطلبات</label>
           <select id="daySelect"></select>
         </div>
+
+        <!-- إضافة حجز يدوي -->
+        <div class="manual-booking-form">
+          <h3>إضافة حجز يدوي</h3>
+          <p class="panel-subtitle">
+            الحجز اليدوي يتم تأكيده مباشرة بعد التحقق من توافر الموعد.
+          </p>
+
+          <div id="manualBookingMessage"></div>
+
+          <div class="grid">
+            <div class="field">
+              <label>اسم العميل</label>
+              <input id="manualCustomerName" type="text" maxlength="100" placeholder="اسم العميل">
+            </div>
+
+            <div class="field">
+              <label>رقم الهاتف</label>
+              <input id="manualPhone" type="tel" maxlength="20" placeholder="رقم الهاتف">
+            </div>
+
+            <div class="field">
+              <label>تاريخ الحجز</label>
+              <input id="manualDate" type="date">
+            </div>
+
+            <div class="field">
+              <label>ساعة بداية الحجز</label>
+              <select id="manualStartHour"></select>
+            </div>
+
+            <div class="field">
+              <label>مدة الحجز</label>
+              <select id="manualDuration">
+                <option value="1">ساعة واحدة</option>
+                <option value="2">ساعتان</option>
+                <option value="3">3 ساعات</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn gold" id="addManualBooking">
+              إضافة وتأكيد الحجز
+            </button>
+          </div>
+        </div>
+
         <div id="bookingsArea">جاري تحميل الحجوزات...</div>
       </div>
     </section>
@@ -618,6 +687,17 @@ function setupEgyptianHourSelects() {
 }
 setupEgyptianHourSelects();
 
+// تجهيز ساعات الحجز اليدوي
+function setupManualBookingHours() {
+  $("manualStartHour").innerHTML = Array.from(
+    {length:24},
+    (_,hour) => `<option value="${hour}">${formatHour(hour)}</option>`
+  ).join("");
+
+  $("manualDate").min = getEgyptDateKey();
+}
+setupManualBookingHours();
+
 function msg(id, text, type = "success") {
   const area = $(id);
   if (!area) return;
@@ -787,6 +867,104 @@ $("daySelect").addEventListener("change",e => {
   renderBookings();
 });
 
+// إضافة حجز يدوي من لوحة الإدارة
+$("addManualBooking").addEventListener("click", addManualBooking);
+
+async function addManualBooking() {
+  const customer_name = $("manualCustomerName").value.trim();
+  const phone = $("manualPhone").value.trim();
+  const booking_date = $("manualDate").value;
+  const start_hour = Number($("manualStartHour").value);
+  const duration = Number($("manualDuration").value);
+
+  if (customer_name.length < 2) {
+    msg("manualBookingMessage","اكتب اسم العميل بشكل صحيح.","error");
+    return;
+  }
+
+  if (phone.length < 7 || phone.length > 20) {
+    msg("manualBookingMessage","اكتب رقم هاتف صحيحًا.","error");
+    return;
+  }
+
+  if (!booking_date) {
+    msg("manualBookingMessage","اختر تاريخ الحجز.","error");
+    return;
+  }
+
+  if (booking_date < getEgyptDateKey()) {
+    msg("manualBookingMessage","لا يمكن إضافة حجز في تاريخ سابق.","error");
+    return;
+  }
+
+  if (![1,2,3].includes(duration)) {
+    msg("manualBookingMessage","مدة الحجز غير صحيحة.","error");
+    return;
+  }
+
+  const button = $("addManualBooking");
+  button.disabled = true;
+  button.textContent = "جاري إضافة الحجز...";
+  msg("manualBookingMessage","جاري التحقق من الموعد وإضافة الحجز...");
+
+  try {
+    const { data, error } = await supabase.functions.invoke(
+      "hyper-endpoint",
+      {
+        body: {
+          action: "manual_booking",
+          customer_name,
+          phone,
+          booking_date,
+          start_hour,
+          duration
+        }
+      }
+    );
+
+    if (error) {
+      let message = "تعذر إضافة الحجز اليدوي.";
+
+      if (data?.error) {
+        message = data.error;
+      } else if (error.message) {
+        message = error.message;
+      }
+
+      throw new Error(message);
+    }
+
+    if (data?.error) {
+      throw new Error(data.error);
+    }
+
+    $("manualCustomerName").value = "";
+    $("manualPhone").value = "";
+    $("manualDate").value = "";
+    $("manualStartHour").value = "0";
+    $("manualDuration").value = "1";
+
+    msg(
+      "manualBookingMessage",
+      `تم تأكيد الحجز بنجاح. السعر: ${Number(data.booking?.price ?? 0)} جنيه.`,
+      "success"
+    );
+
+    await loadBookings();
+    await loadStatistics();
+
+  } catch (error) {
+    msg(
+      "manualBookingMessage",
+      error.message || "حدث خطأ أثناء إضافة الحجز.",
+      "error"
+    );
+  } finally {
+    button.disabled = false;
+    button.textContent = "إضافة وتأكيد الحجز";
+  }
+}
+
 async function loadBookings() {
   $("bookingsArea").textContent = "جاري تحميل الحجوزات...";
   const {data,error} = await supabase
@@ -820,7 +998,6 @@ function renderDayOptions() {
 }
 
 function renderBookings() {
-  const today = getEgyptDateKey();
   const rows = allBookings.filter(b =>
     b.created_at && getEgyptDateKey(new Date(b.created_at))===selectedDay
   ).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
@@ -834,6 +1011,7 @@ function renderBookings() {
   html += rows.map(b => {
     const status = String(b.status||"").toLowerCase();
     let buttons = "";
+
     if (status==="pending") {
       buttons = `
         <button class="btn small green" onclick="updateBooking(${Number(b.id)},'confirmed')">تأكيد الحجز</button>
@@ -845,6 +1023,9 @@ function renderBookings() {
     return `
       <div class="booking">
         <p class="received">وقت وصول الطلب: ${escapeHTML(formatReceivedTime(b.created_at))}</p>
+        ${b.booking_source === "manual"
+          ? '<span class="manual-tag">حجز يدوي من الإدارة</span>'
+          : ""}
         <p>الاسم: ${escapeHTML(b.customer_name)}</p>
         <p>الهاتف: ${escapeHTML(b.phone)}</p>
         <p class="appointment">موعد الحجز: ${escapeHTML(formatAppointmentDate(b.booking_date,b.start_hour))}</p>
@@ -894,6 +1075,9 @@ function updateHomeStats() {
       <strong>${escapeHTML(b.customer_name)}</strong>
       <p>${escapeHTML(formatAppointmentDate(b.booking_date,b.start_hour))}</p>
       <span class="tag">${escapeHTML(statusText(b.status))}</span>
+      ${b.booking_source === "manual"
+        ? '<span class="manual-tag">حجز يدوي من الإدارة</span>'
+        : ""}
     </div>
   `).join("") : '<div class="empty">لا توجد حجوزات حتى الآن.</div>';
 }
