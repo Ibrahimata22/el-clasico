@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -362,8 +361,8 @@ hr{border:0;border-top:1px solid var(--border);margin:20px 0}
       <div class="panel">
         <h2>إعدادات الملعب</h2>
         <p class="panel-subtitle">
-          تعديل القيم وحفظها في قاعدة البيانات.
-          هذه المرحلة تحفظ الإعدادات في لوحة الإدارة فقط.
+          يتم حفظ الإعدادات في قاعدة البيانات وتطبيقها على الحجوزات الجديدة.
+          الأسعار المحفوظة للحجوزات السابقة لا تتغير.
         </p>
 
         <div id="settingsMessage"></div>
@@ -1029,7 +1028,7 @@ async function loadSettings() {
   }
 
   const s=data.settings||{};
-  $("day_price").value=s.day_price??140;
+  $("day_price").value=s.day_price??150;
   $("night_price").value=s.night_price??180;
   $("day_start").value=s.day_start??6;
   $("night_start").value=s.night_start??17;
@@ -1066,7 +1065,21 @@ async function saveSettings() {
     return;
   }
 
+  $("saveSettings").disabled=true;
+  msg("settingsMessage","جاري حفظ الإعدادات...");
+
+  // نقرأ أحدث إعدادات قاعدة البيانات أولًا حتى لا نحذف أي مفاتيح إضافية.
+  const {data:currentData,error:readError}=await supabase.from("site_settings")
+    .select("settings").eq("id",1).single();
+
+  if (readError||!currentData) {
+    $("saveSettings").disabled=false;
+    msg("settingsMessage","تعذر قراءة الإعدادات الحالية قبل الحفظ. لم يتم إجراء أي تغيير.","error");
+    return;
+  }
+
   const settings={
+    ...(currentData.settings||{}),
     day_price:dayPrice,
     night_price:nightPrice,
     day_start:dayStart,
@@ -1075,9 +1088,6 @@ async function saveSettings() {
     whatsapp,
     open_24_hours:$("open_24_hours").checked
   };
-
-  $("saveSettings").disabled=true;
-  msg("settingsMessage","جاري حفظ الإعدادات...");
 
   const {data,error}=await supabase.from("site_settings")
     .update({settings,updated_at:new Date().toISOString()})
