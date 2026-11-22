@@ -1,907 +1,1461 @@
-```html
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة إدارة ملعب الكلاسيكو</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة ملعب الكلاسيكو</title>
 
-  <style>
-    * { box-sizing: border-box; }
+<style>
+:root {
+  --bg:#0d151d;
+  --panel:#17232e;
+  --panel2:#202f3c;
+  --gold:#d6b35c;
+  --text:#f4f6f8;
+  --muted:#aab6c0;
+  --green:#24945b;
+  --red:#c84b4b;
+  --orange:#d99036;
+  --blue:#397ba8;
+  --border:#304250;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Arial,sans-serif;min-height:100vh
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0}
+.hidden{display:none!important}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: #101820;
-      color: white;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
+/* تسجيل الدخول */
+.login-screen{
+  min-height:100vh;display:flex;align-items:center;
+  justify-content:center;padding:20px;
+  background:radial-gradient(circle at top,#263b49,#0d151d 65%)
+}
+.login-card{
+  width:100%;max-width:420px;background:var(--panel);
+  padding:30px;border:1px solid var(--border);
+  border-radius:20px;text-align:center;
+  box-shadow:0 20px 60px #0005
+}
+.logo{
+  width:70px;height:70px;border-radius:20px;
+  display:grid;place-items:center;margin:0 auto 15px;
+  background:var(--gold);color:#14202a;
+  font-size:25px;font-weight:bold
+}
+.login-card h1{color:var(--gold);font-size:25px}
+.login-card p{color:var(--muted)}
+.login-card input{margin-top:12px}
 
-    .login {
-      width: 100%;
-      max-width: 650px;
-      margin: 30px auto;
-      background: #1d2a35;
-      padding: 24px;
-      border-radius: 16px;
-      text-align: center;
-    }
+/* الهيكل */
+.app{display:flex;min-height:100vh}
+.sidebar{
+  width:255px;flex-shrink:0;background:#111d27;
+  border-left:1px solid var(--border);
+  padding:22px 15px;display:flex;flex-direction:column;
+  position:fixed;right:0;top:0;bottom:0;z-index:10;
+  overflow-y:auto
+}
+.brand{
+  padding:8px 10px 24px;border-bottom:1px solid var(--border);
+  margin-bottom:18px
+}
+.brand strong{display:block;color:var(--gold);font-size:21px}
+.brand small{color:var(--muted)}
+.nav-title{
+  color:#788995;font-size:12px;margin:15px 10px 8px
+}
+.nav-btn{
+  width:100%;text-align:right;padding:13px 12px;
+  border-radius:10px;background:transparent;color:#c5d0d8;
+  margin:3px 0;transition:.2s
+}
+.nav-btn:hover,.nav-btn.active{
+  background:#293b49;color:var(--gold)
+}
+.nav-btn span{display:inline-block;width:27px}
+.sidebar-bottom{margin-top:auto;padding-top:20px}
+.logout-btn{background:#472c31;color:#ffb0b0;width:100%}
 
-    h2 { color: #d6b35c; }
+.main{
+  margin-right:255px;width:calc(100% - 255px);
+  padding:25px;max-width:1600px
+}
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:15px;margin-bottom:25px
+}
+.topbar h1{font-size:25px;margin:0}
+.topbar p{color:var(--muted);margin:7px 0 0;font-size:14px}
+.mobile-menu{display:none}
+.page{display:none}
+.page.active{display:block}
 
-    input, button, select {
-      width: 100%;
-      padding: 14px;
-      margin-top: 14px;
-      border-radius: 8px;
-      font-size: 16px;
-    }
+/* العناصر العامة */
+.panel{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:16px;padding:20px;margin-bottom:20px
+}
+.panel h2,.panel h3{margin-top:0;color:var(--gold)}
+.panel-subtitle{color:var(--muted);font-size:13px;line-height:1.7}
+.grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px
+}
+.field{min-width:0}
+.field label{
+  display:block;color:#cbd4db;font-size:14px;
+  margin-bottom:8px
+}
+input,select,textarea{
+  width:100%;padding:12px 13px;border-radius:9px;
+  border:1px solid #435766;background:#101b24;color:white;
+  outline:none;min-width:0
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--gold)
+}
+textarea{resize:vertical;min-height:85px}
+input[type="checkbox"]{width:auto;accent-color:var(--gold)}
+.check-line{display:flex;align-items:center;gap:10px;margin-top:12px}
+.btn{
+  padding:12px 16px;border-radius:9px;font-weight:bold;
+  color:white;background:var(--blue);margin-top:12px
+}
+.btn.gold{background:var(--gold);color:#15212a}
+.btn.green{background:var(--green)}
+.btn.red{background:var(--red)}
+.btn.gray{background:#465866}
+.btn.orange{background:var(--orange);color:#151515}
+.btn.small{padding:8px 11px;font-size:13px;margin:5px 2px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.notice{
+  padding:12px;border-radius:9px;margin:12px 0;
+  background:#263b49;color:#d8e5ed;line-height:1.7
+}
+.notice.error{background:#492d32;color:#ffc1c1}
+.notice.success{background:#1d4636;color:#b9f1cf}
+.empty{
+  padding:25px;text-align:center;color:var(--muted);
+  background:var(--panel2);border-radius:12px
+}
 
-    input, select {
-      border: 1px solid #52616b;
-      background: #fff;
-      color: #111;
-    }
+/* بطاقات الإحصائيات */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:13px
+}
+.stat-card{
+  background:var(--panel2);border:1px solid var(--border);
+  border-radius:13px;padding:17px;text-align:center
+}
+.stat-card .name{color:var(--muted);font-size:13px}
+.stat-card .value{
+  font-size:27px;font-weight:bold;margin-top:12px;
+  overflow-wrap:anywhere
+}
+.green-text{color:#75d69a}
+.red-text{color:#ff8585}
+.orange-text{color:#ffbd59}
+.gold-text{color:var(--gold)}
+.purple-text{color:#c29cff}
+.stat-wide{grid-column:span 2}
 
-    button {
-      border: 0;
-      background: #d6b35c;
-      color: #101820;
-      font-weight: bold;
-      cursor: pointer;
-    }
+/* الحجوزات */
+.booking{
+  background:var(--panel2);border:1px solid var(--border);
+  border-right:4px solid var(--gold);
+  padding:16px;border-radius:12px;margin:12px 0
+}
+.booking p{line-height:1.6;margin:7px 0;overflow-wrap:anywhere}
+.booking .received{color:var(--gold);font-weight:bold}
+.booking .appointment{color:#9ed8ff;font-weight:bold}
+.status{font-weight:bold}
+.status.pending{color:#ffbd59}
+.status.confirmed{color:#ff8585}
+.status.rejected{color:#75d69a}
+.day-title{
+  padding:13px;background:#344653;color:var(--gold);
+  border-radius:10px;text-align:center;margin:18px 0 10px
+}
+.section-heading{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:10px;flex-wrap:wrap
+}
 
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+/* العناصر */
+.item-card{
+  background:var(--panel2);border:1px solid var(--border);
+  padding:15px;border-radius:12px;margin:12px 0
+}
+.item-card h3{margin:0 0 10px;color:var(--gold)}
+.item-card p{color:#c4cdd4;line-height:1.6;overflow-wrap:anywhere}
+.tag{
+  display:inline-block;padding:5px 9px;border-radius:20px;
+  background:#344958;color:#d8e6ee;font-size:12px
+}
+.match-row{
+  display:grid;grid-template-columns:1fr auto 1fr;
+  gap:10px;align-items:center;text-align:center;
+  background:#182733;border-radius:10px;padding:13px;
+  margin:10px 0
+}
+.match-score{color:var(--gold);font-size:20px;font-weight:bold}
+.muted{color:var(--muted)}
+hr{border:0;border-top:1px solid var(--border);margin:20px 0}
 
-    #message { margin-top: 16px; }
-
-    .day-title {
-      background: #d6b35c;
-      color: #101820;
-      padding: 14px;
-      border-radius: 10px;
-      margin-top: 20px;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .booking {
-      background: #293946;
-      padding: 16px;
-      margin: 12px 0;
-      border-radius: 10px;
-      text-align: right;
-      border-right: 4px solid #d6b35c;
-    }
-
-    .booking p {
-      margin: 9px 0;
-      line-height: 1.6;
-      overflow-wrap: anywhere;
-    }
-
-    .received {
-      color: #d6b35c;
-      font-weight: bold;
-    }
-
-    .appointment {
-      color: #9ed8ff;
-      font-weight: bold;
-    }
-
-    .status { font-weight: bold; }
-    .status.pending { color: #ffbd59; }
-    .status.confirmed { color: #ff7373; }
-    .status.rejected { color: #75d69a; }
-
-    .action-btn { margin-top: 10px; }
-
-    .confirm-btn {
-      background: #248b55;
-      color: white;
-    }
-
-    .reject-btn, .cancel-btn {
-      background: #b83b3b;
-      color: white;
-    }
-
-    .empty {
-      background: #1d2a35;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      margin-top: 15px;
-      color: #ddd;
-    }
-
-    .section-label {
-      text-align: right;
-      color: #d6b35c;
-      margin-top: 22px;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    .logout-btn {
-      background: #52616b;
-      color: white;
-      margin-top: 25px;
-    }
-
-    .refresh-btn {
-      background: #40596b;
-      color: white;
-    }
-
-    /* الإحصائيات */
-    .statistics-section {
-      background: #1d2a35;
-      border-radius: 14px;
-      padding: 16px;
-      margin-top: 24px;
-      text-align: right;
-    }
-
-    .statistics-section h3 {
-      color: #d6b35c;
-      text-align: center;
-      margin-top: 5px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-    .stat-card {
-      background: #293946;
-      border-radius: 10px;
-      padding: 14px 8px;
-      text-align: center;
-      min-width: 0;
-    }
-
-    .stat-card .stat-name {
-      color: #ccc;
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
-
-    .stat-card .stat-value {
-      font-size: 23px;
-      font-weight: bold;
-      overflow-wrap: anywhere;
-    }
-
-    .stat-confirmed .stat-value { color: #75d69a; }
-    .stat-rejected .stat-value { color: #ff7373; }
-    .stat-pending .stat-value { color: #ffbd59; }
-    .stat-cancelled .stat-value { color: #c29cff; }
-    .stat-revenue .stat-value { color: #d6b35c; }
-
-    .stat-revenue {
-      grid-column: 1 / -1;
-    }
-
-    .statistics-info {
-      color: #bbb;
-      font-size: 13px;
-      line-height: 1.7;
-      margin-top: 12px;
-    }
-
-    .stats-loading {
-      text-align: center;
-      color: #ddd;
-      padding: 15px;
-    }
-
-    .stats-error {
-      color: #ff9999;
-      text-align: center;
-      padding: 12px;
-    }
-
-    @media (max-width: 380px) {
-      body { padding: 10px; }
-      .stats-grid { gap: 7px; }
-      .stat-card { padding: 12px 5px; }
-      .stat-card .stat-value { font-size: 19px; }
-    }
-  </style>
+@media(max-width:1050px){
+  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .sidebar{
+    transform:translateX(105%);transition:.25s;width:270px;
+    box-shadow:-10px 0 35px #0006
+  }
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-right:0;width:100%;padding:16px}
+  .mobile-menu{display:block;background:var(--panel2);color:var(--gold)}
+  .topbar h1{font-size:20px}
+}
+@media(max-width:480px){
+  .grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .stat-card{padding:13px 7px}
+  .stat-card .value{font-size:22px}
+  .panel{padding:14px}
+  .main{padding:12px}
+  .stat-wide{grid-column:1/-1}
+}
+</style>
 </head>
 
 <body>
 
-  <div class="login">
-    <h2>El Clasico</h2>
+<!-- تسجيل الدخول -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="logo">EC</div>
+    <h1>ملعب الكلاسيكو</h1>
     <p>تسجيل دخول صاحب الملعب</p>
-
     <input id="email" type="email" placeholder="البريد الإلكتروني">
     <input id="password" type="password" placeholder="كلمة المرور">
-
-    <button id="loginBtn">تسجيل الدخول</button>
-    <p id="message"></p>
+    <button class="btn gold" id="loginBtn" style="width:100%">تسجيل الدخول</button>
+    <div id="loginMessage"></div>
   </div>
+</div>
 
-  <script type="module">
-    import { createClient } from
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+<!-- لوحة الإدارة -->
+<div class="app hidden" id="app">
 
-    const SUPABASE_URL =
-      "https://rqcvjbpxntwqhoftupat.supabase.co";
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <strong>EL CLASICO</strong>
+      <small>لوحة إدارة الملعب</small>
+    </div>
 
-    const SUPABASE_KEY =
-      "sb_publishable_ynKIqc436PsqVFt620RgMw_b35h5KO0";
+    <div class="nav-title">الرئيسية</div>
+    <button class="nav-btn active" data-page="home"><span>⌂</span> الرئيسية</button>
+    <button class="nav-btn" data-page="bookings"><span>▣</span> الحجوزات</button>
+    <button class="nav-btn" data-page="statistics"><span>▤</span> الإحصائيات</button>
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    <div class="nav-title">إدارة الموقع</div>
+    <button class="nav-btn" data-page="settings"><span>⚙</span> إعدادات الملعب</button>
+    <button class="nav-btn" data-page="sections"><span>▦</span> أقسام الموقع</button>
+    <button class="nav-btn" data-page="tournaments"><span>🏆</span> الدورات والبطولات</button>
+    <button class="nav-btn" data-page="matches"><span>⚽</span> جدول المباريات</button>
 
-    const message = document.getElementById("message");
+    <div class="sidebar-bottom">
+      <button class="nav-btn logout-btn" id="logoutBtn">⇦ تسجيل الخروج</button>
+    </div>
+  </aside>
 
-    let allBookings = [];
-    let selectedDay = "";
-    let lastTodayKey = getEgyptDateKey();
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">الرئيسية</h1>
+        <p>مرحباً بك في مركز إدارة ملعب الكلاسيكو</p>
+      </div>
+      <button class="btn mobile-menu" id="menuBtn">☰ القائمة</button>
+    </header>
 
-    let weeklyHistory = [];
-    let monthlyHistory = [];
+    <!-- الرئيسية -->
+    <section class="page active" id="page-home">
+      <div class="panel">
+        <h2>مرحباً بك في لوحة الإدارة</h2>
+        <p class="panel-subtitle">
+          من هنا يمكنك إدارة الحجوزات والإحصائيات وإعدادات الملعب
+          والأقسام والدورات والمباريات.
+        </p>
+      </div>
 
-    let selectedWeek = "";
-    let selectedMonth = "";
+      <div class="stats-grid" id="homeStats">
+        <div class="stat-card">
+          <div class="name">طلبات اليوم</div>
+          <div class="value gold-text" id="homeToday">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="name">تحت المراجعة</div>
+          <div class="value orange-text" id="homePending">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="name">حجوزات مؤكدة</div>
+          <div class="value green-text" id="homeConfirmed">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="name">كل الحجوزات</div>
+          <div class="value" id="homeTotal">—</div>
+        </div>
+      </div>
 
-    // التاريخ الحالي حسب توقيت مصر
-    function getEgyptDateKey(date = new Date()) {
-      const parts = new Intl.DateTimeFormat("en-GB", {
-        timeZone: "Africa/Cairo",
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit"
-      }).formatToParts(date);
+      <div class="panel" style="margin-top:20px">
+        <div class="section-heading">
+          <h3>آخر طلبات الحجز</h3>
+          <button class="btn small" onclick="navigate('bookings')">عرض الحجوزات</button>
+        </div>
+        <div id="homeRecent"></div>
+      </div>
+    </section>
 
-      const values = {};
+    <!-- الحجوزات -->
+    <section class="page" id="page-bookings">
+      <div class="panel">
+        <div class="section-heading">
+          <h2>إدارة الحجوزات</h2>
+          <button class="btn gray" id="refreshBookings">تحديث</button>
+        </div>
+        <div class="field">
+          <label>اختر يوم وصول الطلبات</label>
+          <select id="daySelect"></select>
+        </div>
+        <div id="bookingsArea">جاري تحميل الحجوزات...</div>
+      </div>
+    </section>
 
-      parts.forEach(part => {
-        values[part.type] = part.value;
-      });
-
-      return `${values.year}-${values.month}-${values.day}`;
-    }
-
-    function dateObject(dateKey) {
-      const [year, month, day] = dateKey.split("-").map(Number);
-      return new Date(Date.UTC(year, month - 1, day));
-    }
-
-    function dateKeyFromObject(date) {
-      return date.toISOString().slice(0, 10);
-    }
-
-    function addDays(dateKey, days) {
-      const date = dateObject(dateKey);
-      date.setUTCDate(date.getUTCDate() + days);
-      return dateKeyFromObject(date);
-    }
-
-    function formatDate(dateKey) {
-      const date = dateObject(dateKey);
-
-      return new Intl.DateTimeFormat("ar-EG", {
-        weekday: "long",
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        timeZone: "UTC"
-      }).format(date);
-    }
-
-    function getCurrentWeekStart() {
-      const today = getEgyptDateKey();
-      const day = dateObject(today).getUTCDay();
-
-      // السبت = 6
-      const daysSinceSaturday = (day + 1) % 7;
-
-      return addDays(today, -daysSinceSaturday);
-    }
-
-    function getCurrentMonthStart() {
-      const today = getEgyptDateKey();
-      return today.slice(0, 7) + "-01";
-    }
-
-    function getMonthEnd(start) {
-      const date = dateObject(start);
-      date.setUTCMonth(date.getUTCMonth() + 1);
-      date.setUTCDate(0);
-      return dateKeyFromObject(date);
-    }
-
-    function formatReceivedTime(timestamp) {
-      if (!timestamp) return "غير متوفر";
-
-      return new Intl.DateTimeFormat("ar-EG", {
-        timeZone: "Africa/Cairo",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true
-      }).format(new Date(timestamp));
-    }
-
-    function formatHour(hour) {
-      const h = Number(hour);
-
-      if (h === 0) return "12:00 صباحًا";
-      if (h < 12) return `${h}:00 صباحًا`;
-      if (h === 12) return "12:00 ظهرًا";
-
-      return `${h - 12}:00 مساءً`;
-    }
-
-    function formatAppointmentDate(dateKey, hour) {
-      return `${formatDate(dateKey)} - ${formatHour(hour)}`;
-    }
-
-    function getStatusText(status) {
-      switch (String(status).toLowerCase()) {
-        case "pending": return "تحت المراجعة";
-        case "confirmed": return "مؤكد - محجوز";
-        case "rejected": return "مرفوض";
-        default: return status || "غير معروف";
-      }
-    }
-
-    function getStatusClass(status) {
-      const value = String(status).toLowerCase();
-
-      if (value === "pending") return "pending";
-      if (value === "confirmed") return "confirmed";
-      if (value === "rejected") return "rejected";
-
-      return "";
-    }
-
-    document.getElementById("loginBtn").addEventListener(
-      "click",
-      async () => {
-        message.textContent = "جاري تسجيل الدخول...";
-
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password
-        });
-
-        if (error) {
-          message.textContent =
-            "بيانات الدخول غير صحيحة أو تعذر تسجيل الدخول.";
-          return;
-        }
-
-        const { data, error: adminError } =
-          await supabase.rpc("is_admin");
-
-        if (adminError || data !== true) {
-          await supabase.auth.signOut();
-          message.textContent =
-            "هذا الحساب ليس لديه صلاحيات الإدارة.";
-          return;
-        }
-
-        showDashboard();
-      }
-    );
-
-    function showDashboard() {
-      document.querySelector(".login").innerHTML = `
-        <h2>لوحة تحكم ملعب الكلاسيكو</h2>
-        <p>مرحباً بك يا صاحب الملعب</p>
-
-        <div class="statistics-section">
-          <h3>الإحصائيات الأسبوعية</h3>
-          <p class="section-label">اختر الأسبوع</p>
+    <!-- الإحصائيات -->
+    <section class="page" id="page-statistics">
+      <div class="panel">
+        <h2>الإحصائيات الأسبوعية</h2>
+        <div class="field">
+          <label>اختر الأسبوع</label>
           <select id="weekSelect"></select>
-          <div id="weeklyStats" class="stats-loading">
-            جاري تحميل الإحصائيات...
-          </div>
         </div>
+        <div id="weeklyStats" class="muted">جاري التحميل...</div>
+      </div>
 
-        <div class="statistics-section">
-          <h3>الإحصائيات الشهرية</h3>
-          <p class="section-label">اختر الشهر</p>
+      <div class="panel">
+        <h2>الإحصائيات الشهرية</h2>
+        <div class="field">
+          <label>اختر الشهر</label>
           <select id="monthSelect"></select>
-          <div id="monthlyStats" class="stats-loading">
-            جاري تحميل الإحصائيات...
+        </div>
+        <div id="monthlyStats" class="muted">جاري التحميل...</div>
+      </div>
+    </section>
+
+    <!-- الإعدادات -->
+    <section class="page" id="page-settings">
+      <div class="panel">
+        <h2>إعدادات الملعب</h2>
+        <p class="panel-subtitle">
+          تعديل القيم وحفظها في قاعدة البيانات.
+          هذه المرحلة تحفظ الإعدادات في لوحة الإدارة فقط.
+        </p>
+
+        <div id="settingsMessage"></div>
+
+        <div class="grid">
+          <div class="field">
+            <label>سعر الساعة النهارية (جنيه)</label>
+            <input id="day_price" type="number" min="1">
+          </div>
+          <div class="field">
+            <label>سعر الساعة الليلية (جنيه)</label>
+            <input id="night_price" type="number" min="1">
+          </div>
+          <div class="field">
+            <label>بداية الفترة النهارية (0 إلى 23)</label>
+            <input id="day_start" type="number" min="0" max="23">
+          </div>
+          <div class="field">
+            <label>بداية الفترة الليلية (0 إلى 23)</label>
+            <input id="night_start" type="number" min="0" max="23">
+          </div>
+          <div class="field">
+            <label>العربون (جنيه)</label>
+            <input id="deposit" type="number" min="0">
+          </div>
+          <div class="field">
+            <label>رقم واتساب</label>
+            <input id="whatsapp" type="text" placeholder="+2010...">
           </div>
         </div>
 
-        <p class="section-label">اختر يوم مراجعة الطلبات</p>
-        <select id="daySelect"></select>
+        <label class="check-line">
+          <input type="checkbox" id="open_24_hours">
+          الملعب مفتوح 24 ساعة
+        </label>
 
-        <button class="refresh-btn" id="refreshBtn">
-          تحديث الحجوزات والإحصائيات
-        </button>
-
-        <div id="bookings">جاري تحميل الحجوزات...</div>
-
-        <button class="logout-btn" id="logoutBtn">
-          تسجيل الخروج
-        </button>
-      `;
-
-      document.getElementById("daySelect").addEventListener(
-        "change",
-        event => {
-          selectedDay = event.target.value;
-          renderBookings();
-        }
-      );
-
-      document.getElementById("weekSelect").addEventListener(
-        "change",
-        event => {
-          selectedWeek = event.target.value;
-          loadOneStatistics("weekly", selectedWeek, "weeklyStats");
-        }
-      );
-
-      document.getElementById("monthSelect").addEventListener(
-        "change",
-        event => {
-          selectedMonth = event.target.value;
-          loadOneStatistics("monthly", selectedMonth, "monthlyStats");
-        }
-      );
-
-      document.getElementById("refreshBtn").addEventListener(
-        "click",
-        async () => {
-          await loadBookings();
-          await loadStatistics();
-        }
-      );
-
-      document.getElementById("logoutBtn").addEventListener(
-        "click",
-        async () => {
-          await supabase.auth.signOut();
-          location.reload();
-        }
-      );
-
-      loadBookings();
-      loadStatistics();
-
-      // الانتقال تلقائيًا لليوم الجديد بتوقيت مصر
-      setInterval(() => {
-        const today = getEgyptDateKey();
-
-        if (today !== lastTodayKey) {
-          const wasShowingToday = selectedDay === lastTodayKey;
-
-          lastTodayKey = today;
-
-          if (wasShowingToday) {
-            selectedDay = today;
-          }
-
-          loadBookings();
-          loadStatistics();
-        }
-      }, 30000);
-    }
-
-    async function loadBookings() {
-      const area = document.getElementById("bookings");
-
-      if (!area) return;
-
-      area.textContent = "جاري تحميل الحجوزات...";
-
-      const { data, error } = await supabase
-        .from("bookings")
-        .select("*")
-        .order("created_at", { ascending: true });
-
-      if (error) {
-        area.textContent = "تعذر تحميل الحجوزات.";
-        return;
-      }
-
-      allBookings = data || [];
-
-      const today = getEgyptDateKey();
-
-      if (!selectedDay) {
-        selectedDay = today;
-      }
-
-      renderDayOptions();
-      renderBookings();
-    }
-
-    function renderDayOptions() {
-      const select = document.getElementById("daySelect");
-
-      if (!select) return;
-
-      const today = getEgyptDateKey();
-      const days = new Set([today]);
-
-      allBookings.forEach(booking => {
-        if (booking.created_at) {
-          days.add(getEgyptDateKey(new Date(booking.created_at)));
-        }
-      });
-
-      const sortedDays = Array.from(days).sort().reverse();
-
-      if (!days.has(selectedDay)) {
-        selectedDay = today;
-      }
-
-      select.innerHTML = sortedDays.map(day => `
-        <option value="${day}" ${day === selectedDay ? "selected" : ""}>
-          ${escapeHTML(formatDate(day))}
-          ${day === today ? " - اليوم الحالي" : ""}
-        </option>
-      `).join("");
-    }
-
-    function renderBookings() {
-      const area = document.getElementById("bookings");
-
-      if (!area) return;
-
-      const today = getEgyptDateKey();
-
-      const dayBookings = allBookings
-        .filter(booking => {
-          if (!booking.created_at) return false;
-
-          return getEgyptDateKey(new Date(booking.created_at)) === selectedDay;
-        })
-        .sort((a, b) => {
-          return new Date(a.created_at) - new Date(b.created_at);
-        });
-
-      const heading = `
-        <div class="day-title">
-          طلبات يوم ${escapeHTML(formatDate(selectedDay))}
-          ${selectedDay === today ? " - اليوم الحالي" : ""}
+        <div class="actions">
+          <button class="btn gold" id="saveSettings">حفظ الإعدادات</button>
+          <button class="btn gray" id="reloadSettings">إعادة تحميل القيم</button>
         </div>
-      `;
+      </div>
+    </section>
 
-      if (dayBookings.length === 0) {
-        area.innerHTML = heading + `
-          <div class="empty">
-            لا توجد طلبات حجز وصلت في هذا اليوم.
-          </div>
-        `;
-        return;
-      }
+    <!-- الأقسام -->
+    <section class="page" id="page-sections">
+      <div class="panel">
+        <h2>إضافة قسم جديد</h2>
+        <p class="panel-subtitle">
+          أنشئ أقسام الموقع وحدد نوعها وترتيب ظهورها.
+        </p>
+        <div id="sectionMessage"></div>
 
-      area.innerHTML = heading + dayBookings.map(booking => {
-        const status = String(booking.status || "").toLowerCase();
-        const receivedTime = formatReceivedTime(booking.created_at);
+        <input type="hidden" id="sectionId">
 
-        const appointment = formatAppointmentDate(
-          booking.booking_date,
-          booking.start_hour
-        );
-
-        let buttons = "";
-
-        if (status === "pending") {
-          buttons = `
-            <button class="action-btn confirm-btn"
-              onclick="updateBooking(${Number(booking.id)}, 'confirmed')">
-              تأكيد الحجز
-            </button>
-
-            <button class="action-btn reject-btn"
-              onclick="updateBooking(${Number(booking.id)}, 'rejected')">
-              رفض الحجز
-            </button>
-          `;
-        } else if (status === "confirmed") {
-          buttons = `
-            <button class="action-btn cancel-btn"
-              onclick="updateBooking(${Number(booking.id)}, 'rejected')">
-              إلغاء الحجز
-            </button>
-          `;
-        }
-
-        return `
-          <div class="booking">
-            <p class="received">
-              وقت وصول الطلب: ${escapeHTML(receivedTime)}
-            </p>
-
-            <p>
-              الاسم: ${escapeHTML(booking.customer_name)}
-            </p>
-
-            <p>
-              الهاتف: ${escapeHTML(booking.phone)}
-            </p>
-
-            <p class="appointment">
-              موعد الحجز المطلوب: ${escapeHTML(appointment)}
-            </p>
-
-            <p>
-              المدة: ${Number(booking.duration || 1)} ساعة
-            </p>
-
-            <p>
-              السعر: ${Number(booking.price)} جنيه
-            </p>
-
-            <p class="status ${getStatusClass(status)}">
-              الحالة: ${escapeHTML(getStatusText(status))}
-            </p>
-
-            ${buttons}
-          </div>
-        `;
-      }).join("");
-    }
-
-    // تحميل الفترات المحفوظة
-    async function loadStatistics() {
-      const weeklyArea = document.getElementById("weeklyStats");
-      const monthlyArea = document.getElementById("monthlyStats");
-
-      if (!weeklyArea || !monthlyArea) return;
-
-      weeklyArea.textContent = "جاري تحميل الإحصائيات...";
-      monthlyArea.textContent = "جاري تحميل الإحصائيات...";
-
-      const { data, error } = await supabase
-        .from("booking_statistics")
-        .select("*")
-        .order("period_start", { ascending: false });
-
-      if (error) {
-        weeklyArea.innerHTML =
-          '<div class="stats-error">تعذر تحميل الإحصائيات الأسبوعية.</div>';
-        monthlyArea.innerHTML =
-          '<div class="stats-error">تعذر تحميل الإحصائيات الشهرية.</div>';
-        return;
-      }
-
-      const records = data || [];
-
-      weeklyHistory = records.filter(
-        item => item.period_type === "weekly"
-      );
-
-      monthlyHistory = records.filter(
-        item => item.period_type === "monthly"
-      );
-
-      const currentWeek = getCurrentWeekStart();
-      const currentMonth = getCurrentMonthStart();
-
-      selectedWeek = selectedWeek || currentWeek;
-      selectedMonth = selectedMonth || currentMonth;
-
-      renderStatisticsOptions();
-
-      await Promise.all([
-        loadOneStatistics("weekly", selectedWeek, "weeklyStats"),
-        loadOneStatistics("monthly", selectedMonth, "monthlyStats")
-      ]);
-    }
-
-    function renderStatisticsOptions() {
-      const weekSelect = document.getElementById("weekSelect");
-      const monthSelect = document.getElementById("monthSelect");
-
-      if (!weekSelect || !monthSelect) return;
-
-      const currentWeek = getCurrentWeekStart();
-      const currentMonth = getCurrentMonthStart();
-
-      const weekOptions = new Map();
-      weekOptions.set(currentWeek, "الأسبوع الحالي");
-
-      weeklyHistory.forEach(item => {
-        const label =
-          `${formatDate(item.period_start)} إلى ${formatDate(item.period_end)}`;
-        weekOptions.set(item.period_start, label);
-      });
-
-      const monthOptions = new Map();
-      monthOptions.set(currentMonth, "الشهر الحالي");
-
-      monthlyHistory.forEach(item => {
-        const label = formatDate(item.period_start);
-        monthOptions.set(item.period_start, label);
-      });
-
-      if (!weekOptions.has(selectedWeek)) {
-        selectedWeek = currentWeek;
-      }
-
-      if (!monthOptions.has(selectedMonth)) {
-        selectedMonth = currentMonth;
-      }
-
-      weekSelect.innerHTML = Array.from(weekOptions.entries())
-        .map(([value, label]) => `
-          <option value="${value}" ${value === selectedWeek ? "selected" : ""}>
-            ${escapeHTML(label)}
-          </option>
-        `).join("");
-
-      monthSelect.innerHTML = Array.from(monthOptions.entries())
-        .map(([value, label]) => `
-          <option value="${value}" ${value === selectedMonth ? "selected" : ""}>
-            ${escapeHTML(label)}
-          </option>
-        `).join("");
-    }
-
-    async function loadOneStatistics(type, start, areaId) {
-      const area = document.getElementById(areaId);
-
-      if (!area || !start) return;
-
-      area.textContent = "جاري تحميل الإحصائيات...";
-
-      const isWeekly = type === "weekly";
-
-      const currentStart = isWeekly
-        ? getCurrentWeekStart()
-        : getCurrentMonthStart();
-
-      const isCurrent = start === currentStart;
-
-      let stats = null;
-
-      if (isCurrent) {
-        const end = isWeekly
-          ? addDays(start, 6)
-          : getMonthEnd(start);
-
-        const { data, error } = await supabase.rpc(
-          "calculate_booking_statistics",
-          {
-            p_period_type: type,
-            p_period_start: start,
-            p_period_end: end
-          }
-        );
-
-        if (error) {
-          area.innerHTML =
-            '<div class="stats-error">تعذر حساب الإحصائيات الحالية.</div>';
-          return;
-        }
-
-        stats = Array.isArray(data) ? data[0] : data;
-      } else {
-        const history = isWeekly ? weeklyHistory : monthlyHistory;
-
-        const record = history.find(
-          item => item.period_start === start
-        );
-
-        if (record) {
-          stats = {
-            confirmed_count: record.confirmed_count,
-            rejected_count: record.rejected_count,
-            pending_count: record.pending_count,
-            cancelled_count: record.cancelled_count,
-            confirmed_revenue: record.confirmed_revenue
-          };
-        }
-      }
-
-      if (!stats) {
-        area.innerHTML = `
-          <div class="empty">
-            لا توجد إحصائيات محفوظة لهذه الفترة.
-          </div>
-        `;
-        return;
-      }
-
-      renderStatistics(area, stats, isCurrent);
-    }
-
-    function renderStatistics(area, stats, isCurrent) {
-      const confirmed = Number(stats.confirmed_count || 0);
-      const rejected = Number(stats.rejected_count || 0);
-      const pending = Number(stats.pending_count || 0);
-      const cancelled = Number(stats.cancelled_count || 0);
-      const revenue = Number(stats.confirmed_revenue || 0);
-
-      area.innerHTML = `
-        <div class="stats-grid">
-
-          <div class="stat-card stat-confirmed">
-            <div class="stat-name">الحجوزات المؤكدة</div>
-            <div class="stat-value">${confirmed}</div>
-          </div>
-
-          <div class="stat-card stat-rejected">
-            <div class="stat-name">الطلبات المرفوضة</div>
-            <div class="stat-value">${rejected}</div>
-          </div>
-
-          <div class="stat-card stat-pending">
-            <div class="stat-name">تحت المراجعة</div>
-            <div class="stat-value">${pending}</div>
-          </div>
-
-          <div class="stat-card stat-cancelled">
-            <div class="stat-name">الحجوزات الملغاة</div>
-            <div class="stat-value">${cancelled}</div>
-          </div>
-
-          <div class="stat-card stat-revenue">
-            <div class="stat-name">إجمالي الإيرادات من المؤكد فقط</div>
-            <div class="stat-value">${revenue.toLocaleString("en-US")} جنيه</div>
-          </div>
-
+        <div class="field">
+          <label>اسم القسم</label>
+          <input id="sectionTitle" placeholder="مثال: جدول مباريات الدورة">
         </div>
 
-        <div class="statistics-info">
-          ${
-            isCurrent
-              ? "إحصائيات الفترة الحالية، ويتم تحديثها من الحجوزات المسجلة."
-              : "إحصائيات محفوظة للفترة السابقة، ولا تتغير عند تعديل حالات الحجوزات لاحقًا."
-          }
-          <br>
-          الإيرادات محسوبة بالسعر الكامل قبل خصم العربون.
+        <div class="grid">
+          <div class="field">
+            <label>نوع القسم</label>
+            <select id="sectionType">
+              <option value="custom">قسم عام</option>
+              <option value="announcement">إعلان</option>
+              <option value="offer">عرض</option>
+              <option value="tournament">دورات وبطولات</option>
+              <option value="matches">جدول مباريات</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>ترتيب الظهور</label>
+            <input id="sectionOrder" type="number" value="0">
+          </div>
         </div>
-      `;
-    }
 
-    function escapeHTML(value) {
-      return String(value ?? "").replace(/[&<>"']/g, char => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-      })[char]);
-    }
+        <div class="field">
+          <label>وصف أو محتوى القسم</label>
+          <textarea id="sectionContent" placeholder="اكتب وصف القسم هنا..."></textarea>
+        </div>
 
-    window.updateBooking = async function(id, newStatus) {
-      const { error } = await supabase
-        .from("bookings")
-        .update({ status: newStatus })
-        .eq("id", id);
+        <label class="check-line">
+          <input type="checkbox" id="sectionVisible" checked>
+          القسم ظاهر
+        </label>
 
-      if (error) {
-        alert("تعذر تحديث حالة الحجز");
-        return;
-      }
+        <div class="actions">
+          <button class="btn gold" id="saveSection">حفظ القسم</button>
+          <button class="btn gray" id="resetSection">إلغاء التعديل</button>
+        </div>
+      </div>
 
-      alert(
-        newStatus === "confirmed"
-          ? "تم تأكيد الحجز بنجاح"
-          : "تم رفض الحجز أو إلغاء الحجز بنجاح"
-      );
+      <div class="panel">
+        <h2>الأقسام الحالية</h2>
+        <div id="sectionsList">جاري التحميل...</div>
+      </div>
+    </section>
 
+    <!-- البطولات -->
+    <section class="page" id="page-tournaments">
+      <div class="panel">
+        <h2>إضافة دورة أو بطولة</h2>
+        <div id="tournamentMessage"></div>
+        <input type="hidden" id="tournamentId">
+
+        <div class="field">
+          <label>اسم الدورة</label>
+          <input id="tournamentTitle" placeholder="اسم البطولة">
+        </div>
+        <div class="field">
+          <label>وصف الدورة</label>
+          <textarea id="tournamentDescription"></textarea>
+        </div>
+        <div class="field">
+          <label>شروط الاشتراك</label>
+          <textarea id="tournamentRules"></textarea>
+        </div>
+        <div class="grid">
+          <div class="field">
+            <label>رسوم الاشتراك</label>
+            <input id="tournamentFee" type="number" min="0" value="0">
+          </div>
+          <div class="field">
+            <label>رابط صورة الدورة (اختياري)</label>
+            <input id="tournamentImage" type="url" placeholder="https://...">
+          </div>
+        </div>
+        <div class="field">
+          <label>الجوائز</label>
+          <textarea id="tournamentPrizes"></textarea>
+        </div>
+        <label class="check-line">
+          <input type="checkbox" id="tournamentVisible" checked>
+          الدورة ظاهرة للزوار
+        </label>
+        <div class="actions">
+          <button class="btn gold" id="saveTournament">حفظ الدورة</button>
+          <button class="btn gray" id="resetTournament">إلغاء التعديل</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>الدورات المسجلة</h2>
+        <div id="tournamentsList">جاري التحميل...</div>
+      </div>
+    </section>
+
+    <!-- المباريات -->
+    <section class="page" id="page-matches">
+      <div class="panel">
+        <h2>إضافة مباراة</h2>
+        <div id="matchMessage"></div>
+        <input type="hidden" id="matchId">
+
+        <div class="field">
+          <label>اختر الدورة</label>
+          <select id="matchTournament"></select>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label>الفريق الأول</label>
+            <input id="teamA" placeholder="اسم الفريق الأول">
+          </div>
+          <div class="field">
+            <label>الفريق الثاني</label>
+            <input id="teamB" placeholder="اسم الفريق الثاني">
+          </div>
+          <div class="field">
+            <label>تاريخ المباراة</label>
+            <input id="matchDate" type="date">
+          </div>
+          <div class="field">
+            <label>وقت المباراة</label>
+            <input id="matchTime" type="time">
+          </div>
+          <div class="field">
+            <label>مكان المباراة</label>
+            <input id="matchVenue" placeholder="اسم الملعب">
+          </div>
+          <div class="field">
+            <label>حالة المباراة</label>
+            <select id="matchStatus">
+              <option value="scheduled">لم تبدأ</option>
+              <option value="live">مباشرة</option>
+              <option value="finished">انتهت</option>
+              <option value="postponed">مؤجلة</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>نتيجة الفريق الأول</label>
+            <input id="scoreA" type="number" min="0" placeholder="اتركه فارغًا إن لم تبدأ">
+          </div>
+          <div class="field">
+            <label>نتيجة الفريق الثاني</label>
+            <input id="scoreB" type="number" min="0" placeholder="اتركه فارغًا إن لم تبدأ">
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn gold" id="saveMatch">حفظ المباراة</button>
+          <button class="btn gray" id="resetMatch">إلغاء التعديل</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>المباريات المسجلة</h2>
+        <div class="field">
+          <label>تصفية حسب الدورة</label>
+          <select id="matchesFilter"></select>
+        </div>
+        <div id="matchesList">اختر دورة لعرض مبارياتها.</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script type="module">
+import { createClient } from
+"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const SUPABASE_URL = "https://rqcvjbpxntwqhoftupat.supabase.co";
+const SUPABASE_KEY = "sb_publishable_ynKIqc436PsqVFt620RgMw_b35h5KO0";
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let allBookings = [];
+let selectedDay = "";
+let weeklyHistory = [];
+let monthlyHistory = [];
+let selectedWeek = "";
+let selectedMonth = "";
+let tournamentsCache = [];
+
+const $ = id => document.getElementById(id);
+
+function msg(id, text, type = "success") {
+  const area = $(id);
+  if (!area) return;
+  area.innerHTML = `<div class="notice ${type}">${escapeHTML(text)}</div>`;
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[char]);
+}
+
+function getEgyptDateKey(date = new Date()) {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone:"Africa/Cairo",year:"numeric",month:"2-digit",day:"2-digit"
+  }).formatToParts(date);
+  const values = {};
+  parts.forEach(p => values[p.type] = p.value);
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+function dateObject(key) {
+  const [y,m,d] = key.split("-").map(Number);
+  return new Date(Date.UTC(y,m-1,d));
+}
+function dateKeyFromObject(date) {
+  return date.toISOString().slice(0,10);
+}
+function addDays(key,days) {
+  const date = dateObject(key);
+  date.setUTCDate(date.getUTCDate()+days);
+  return dateKeyFromObject(date);
+}
+function formatDate(key) {
+  if (!key) return "غير محدد";
+  return new Intl.DateTimeFormat("ar-EG",{
+    weekday:"long",day:"2-digit",month:"2-digit",year:"numeric",
+    timeZone:"UTC"
+  }).format(dateObject(key));
+}
+function getCurrentWeekStart() {
+  const today = getEgyptDateKey();
+  const day = dateObject(today).getUTCDay();
+  return addDays(today,-((day+1)%7));
+}
+function getCurrentMonthStart() {
+  return getEgyptDateKey().slice(0,7)+"-01";
+}
+function getMonthEnd(start) {
+  const date = dateObject(start);
+  date.setUTCMonth(date.getUTCMonth()+1);
+  date.setUTCDate(0);
+  return dateKeyFromObject(date);
+}
+function formatReceivedTime(timestamp) {
+  if (!timestamp) return "غير متوفر";
+  return new Intl.DateTimeFormat("ar-EG",{
+    timeZone:"Africa/Cairo",hour:"numeric",minute:"2-digit",hour12:true
+  }).format(new Date(timestamp));
+}
+function formatHour(hour) {
+  const h = Number(hour);
+  if (h===0) return "12:00 صباحًا";
+  if (h<12) return `${h}:00 صباحًا`;
+  if (h===12) return "12:00 ظهرًا";
+  return `${h-12}:00 مساءً`;
+}
+function formatAppointmentDate(date,hour) {
+  return `${formatDate(date)} - ${formatHour(hour)}`;
+}
+function statusText(status) {
+  return ({
+    pending:"تحت المراجعة",
+    confirmed:"مؤكد - محجوز",
+    rejected:"مرفوض"
+  })[String(status).toLowerCase()] || status || "غير معروف";
+}
+function statusClass(status) {
+  return String(status).toLowerCase();
+}
+
+/* التنقل */
+const pageNames = {
+  home:"الرئيسية",
+  bookings:"إدارة الحجوزات",
+  statistics:"الإحصائيات",
+  settings:"إعدادات الملعب",
+  sections:"أقسام الموقع",
+  tournaments:"الدورات والبطولات",
+  matches:"جدول المباريات"
+};
+
+window.navigate = function(page) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".nav-btn[data-page]").forEach(b => b.classList.remove("active"));
+  $("page-"+page)?.classList.add("active");
+  document.querySelector(`.nav-btn[data-page="${page}"]`)?.classList.add("active");
+  $("pageTitle").textContent = pageNames[page] || "لوحة الإدارة";
+  $("sidebar").classList.remove("open");
+
+  if (page==="settings") loadSettings();
+  if (page==="sections") loadSections();
+  if (page==="tournaments") loadTournaments();
+  if (page==="matches") loadMatchPage();
+};
+
+document.querySelectorAll(".nav-btn[data-page]").forEach(button => {
+  button.addEventListener("click",() => navigate(button.dataset.page));
+});
+$("menuBtn").addEventListener("click",() => $("sidebar").classList.toggle("open"));
+
+/* الدخول */
+$("loginBtn").addEventListener("click",login);
+$("password").addEventListener("keydown",e => {
+  if (e.key==="Enter") login();
+});
+
+async function login() {
+  $("loginMessage").innerHTML = '<div class="notice">جاري تسجيل الدخول...</div>';
+  const email = $("email").value.trim();
+  const password = $("password").value;
+
+  const {error} = await supabase.auth.signInWithPassword({email,password});
+  if (error) {
+    msg("loginMessage","بيانات الدخول غير صحيحة أو تعذر تسجيل الدخول.","error");
+    return;
+  }
+
+  const {data,error:adminError} = await supabase.rpc("is_admin");
+  if (adminError || data!==true) {
+    await supabase.auth.signOut();
+    msg("loginMessage","هذا الحساب ليس لديه صلاحيات الإدارة.","error");
+    return;
+  }
+
+  $("loginScreen").classList.add("hidden");
+  $("app").classList.remove("hidden");
+  await startDashboard();
+}
+
+$("logoutBtn").addEventListener("click",async() => {
+  await supabase.auth.signOut();
+  location.reload();
+});
+
+async function startDashboard() {
+  await Promise.all([loadBookings(),loadStatistics()]);
+  updateHomeStats();
+
+  const today = getEgyptDateKey();
+  setInterval(async() => {
+    if (getEgyptDateKey()!==today) {
       await loadBookings();
       await loadStatistics();
-    };
-  </script>
+    }
+  },60000);
+}
 
+/* الحجوزات */
+$("refreshBookings").addEventListener("click",async() => {
+  await loadBookings();
+  await loadStatistics();
+});
+
+$("daySelect").addEventListener("change",e => {
+  selectedDay = e.target.value;
+  renderBookings();
+});
+
+async function loadBookings() {
+  $("bookingsArea").textContent = "جاري تحميل الحجوزات...";
+  const {data,error} = await supabase
+    .from("bookings").select("*").order("created_at",{ascending:true});
+
+  if (error) {
+    $("bookingsArea").textContent = "تعذر تحميل الحجوزات.";
+    return;
+  }
+  allBookings = data || [];
+  if (!selectedDay) selectedDay = getEgyptDateKey();
+  renderDayOptions();
+  renderBookings();
+  updateHomeStats();
+}
+
+function renderDayOptions() {
+  const today = getEgyptDateKey();
+  const days = new Set([today]);
+  allBookings.forEach(b => {
+    if (b.created_at) days.add(getEgyptDateKey(new Date(b.created_at)));
+  });
+  const sorted = Array.from(days).sort().reverse();
+  if (!days.has(selectedDay)) selectedDay = today;
+
+  $("daySelect").innerHTML = sorted.map(day => `
+    <option value="${day}" ${day===selectedDay?"selected":""}>
+      ${escapeHTML(formatDate(day))}${day===today?" - اليوم الحالي":""}
+    </option>
+  `).join("");
+}
+
+function renderBookings() {
+  const today = getEgyptDateKey();
+  const rows = allBookings.filter(b =>
+    b.created_at && getEgyptDateKey(new Date(b.created_at))===selectedDay
+  ).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+
+  let html = `<div class="day-title">طلبات يوم ${escapeHTML(formatDate(selectedDay))}</div>`;
+  if (!rows.length) {
+    $("bookingsArea").innerHTML = html+'<div class="empty">لا توجد طلبات في هذا اليوم.</div>';
+    return;
+  }
+
+  html += rows.map(b => {
+    const status = String(b.status||"").toLowerCase();
+    let buttons = "";
+    if (status==="pending") {
+      buttons = `
+        <button class="btn small green" onclick="updateBooking(${Number(b.id)},'confirmed')">تأكيد الحجز</button>
+        <button class="btn small red" onclick="updateBooking(${Number(b.id)},'rejected')">رفض الحجز</button>`;
+    } else if (status==="confirmed") {
+      buttons = `<button class="btn small red" onclick="updateBooking(${Number(b.id)},'rejected')">إلغاء الحجز</button>`;
+    }
+
+    return `
+      <div class="booking">
+        <p class="received">وقت وصول الطلب: ${escapeHTML(formatReceivedTime(b.created_at))}</p>
+        <p>الاسم: ${escapeHTML(b.customer_name)}</p>
+        <p>الهاتف: ${escapeHTML(b.phone)}</p>
+        <p class="appointment">موعد الحجز: ${escapeHTML(formatAppointmentDate(b.booking_date,b.start_hour))}</p>
+        <p>المدة: ${Number(b.duration||1)} ساعة</p>
+        <p>السعر: ${Number(b.price)} جنيه</p>
+        <p class="status ${statusClass(status)}">الحالة: ${escapeHTML(statusText(status))}</p>
+        <div class="actions">${buttons}</div>
+      </div>`;
+  }).join("");
+
+  $("bookingsArea").innerHTML = html;
+}
+
+window.updateBooking = async function(id,newStatus) {
+  if (!confirm(newStatus==="confirmed"?"تأكيد هذا الحجز؟":"هل تريد تغيير حالة الحجز؟")) return;
+
+  const {error} = await supabase.from("bookings")
+    .update({status:newStatus}).eq("id",id);
+
+  if (error) {
+    alert("تعذر تحديث حالة الحجز.");
+    return;
+  }
+
+  alert(newStatus==="confirmed"?"تم تأكيد الحجز بنجاح":"تم تحديث حالة الحجز بنجاح");
+  await loadBookings();
+  await loadStatistics();
+};
+
+/* الرئيسية */
+function updateHomeStats() {
+  const today = getEgyptDateKey();
+  const todayRows = allBookings.filter(b =>
+    b.created_at && getEgyptDateKey(new Date(b.created_at))===today
+  );
+  $("homeToday").textContent = todayRows.length;
+  $("homePending").textContent = allBookings.filter(b=>b.status==="pending").length;
+  $("homeConfirmed").textContent = allBookings.filter(b=>b.status==="confirmed").length;
+  $("homeTotal").textContent = allBookings.length;
+
+  const recent = [...allBookings].sort((a,b)=>
+    new Date(b.created_at)-new Date(a.created_at)
+  ).slice(0,5);
+
+  $("homeRecent").innerHTML = recent.length ? recent.map(b=>`
+    <div class="item-card">
+      <strong>${escapeHTML(b.customer_name)}</strong>
+      <p>${escapeHTML(formatAppointmentDate(b.booking_date,b.start_hour))}</p>
+      <span class="tag">${escapeHTML(statusText(b.status))}</span>
+    </div>
+  `).join("") : '<div class="empty">لا توجد حجوزات حتى الآن.</div>';
+}
+
+/* الإحصائيات */
+$("weekSelect").addEventListener("change",e=>{
+  selectedWeek=e.target.value;
+  loadOneStatistics("weekly",selectedWeek,"weeklyStats");
+});
+$("monthSelect").addEventListener("change",e=>{
+  selectedMonth=e.target.value;
+  loadOneStatistics("monthly",selectedMonth,"monthlyStats");
+});
+
+async function loadStatistics() {
+  const {data,error} = await supabase.from("booking_statistics")
+    .select("*").order("period_start",{ascending:false});
+
+  if (error) {
+    $("weeklyStats").innerHTML='<div class="notice error">تعذر تحميل الإحصائيات الأسبوعية.</div>';
+    $("monthlyStats").innerHTML='<div class="notice error">تعذر تحميل الإحصائيات الشهرية.</div>';
+    return;
+  }
+
+  weeklyHistory=(data||[]).filter(x=>x.period_type==="weekly");
+  monthlyHistory=(data||[]).filter(x=>x.period_type==="monthly");
+
+  selectedWeek=selectedWeek||getCurrentWeekStart();
+  selectedMonth=selectedMonth||getCurrentMonthStart();
+  renderStatisticsOptions();
+
+  await Promise.all([
+    loadOneStatistics("weekly",selectedWeek,"weeklyStats"),
+    loadOneStatistics("monthly",selectedMonth,"monthlyStats")
+  ]);
+}
+
+function renderStatisticsOptions() {
+  const weekOptions=new Map([[getCurrentWeekStart(),"الأسبوع الحالي"]]);
+  weeklyHistory.forEach(x=>weekOptions.set(
+    x.period_start,`${formatDate(x.period_start)} إلى ${formatDate(x.period_end)}`
+  ));
+
+  const monthOptions=new Map([[getCurrentMonthStart(),"الشهر الحالي"]]);
+  monthlyHistory.forEach(x=>monthOptions.set(x.period_start,formatDate(x.period_start)));
+
+  if (!weekOptions.has(selectedWeek)) selectedWeek=getCurrentWeekStart();
+  if (!monthOptions.has(selectedMonth)) selectedMonth=getCurrentMonthStart();
+
+  $("weekSelect").innerHTML=Array.from(weekOptions.entries()).map(([v,l])=>
+    `<option value="${v}" ${v===selectedWeek?"selected":""}>${escapeHTML(l)}</option>`
+  ).join("");
+
+  $("monthSelect").innerHTML=Array.from(monthOptions.entries()).map(([v,l])=>
+    `<option value="${v}" ${v===selectedMonth?"selected":""}>${escapeHTML(l)}</option>`
+  ).join("");
+}
+
+async function loadOneStatistics(type,start,areaId) {
+  const area=$(areaId);
+  if (!area||!start) return;
+  area.textContent="جاري تحميل الإحصائيات...";
+
+  const weekly=type==="weekly";
+  const current=weekly?getCurrentWeekStart():getCurrentMonthStart();
+  let stats=null;
+
+  if (start===current) {
+    const end=weekly?addDays(start,6):getMonthEnd(start);
+    const {data,error}=await supabase.rpc("calculate_booking_statistics",{
+      p_period_type:type,p_period_start:start,p_period_end:end
+    });
+    if (error) {
+      area.innerHTML='<div class="notice error">تعذر حساب الإحصائيات الحالية.</div>';
+      return;
+    }
+    stats=Array.isArray(data)?data[0]:data;
+  } else {
+    const history=weekly?weeklyHistory:monthlyHistory;
+    const record=history.find(x=>x.period_start===start);
+    if (record) stats=record;
+  }
+
+  if (!stats) {
+    area.innerHTML='<div class="empty">لا توجد إحصائيات محفوظة لهذه الفترة.</div>';
+    return;
+  }
+
+  renderStatistics(area,stats,start===current);
+}
+
+function renderStatistics(area,s,isCurrent) {
+  const values=[
+    ["الحجوزات المؤكدة",Number(s.confirmed_count||0),"green-text"],
+    ["الطلبات المرفوضة",Number(s.rejected_count||0),"red-text"],
+    ["تحت المراجعة",Number(s.pending_count||0),"orange-text"],
+    ["الحجوزات الملغاة",Number(s.cancelled_count||0),"purple-text"]
+  ];
+
+  area.innerHTML=`
+    <div class="stats-grid">
+      ${values.map(v=>`
+        <div class="stat-card">
+          <div class="name">${v[0]}</div>
+          <div class="value ${v[2]}">${v[1]}</div>
+        </div>
+      `).join("")}
+      <div class="stat-card stat-wide">
+        <div class="name">إجمالي الإيرادات من الحجوزات المؤكدة</div>
+        <div class="value gold-text">${Number(s.confirmed_revenue||0).toLocaleString("en-US")} جنيه</div>
+      </div>
+    </div>
+    <p class="panel-subtitle">
+      ${isCurrent?"إحصائيات الفترة الحالية.":"إحصائيات محفوظة للفترة السابقة."}
+      الإيرادات محسوبة بالسعر الكامل قبل خصم العربون.
+    </p>`;
+}
+
+/* إعدادات الملعب */
+$("reloadSettings").addEventListener("click",loadSettings);
+$("saveSettings").addEventListener("click",saveSettings);
+
+async function loadSettings() {
+  $("settingsMessage").innerHTML='<div class="notice">جاري تحميل الإعدادات...</div>';
+
+  const {data,error}=await supabase.from("site_settings")
+    .select("settings").eq("id",1).single();
+
+  if (error||!data) {
+    msg("settingsMessage","تعذر تحميل الإعدادات. تأكد من وجود سجل الإعدادات وصلاحيات الحساب.","error");
+    return;
+  }
+
+  const s=data.settings||{};
+  $("day_price").value=s.day_price??140;
+  $("night_price").value=s.night_price??180;
+  $("day_start").value=s.day_start??6;
+  $("night_start").value=s.night_start??17;
+  $("deposit").value=s.deposit??20;
+  $("whatsapp").value=s.whatsapp??"+201098257528";
+  $("open_24_hours").checked=s.open_24_hours??true;
+
+  msg("settingsMessage","تم تحميل الإعدادات بنجاح.");
+}
+
+async function saveSettings() {
+  const dayPrice=Number($("day_price").value);
+  const nightPrice=Number($("night_price").value);
+  const dayStart=Number($("day_start").value);
+  const nightStart=Number($("night_start").value);
+  const deposit=Number($("deposit").value);
+  const whatsapp=$("whatsapp").value.trim();
+
+  if (!Number.isInteger(dayPrice)||dayPrice<=0||
+      !Number.isInteger(nightPrice)||nightPrice<=0||
+      !Number.isInteger(deposit)||deposit<0) {
+    msg("settingsMessage","الأسعار يجب أن تكون أعدادًا صحيحة أكبر من صفر، والعربون لا يقل عن صفر.","error");
+    return;
+  }
+
+  if (!Number.isInteger(dayStart)||dayStart<0||dayStart>23||
+      !Number.isInteger(nightStart)||nightStart<0||nightStart>23) {
+    msg("settingsMessage","مواعيد بداية الفترات يجب أن تكون من 0 إلى 23.","error");
+    return;
+  }
+
+  if (!whatsapp) {
+    msg("settingsMessage","اكتب رقم واتساب صحيحًا.","error");
+    return;
+  }
+
+  const settings={
+    day_price:dayPrice,
+    night_price:nightPrice,
+    day_start:dayStart,
+    night_start:nightStart,
+    deposit,
+    whatsapp,
+    open_24_hours:$("open_24_hours").checked
+  };
+
+  $("saveSettings").disabled=true;
+  msg("settingsMessage","جاري حفظ الإعدادات...");
+
+  const {data,error}=await supabase.from("site_settings")
+    .update({settings,updated_at:new Date().toISOString()})
+    .eq("id",1).select("settings").single();
+
+  $("saveSettings").disabled=false;
+
+  if (error||!data) {
+    msg("settingsMessage","تعذر حفظ الإعدادات. راجع صلاحيات الإدارة وحاول مرة أخرى.","error");
+    return;
+  }
+
+  msg("settingsMessage","تم حفظ إعدادات الملعب بنجاح.");
+}
+
+/* أقسام الموقع */
+$("saveSection").addEventListener("click",saveSection);
+$("resetSection").addEventListener("click",resetSection);
+
+async function loadSections() {
+  $("sectionsList").textContent="جاري تحميل الأقسام...";
+  const {data,error}=await supabase.from("site_sections")
+    .select("*").order("display_order",{ascending:true});
+
+  if (error) {
+    $("sectionsList").innerHTML='<div class="notice error">تعذر تحميل الأقسام.</div>';
+    return;
+  }
+
+  if (!data?.length) {
+    $("sectionsList").innerHTML='<div class="empty">لم تتم إضافة أقسام بعد.</div>';
+    return;
+  }
+
+  $("sectionsList").innerHTML=data.map(s=>`
+    <div class="item-card">
+      <div class="section-heading">
+        <h3>${escapeHTML(s.title)}</h3>
+        <span class="tag">${s.is_visible?"ظاهر":"مخفي"}</span>
+      </div>
+      <p>النوع: ${escapeHTML(s.section_type)}</p>
+      <p>الترتيب: ${Number(s.display_order||0)}</p>
+      <p>${escapeHTML(s.content?.description||"")}</p>
+      <div class="actions">
+        <button class="btn small" onclick="editSection(${Number(s.id)})">تعديل</button>
+        <button class="btn small orange" onclick="toggleSection(${Number(s.id)},${!s.is_visible})">${s.is_visible?"إخفاء":"إظهار"}</button>
+        <button class="btn small red" onclick="deleteSection(${Number(s.id)})">حذف</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+async function saveSection() {
+  const title=$("sectionTitle").value.trim();
+  if (!title) {
+    msg("sectionMessage","اكتب اسم القسم.","error");
+    return;
+  }
+
+  const id=$("sectionId").value;
+  const record={
+    title,
+    section_type:$("sectionType").value,
+    content:{description:$("sectionContent").value.trim()},
+    display_order:Number($("sectionOrder").value||0),
+    is_visible:$("sectionVisible").checked,
+    updated_at:new Date().toISOString()
+  };
+
+  const result=id
+    ? await supabase.from("site_sections").update(record).eq("id",id)
+    : await supabase.from("site_sections").insert(record);
+
+  if (result.error) {
+    msg("sectionMessage","تعذر حفظ القسم.","error");
+    return;
+  }
+
+  msg("sectionMessage","تم حفظ القسم بنجاح.");
+  resetSection();
+  await loadSections();
+}
+
+function resetSection() {
+  $("sectionId").value="";
+  $("sectionTitle").value="";
+  $("sectionType").value="custom";
+  $("sectionContent").value="";
+  $("sectionOrder").value="0";
+  $("sectionVisible").checked=true;
+}
+
+window.editSection=async function(id) {
+  const {data,error}=await supabase.from("site_sections").select("*").eq("id",id).single();
+  if (error||!data) return alert("تعذر تحميل القسم.");
+
+  $("sectionId").value=data.id;
+  $("sectionTitle").value=data.title;
+  $("sectionType").value=data.section_type;
+  $("sectionContent").value=data.content?.description||"";
+  $("sectionOrder").value=data.display_order;
+  $("sectionVisible").checked=data.is_visible;
+  window.navigate("sections");
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+
+window.toggleSection=async function(id,visible) {
+  const {error}=await supabase.from("site_sections")
+    .update({is_visible:visible,updated_at:new Date().toISOString()}).eq("id",id);
+  if (error) return alert("تعذر تحديث القسم.");
+  await loadSections();
+};
+
+window.deleteSection=async function(id) {
+  if (!confirm("هل تريد حذف هذا القسم نهائيًا؟")) return;
+  const {error}=await supabase.from("site_sections").delete().eq("id",id);
+  if (error) return alert("تعذر حذف القسم.");
+  await loadSections();
+};
+
+/* الدورات والبطولات */
+$("saveTournament").addEventListener("click",saveTournament);
+$("resetTournament").addEventListener("click",resetTournament);
+
+async function loadTournaments() {
+  $("tournamentsList").textContent="جاري تحميل الدورات...";
+  const {data,error}=await supabase.from("tournaments")
+    .select("*").order("created_at",{ascending:false});
+
+  if (error) {
+    $("tournamentsList").innerHTML='<div class="notice error">تعذر تحميل الدورات.</div>';
+    return;
+  }
+
+  tournamentsCache=data||[];
+
+  if (!tournamentsCache.length) {
+    $("tournamentsList").innerHTML='<div class="empty">لم تتم إضافة دورات بعد.</div>';
+    return;
+  }
+
+  $("tournamentsList").innerHTML=tournamentsCache.map(t=>`
+    <div class="item-card">
+      <div class="section-heading">
+        <h3>${escapeHTML(t.title)}</h3>
+        <span class="tag">${t.is_visible?"ظاهرة":"مخفية"}</span>
+      </div>
+      <p>${escapeHTML(t.description)}</p>
+      <p>الاشتراك: ${Number(t.subscription_fee||0)} جنيه</p>
+      <p>الجوائز: ${escapeHTML(t.prize_details)}</p>
+      <div class="actions">
+        <button class="btn small" onclick="editTournament(${Number(t.id)})">تعديل</button>
+        <button class="btn small orange" onclick="toggleTournament(${Number(t.id)},${!t.is_visible})">${t.is_visible?"إخفاء":"إظهار"}</button>
+        <button class="btn small" onclick="openTournamentMatches(${Number(t.id)})">مباريات الدورة</button>
+        <button class="btn small red" onclick="deleteTournament(${Number(t.id)})">حذف</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+async function saveTournament() {
+  const title=$("tournamentTitle").value.trim();
+  const fee=Number($("tournamentFee").value);
+
+  if (!title||!Number.isFinite(fee)||fee<0) {
+    msg("tournamentMessage","اكتب اسم الدورة ورسوم اشتراك صحيحة.","error");
+    return;
+  }
+
+  const record={
+    title,
+    description:$("tournamentDescription").value.trim(),
+    rules:$("tournamentRules").value.trim(),
+    subscription_fee:fee,
+    prize_details:$("tournamentPrizes").value.trim(),
+    image_url:$("tournamentImage").value.trim()||null,
+    is_visible:$("tournamentVisible").checked,
+    updated_at:new Date().toISOString()
+  };
+
+  const id=$("tournamentId").value;
+  const result=id
+    ? await supabase.from("tournaments").update(record).eq("id",id)
+    : await supabase.from("tournaments").insert(record);
+
+  if (result.error) {
+    msg("tournamentMessage","تعذر حفظ الدورة.","error");
+    return;
+  }
+
+  msg("tournamentMessage","تم حفظ الدورة بنجاح.");
+  resetTournament();
+  await loadTournaments();
+}
+
+function resetTournament() {
+  $("tournamentId").value="";
+  $("tournamentTitle").value="";
+  $("tournamentDescription").value="";
+  $("tournamentRules").value="";
+  $("tournamentFee").value="0";
+  $("tournamentPrizes").value="";
+  $("tournamentImage").value="";
+  $("tournamentVisible").checked=true;
+}
+
+window.editTournament=function(id) {
+  const t=tournamentsCache.find(x=>Number(x.id)===Number(id));
+  if (!t) return;
+
+  $("tournamentId").value=t.id;
+  $("tournamentTitle").value=t.title;
+  $("tournamentDescription").value=t.description||"";
+  $("tournamentRules").value=t.rules||"";
+  $("tournamentFee").value=t.subscription_fee||0;
+  $("tournamentPrizes").value=t.prize_details||"";
+  $("tournamentImage").value=t.image_url||"";
+  $("tournamentVisible").checked=t.is_visible;
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+
+window.toggleTournament=async function(id,visible) {
+  const {error}=await supabase.from("tournaments")
+    .update({is_visible:visible,updated_at:new Date().toISOString()}).eq("id",id);
+  if (error) return alert("تعذر تحديث الدورة.");
+  await loadTournaments();
+};
+
+window.deleteTournament=async function(id) {
+  if (!confirm("حذف الدورة؟ سيتم حذف مبارياتها المرتبطة بها أيضًا.")) return;
+  const {error}=await supabase.from("tournaments").delete().eq("id",id);
+  if (error) return alert("تعذر حذف الدورة.");
+  await loadTournaments();
+};
+
+/* المباريات */
+$("saveMatch").addEventListener("click",saveMatch);
+$("resetMatch").addEventListener("click",resetMatch);
+$("matchesFilter").addEventListener("change",loadMatches);
+
+async function loadMatchPage() {
+  await loadTournaments();
+  const options=tournamentsCache.map(t=>
+    `<option value="${t.id}">${escapeHTML(t.title)}</option>`
+  ).join("");
+
+  $("matchTournament").innerHTML=options||'<option value="">لا توجد دورات</option>';
+  $("matchesFilter").innerHTML='<option value="">اختر كل الدورات</option>'+options;
+  await loadMatches();
+}
+
+window.openTournamentMatches=function(id) {
+  navigate("matches");
+  setTimeout(()=>{
+    $("matchesFilter").value=String(id);
+    loadMatches();
+  },100);
+};
+
+function resetMatch() {
+  $("matchId").value="";
+  $("teamA").value="";
+  $("teamB").value="";
+  $("matchDate").value="";
+  $("matchTime").value="";
+  $("matchVenue").value="";
+  $("matchStatus").value="scheduled";
+  $("scoreA").value="";
+  $("scoreB").value="";
+}
+
+async function saveMatch() {
+  const tournamentId=$("matchTournament").value;
+  const teamA=$("teamA").value.trim();
+  const teamB=$("teamB").value.trim();
+
+  if (!tournamentId||!teamA||!teamB) {
+    msg("matchMessage","اختر الدورة واكتب اسمي الفريقين.","error");
+    return;
+  }
+
+  const scoreA=$("scoreA").value;
+  const scoreB=$("scoreB").value;
+
+  const record={
+    tournament_id:Number(tournamentId),
+    team_a:teamA,
+    team_b:teamB,
+    match_date:$("matchDate").value||null,
+    match_time:$("matchTime").value||null,
+    venue:$("matchVenue").value.trim(),
+    status:$("matchStatus").value,
+    team_a_score:scoreA===""?null:Number(scoreA),
+    team_b_score:scoreB===""?null:Number(scoreB),
+    updated_at:new Date().toISOString()
+  };
+
+  if ([record.team_a_score,record.team_b_score].some(v=>v!==null&&(!Number.isInteger(v)||v<0))) {
+    msg("matchMessage","النتائج يجب أن تكون أعدادًا صحيحة غير سالبة.","error");
+    return;
+  }
+
+  const id=$("matchId").value;
+  const result=id
+    ? await supabase.from("tournament_matches").update(record).eq("id",id)
+    : await supabase.from("tournament_matches").insert(record);
+
+  if (result.error) {
+    msg("matchMessage","تعذر حفظ المباراة.","error");
+    return;
+  }
+
+  msg("matchMessage","تم حفظ المباراة بنجاح.");
+  resetMatch();
+  await loadMatches();
+}
+
+async function loadMatches() {
+  const tournamentId=$("matchesFilter").value;
+  let query=supabase.from("tournament_matches").select("*")
+    .order("match_date",{ascending:true});
+
+  if (tournamentId) query=query.eq("tournament_id",tournamentId);
+
+  const {data,error}=await query;
+  if (error) {
+    $("matchesList").innerHTML='<div class="notice error">تعذر تحميل المباريات.</div>';
+    return;
+  }
+
+  if (!data?.length) {
+    $("matchesList").innerHTML='<div class="empty">لا توجد مباريات مسجلة.</div>';
+    return;
+  }
+
+  $("matchesList").innerHTML=data.map(m=>{
+    const tournament=tournamentsCache.find(t=>Number(t.id)===Number(m.tournament_id));
+    const score=m.team_a_score===null||m.team_b_score===null
+      ? "VS" : `${m.team_a_score} - ${m.team_b_score}`;
+    const states={
+      scheduled:"لم تبدأ",live:"مباشرة",finished:"انتهت",postponed:"مؤجلة"
+    };
+
+    return `
+      <div class="item-card">
+        <p class="muted">${escapeHTML(tournament?.title||"دورة")}</p>
+        <div class="match-row">
+          <strong>${escapeHTML(m.team_a)}</strong>
+          <span class="match-score">${escapeHTML(score)}</span>
+          <strong>${escapeHTML(m.team_b)}</strong>
+        </div>
+        <p>التاريخ: ${escapeHTML(m.match_date||"غير محدد")}</p>
+        <p>الوقت: ${escapeHTML(m.match_time||"غير محدد")}</p>
+        <p>المكان: ${escapeHTML(m.venue||"غير محدد")}</p>
+        <span class="tag">${states[m.status]||m.status}</span>
+        <div class="actions">
+          <button class="btn small" onclick="editMatch(${Number(m.id)})">تعديل المباراة</button>
+          <button class="btn small red" onclick="deleteMatch(${Number(m.id)})">حذف</button>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+window.editMatch=async function(id) {
+  const {data,error}=await supabase.from("tournament_matches").select("*").eq("id",id).single();
+  if (error||!data) return alert("تعذر تحميل المباراة.");
+
+  $("matchId").value=data.id;
+  $("matchTournament").value=data.tournament_id;
+  $("teamA").value=data.team_a;
+  $("teamB").value=data.team_b;
+  $("matchDate").value=data.match_date||"";
+  $("matchTime").value=data.match_time||"";
+  $("matchVenue").value=data.venue||"";
+  $("matchStatus").value=data.status;
+  $("scoreA").value=data.team_a_score??"";
+  $("scoreB").value=data.team_b_score??"";
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+
+window.deleteMatch=async function(id) {
+  if (!confirm("هل تريد حذف المباراة؟")) return;
+  const {error}=await supabase.from("tournament_matches").delete().eq("id",id);
+  if (error) return alert("تعذر حذف المباراة.");
+  await loadMatches();
+};
+
+/* استعادة الجلسة */
+const {data:sessionData}=await supabase.auth.getSession();
+if (sessionData.session) {
+  const {data,error}=await supabase.rpc("is_admin");
+  if (!error&&data===true) {
+    $("loginScreen").classList.add("hidden");
+    $("app").classList.remove("hidden");
+    await startDashboard();
+  }
+}
+</script>
 </body>
 </html>
-```
