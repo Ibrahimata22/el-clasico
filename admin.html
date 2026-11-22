@@ -378,12 +378,12 @@ hr{border:0;border-top:1px solid var(--border);margin:20px 0}
             <input id="night_price" type="number" min="1">
           </div>
           <div class="field">
-            <label>بداية الفترة النهارية (0 إلى 23)</label>
-            <input id="day_start" type="number" min="0" max="23">
+            <label>بداية الفترة النهارية</label>
+            <select id="day_start"></select>
           </div>
           <div class="field">
-            <label>بداية الفترة الليلية (0 إلى 23)</label>
-            <input id="night_start" type="number" min="0" max="23">
+            <label>بداية الفترة الليلية</label>
+            <select id="night_start"></select>
           </div>
           <div class="field">
             <label>العربون (جنيه)</label>
@@ -599,6 +599,25 @@ let selectedMonth = "";
 let tournamentsCache = [];
 
 const $ = id => document.getElementById(id);
+
+// عرض ساعات إعدادات الفترتين بنظام 12 ساعة المصري، مع الاحتفاظ بالقيمة 0-23 داخليًا.
+function setupEgyptianHourSelects() {
+  const formatSettingsHour = hour => {
+    if (hour === 0) return "12:00 صباحًا";
+    if (hour < 12) return `${hour}:00 صباحًا`;
+    if (hour === 12) return "12:00 ظهرًا";
+    return `${hour - 12}:00 مساءً`;
+  };
+
+  ["day_start", "night_start"].forEach(id => {
+    const select = $(id);
+    if (!select) return;
+    select.innerHTML = Array.from({length: 24}, (_, hour) =>
+      `<option value="${hour}">${formatSettingsHour(hour)}</option>`
+    ).join("");
+  });
+}
+setupEgyptianHourSelects();
 
 function msg(id, text, type = "success") {
   const area = $(id);
