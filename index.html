@@ -153,7 +153,32 @@ async function loadBookings(){
 }
 dateInput.addEventListener("change",loadBookings);
 function safeText(value){return String(value??"");}
-async function getPublicRows(table,query){const response=await fetch(SUPABASE_URL+"/rest/v1/"+table+"?"+query,{headers:REST_HEADERS});if(!response.ok)throw new Error("تعذر تحميل "+table);return response.json();}
+
+/* تم تعديل هذه الدالة لحل مشكلة قراءة المحتوى العام */
+async function getPublicRows(table, query) {
+  const response = await fetch(
+    SUPABASE_URL + "/rest/v1/" + table + "?" + query,
+    {
+      headers: {
+        apikey: SUPABASE_ANON_KEY
+      }
+    }
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(
+      "Supabase public content error:",
+      table,
+      response.status,
+      errorText
+    );
+    throw new Error("تعذر تحميل " + table);
+  }
+
+  return response.json();
+}
+
 function renderSections(rows){
  const host=$("dynamicSections");host.innerHTML="";
  (rows||[]).filter(x=>x.is_visible!==false).forEach(section=>{const wrapper=document.createElement("section");wrapper.className="dynamic-section";const h=document.createElement("h2");h.textContent=safeText(section.title);wrapper.appendChild(h);const content=section.content||{};const p=document.createElement("p");p.className="subtitle";p.textContent=safeText(content.description||content.text||"");wrapper.appendChild(p);host.appendChild(wrapper);});
