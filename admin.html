@@ -5,127 +5,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>إدارة ملعب الكلاسيكو</title>
-
 <style>
-:root {
-  --bg:#0d151d;
-  --panel:#17232e;
-  --panel2:#202f3c;
-  --gold:#d6b35c;
-  --text:#f4f6f8;
-  --muted:#aab6c0;
-  --green:#24945b;
-  --red:#c84b4b;
-  --orange:#d99036;
-  --blue:#397ba8;
-  --border:#304250;
-}
+:root{--bg:#0d151d;--panel:#17232e;--panel2:#202f3c;--gold:#d6b35c;--text:#f4f6f8;--muted:#aab6c0;--green:#24945b;--red:#c84b4b;--orange:#d99036;--blue:#397ba8;--border:#304250}
 *{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:Arial,sans-serif;min-height:100vh
-}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;min-height:100vh}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer;border:0}
 .hidden{display:none!important}
-
-/* تسجيل الدخول */
-.login-screen{
-  min-height:100vh;display:flex;align-items:center;
-  justify-content:center;padding:20px;
-  background:radial-gradient(circle at top,#263b49,#0d151d 65%)
-}
-.login-card{
-  width:100%;max-width:420px;background:var(--panel);
-  padding:30px;border:1px solid var(--border);
-  border-radius:20px;text-align:center;
-  box-shadow:0 20px 60px #0005
-}
-.logo{
-  width:70px;height:70px;border-radius:20px;
-  display:grid;place-items:center;margin:0 auto 15px;
-  background:var(--gold);color:#14202a;
-  font-size:25px;font-weight:bold
-}
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at top,#263b49,#0d151d 65%)}
+.login-card{width:100%;max-width:420px;background:var(--panel);padding:30px;border:1px solid var(--border);border-radius:20px;text-align:center;box-shadow:0 20px 60px #0005}
+.logo{width:70px;height:70px;border-radius:20px;display:grid;place-items:center;margin:0 auto 15px;background:var(--gold);color:#14202a;font-size:25px;font-weight:bold}
 .login-card h1{color:var(--gold);font-size:25px}
 .login-card p{color:var(--muted)}
 .login-card input{margin-top:12px}
-
-/* الهيكل */
 .app{display:flex;min-height:100vh}
-.sidebar{
-  width:255px;flex-shrink:0;background:#111d27;
-  border-left:1px solid var(--border);
-  padding:22px 15px;display:flex;flex-direction:column;
-  position:fixed;right:0;top:0;bottom:0;z-index:10;
-  overflow-y:auto
-}
-.brand{
-  padding:8px 10px 24px;border-bottom:1px solid var(--border);
-  margin-bottom:18px
-}
+.sidebar{width:255px;flex-shrink:0;background:#111d27;border-left:1px solid var(--border);padding:22px 15px;display:flex;flex-direction:column;position:fixed;right:0;top:0;bottom:0;z-index:10;overflow-y:auto}
+.brand{padding:8px 10px 24px;border-bottom:1px solid var(--border);margin-bottom:18px}
 .brand strong{display:block;color:var(--gold);font-size:21px}
 .brand small{color:var(--muted)}
-.nav-title{
-  color:#788995;font-size:12px;margin:15px 10px 8px
-}
-.nav-btn{
-  width:100%;text-align:right;padding:13px 12px;
-  border-radius:10px;background:transparent;color:#c5d0d8;
-  margin:3px 0;transition:.2s
-}
-.nav-btn:hover,.nav-btn.active{
-  background:#293b49;color:var(--gold)
-}
+.nav-title{color:#788995;font-size:12px;margin:15px 10px 8px}
+.nav-btn{width:100%;text-align:right;padding:13px 12px;border-radius:10px;background:transparent;color:#c5d0d8;margin:3px 0;transition:.2s}
+.nav-btn:hover,.nav-btn.active{background:#293b49;color:var(--gold)}
 .nav-btn span{display:inline-block;width:27px}
 .sidebar-bottom{margin-top:auto;padding-top:20px}
 .logout-btn{background:#472c31;color:#ffb0b0;width:100%}
-
-.main{
-  margin-right:255px;width:calc(100% - 255px);
-  padding:25px;max-width:1600px
-}
-.topbar{
-  display:flex;justify-content:space-between;align-items:center;
-  gap:15px;margin-bottom:25px
-}
+.main{margin-right:255px;width:calc(100% - 255px);padding:25px;max-width:1600px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}
 .topbar h1{font-size:25px;margin:0}
 .topbar p{color:var(--muted);margin:7px 0 0;font-size:14px}
 .mobile-menu{display:none}
 .page{display:none}
 .page.active{display:block}
-
-/* العناصر العامة */
-.panel{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:16px;padding:20px;margin-bottom:20px
-}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px}
 .panel h2,.panel h3{margin-top:0;color:var(--gold)}
 .panel-subtitle{color:var(--muted);font-size:13px;line-height:1.7}
-.grid{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:14px
-}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .field{min-width:0}
-.field label{
-  display:block;color:#cbd4db;font-size:14px;
-  margin-bottom:8px
-}
-input,select,textarea{
-  width:100%;padding:12px 13px;border-radius:9px;
-  border:1px solid #435766;background:#101b24;color:white;
-  outline:none;min-width:0
-}
-input:focus,select:focus,textarea:focus{
-  border-color:var(--gold)
-}
+.field label{display:block;color:#cbd4db;font-size:14px;margin-bottom:8px}
+input,select,textarea{width:100%;padding:12px 13px;border-radius:9px;border:1px solid #435766;background:#101b24;color:white;outline:none;min-width:0}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 textarea{resize:vertical;min-height:85px}
 input[type="checkbox"]{width:auto;accent-color:var(--gold)}
 .check-line{display:flex;align-items:center;gap:10px;margin-top:12px}
-.btn{
-  padding:12px 16px;border-radius:9px;font-weight:bold;
-  color:white;background:var(--blue);margin-top:12px
-}
+.btn{padding:12px 16px;border-radius:9px;font-weight:bold;color:white;background:var(--blue);margin-top:12px}
 .btn.gold{background:var(--gold);color:#15212a}
 .btn.green{background:var(--green)}
 .btn.red{background:var(--red)}
@@ -134,129 +56,76 @@ input[type="checkbox"]{width:auto;accent-color:var(--gold)}
 .btn.small{padding:8px 11px;font-size:13px;margin:5px 2px}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
-.notice{
-  padding:12px;border-radius:9px;margin:12px 0;
-  background:#263b49;color:#d8e5ed;line-height:1.7
-}
+.notice{padding:12px;border-radius:9px;margin:12px 0;background:#263b49;color:#d8e5ed;line-height:1.7}
 .notice.error{background:#492d32;color:#ffc1c1}
 .notice.success{background:#1d4636;color:#b9f1cf}
-.empty{
-  padding:25px;text-align:center;color:var(--muted);
-  background:var(--panel2);border-radius:12px
-}
-
-/* بطاقات الإحصائيات */
-.stats-grid{
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:13px
-}
-.stat-card{
-  background:var(--panel2);border:1px solid var(--border);
-  border-radius:13px;padding:17px;text-align:center
-}
+.empty{padding:25px;text-align:center;color:var(--muted);background:var(--panel2);border-radius:12px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.stat-card{background:var(--panel2);border:1px solid var(--border);border-radius:13px;padding:17px;text-align:center}
 .stat-card .name{color:var(--muted);font-size:13px}
-.stat-card .value{
-  font-size:27px;font-weight:bold;margin-top:12px;
-  overflow-wrap:anywhere
-}
-.green-text{color:#75d69a}
-.red-text{color:#ff8585}
-.orange-text{color:#ffbd59}
-.gold-text{color:var(--gold)}
-.purple-text{color:#c29cff}
+.stat-card .value{font-size:27px;font-weight:bold;margin-top:12px;overflow-wrap:anywhere}
+.green-text{color:#75d69a}.red-text{color:#ff8585}.orange-text{color:#ffbd59}.gold-text{color:var(--gold)}.purple-text{color:#c29cff}
 .stat-wide{grid-column:span 2}
-
-/* الحجوزات */
-.booking{
-  background:var(--panel2);border:1px solid var(--border);
-  border-right:4px solid var(--gold);
-  padding:16px;border-radius:12px;margin:12px 0
-}
+.booking{background:var(--panel2);border:1px solid var(--border);border-right:4px solid var(--gold);padding:16px;border-radius:12px;margin:12px 0}
 .booking p{line-height:1.6;margin:7px 0;overflow-wrap:anywhere}
 .booking .received{color:var(--gold);font-weight:bold}
 .booking .appointment{color:#9ed8ff;font-weight:bold}
 .status{font-weight:bold}
-.status.pending{color:#ffbd59}
-.status.confirmed{color:#ff8585}
-.status.rejected{color:#75d69a}
-.day-title{
-  padding:13px;background:#344653;color:var(--gold);
-  border-radius:10px;text-align:center;margin:18px 0 10px
-}
-.section-heading{
-  display:flex;justify-content:space-between;
-  align-items:center;gap:10px;flex-wrap:wrap
-}
-
-/* الحجز اليدوي */
-.manual-booking-form{
-  background:var(--panel2);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:16px;
-  margin-top:16px
-}
+.status.pending{color:#ffbd59}.status.confirmed{color:#ff8585}.status.rejected{color:#75d69a}
+.day-title{padding:13px;background:#344653;color:var(--gold);border-radius:10px;text-align:center;margin:18px 0 10px}
+.section-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.manual-booking-form{background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:16px}
 .manual-booking-form h3{color:var(--gold);margin-top:0}
-.manual-tag{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:20px;
-  background:#4b3d20;
-  color:#ffdc83;
-  font-size:12px;
-  font-weight:bold;
-  margin:5px 0
-}
+.manual-tag{display:inline-block;padding:5px 9px;border-radius:20px;background:#4b3d20;color:#ffdc83;font-size:12px;font-weight:bold;margin:5px 0}
 
-/* العناصر */
-.item-card{
-  background:var(--panel2);border:1px solid var(--border);
-  padding:15px;border-radius:12px;margin:12px 0
-}
+/* شبكة ساعات الحجز اليدوي */
+.manual-hours-area{margin-top:18px}
+.manual-hours-title{color:var(--gold);font-weight:bold;margin-bottom:12px}
+.manual-hours-legend{display:flex;gap:14px;flex-wrap:wrap;margin:12px 0 16px}
+.manual-legend-item{display:flex;align-items:center;gap:7px;color:#d8e0e6;font-size:13px}
+.manual-legend-dot{width:13px;height:13px;border-radius:4px;display:inline-block}
+.manual-legend-dot.available{background:#24945b}
+.manual-legend-dot.pending{background:#d99036}
+.manual-legend-dot.booked{background:#c84b4b}
+.manual-hours-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.manual-hour{padding:12px 5px;border-radius:9px;color:white;font-size:13px;font-weight:bold;border:2px solid transparent;background:#24945b;transition:.15s}
+.manual-hour.available:hover{filter:brightness(1.2);transform:translateY(-1px)}
+.manual-hour.pending{background:#d99036;color:#171717;cursor:not-allowed}
+.manual-hour.booked{background:#c84b4b;cursor:not-allowed}
+.manual-hour.selected{background:#176b40;border-color:#fff;box-shadow:0 0 0 2px #24945b}
+.manual-hour:disabled{opacity:1}
+.manual-hours-help{color:var(--muted);font-size:12px;line-height:1.7;margin-top:12px}
+.item-card{background:var(--panel2);border:1px solid var(--border);padding:15px;border-radius:12px;margin:12px 0}
 .item-card h3{margin:0 0 10px;color:var(--gold)}
 .item-card p{color:#c4cdd4;line-height:1.6;overflow-wrap:anywhere}
-.tag{
-  display:inline-block;padding:5px 9px;border-radius:20px;
-  background:#344958;color:#d8e6ee;font-size:12px
-}
-.match-row{
-  display:grid;grid-template-columns:1fr auto 1fr;
-  gap:10px;align-items:center;text-align:center;
-  background:#182733;border-radius:10px;padding:13px;
-  margin:10px 0
-}
+.tag{display:inline-block;padding:5px 9px;border-radius:20px;background:#344958;color:#d8e6ee;font-size:12px}
+.match-row{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;text-align:center;background:#182733;border-radius:10px;padding:13px;margin:10px 0}
 .match-score{color:var(--gold);font-size:20px;font-weight:bold}
 .muted{color:var(--muted)}
 hr{border:0;border-top:1px solid var(--border);margin:20px 0}
-
-@media(max-width:1050px){
-  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
+@media(max-width:1050px){.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){
-  .sidebar{
-    transform:translateX(105%);transition:.25s;width:270px;
-    box-shadow:-10px 0 35px #0006
-  }
-  .sidebar.open{transform:translateX(0)}
-  .main{margin-right:0;width:100%;padding:16px}
-  .mobile-menu{display:block;background:var(--panel2);color:var(--gold)}
-  .topbar h1{font-size:20px}
+.sidebar{transform:translateX(105%);transition:.25s;width:270px;box-shadow:-10px 0 35px #0006}
+.sidebar.open{transform:translateX(0)}
+.main{margin-right:0;width:100%;padding:16px}
+.mobile-menu{display:block;background:var(--panel2);color:var(--gold)}
+.topbar h1{font-size:20px}
 }
 @media(max-width:480px){
-  .grid{grid-template-columns:1fr}
-  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-  .stat-card{padding:13px 7px}
-  .stat-card .value{font-size:22px}
-  .panel{padding:14px}
-  .main{padding:12px}
-  .stat-wide{grid-column:1/-1}
+.grid{grid-template-columns:1fr}
+.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.stat-card{padding:13px 7px}
+.stat-card .value{font-size:22px}
+.panel{padding:14px}
+.main{padding:12px}
+.stat-wide{grid-column:1/-1}
+.manual-hours-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.manual-hour{padding:12px 3px;font-size:12px}
 }
 </style>
 </head>
-
 <body>
 
-<!-- تسجيل الدخول -->
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
     <div class="logo">EC</div>
@@ -269,120 +138,58 @@ hr{border:0;border-top:1px solid var(--border);margin:20px 0}
   </div>
 </div>
 
-<!-- لوحة الإدارة -->
 <div class="app hidden" id="app">
-
   <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <strong>EL CLASICO</strong>
-      <small>لوحة إدارة الملعب</small>
-    </div>
-
+    <div class="brand"><strong>EL CLASICO</strong><small>لوحة إدارة الملعب</small></div>
     <div class="nav-title">الرئيسية</div>
     <button class="nav-btn active" data-page="home"><span>⌂</span> الرئيسية</button>
     <button class="nav-btn" data-page="bookings"><span>▣</span> الحجوزات</button>
     <button class="nav-btn" data-page="statistics"><span>▤</span> الإحصائيات</button>
-
     <div class="nav-title">إدارة الموقع</div>
     <button class="nav-btn" data-page="settings"><span>⚙</span> إعدادات الملعب</button>
     <button class="nav-btn" data-page="sections"><span>▦</span> أقسام الموقع</button>
     <button class="nav-btn" data-page="tournaments"><span>🏆</span> الدورات والبطولات</button>
     <button class="nav-btn" data-page="matches"><span>⚽</span> جدول المباريات</button>
-
-    <div class="sidebar-bottom">
-      <button class="nav-btn logout-btn" id="logoutBtn">⇦ تسجيل الخروج</button>
-    </div>
+    <div class="sidebar-bottom"><button class="nav-btn logout-btn" id="logoutBtn">⇦ تسجيل الخروج</button></div>
   </aside>
 
   <main class="main">
     <header class="topbar">
-      <div>
-        <h1 id="pageTitle">الرئيسية</h1>
-        <p>مرحباً بك في مركز إدارة ملعب الكلاسيكو</p>
-      </div>
+      <div><h1 id="pageTitle">الرئيسية</h1><p>مرحباً بك في مركز إدارة ملعب الكلاسيكو</p></div>
       <button class="btn mobile-menu" id="menuBtn">☰ القائمة</button>
     </header>
 
-    <!-- الرئيسية -->
     <section class="page active" id="page-home">
       <div class="panel">
         <h2>مرحباً بك في لوحة الإدارة</h2>
-        <p class="panel-subtitle">
-          من هنا يمكنك إدارة الحجوزات والإحصائيات وإعدادات الملعب
-          والأقسام والدورات والمباريات.
-        </p>
+        <p class="panel-subtitle">من هنا يمكنك إدارة الحجوزات والإحصائيات وإعدادات الملعب والأقسام والدورات والمباريات.</p>
       </div>
-
       <div class="stats-grid" id="homeStats">
-        <div class="stat-card">
-          <div class="name">طلبات اليوم</div>
-          <div class="value gold-text" id="homeToday">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="name">تحت المراجعة</div>
-          <div class="value orange-text" id="homePending">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="name">حجوزات مؤكدة</div>
-          <div class="value green-text" id="homeConfirmed">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="name">كل الحجوزات</div>
-          <div class="value" id="homeTotal">—</div>
-        </div>
+        <div class="stat-card"><div class="name">طلبات اليوم</div><div class="value gold-text" id="homeToday">—</div></div>
+        <div class="stat-card"><div class="name">تحت المراجعة</div><div class="value orange-text" id="homePending">—</div></div>
+        <div class="stat-card"><div class="name">حجوزات مؤكدة</div><div class="value green-text" id="homeConfirmed">—</div></div>
+        <div class="stat-card"><div class="name">كل الحجوزات</div><div class="value" id="homeTotal">—</div></div>
       </div>
-
       <div class="panel" style="margin-top:20px">
-        <div class="section-heading">
-          <h3>آخر طلبات الحجز</h3>
-          <button class="btn small" onclick="navigate('bookings')">عرض الحجوزات</button>
-        </div>
+        <div class="section-heading"><h3>آخر طلبات الحجز</h3><button class="btn small" onclick="navigate('bookings')">عرض الحجوزات</button></div>
         <div id="homeRecent"></div>
       </div>
     </section>
 
-    <!-- الحجوزات -->
     <section class="page" id="page-bookings">
       <div class="panel">
-        <div class="section-heading">
-          <h2>إدارة الحجوزات</h2>
-          <button class="btn gray" id="refreshBookings">تحديث</button>
-        </div>
-        <div class="field">
-          <label>اختر يوم وصول الطلبات</label>
-          <select id="daySelect"></select>
-        </div>
+        <div class="section-heading"><h2>إدارة الحجوزات</h2><button class="btn gray" id="refreshBookings">تحديث</button></div>
+        <div class="field"><label>اختر يوم وصول الطلبات</label><select id="daySelect"></select></div>
 
-        <!-- إضافة حجز يدوي -->
         <div class="manual-booking-form">
           <h3>إضافة حجز يدوي</h3>
-          <p class="panel-subtitle">
-            الحجز اليدوي يتم تأكيده مباشرة بعد التحقق من توافر الموعد.
-          </p>
-
+          <p class="panel-subtitle">الحجز اليدوي يتم تأكيده مباشرة بعد التحقق من توافر الموعد.</p>
           <div id="manualBookingMessage"></div>
-
           <div class="grid">
-            <div class="field">
-              <label>اسم العميل</label>
-              <input id="manualCustomerName" type="text" maxlength="100" placeholder="اسم العميل">
-            </div>
-
-            <div class="field">
-              <label>رقم الهاتف</label>
-              <input id="manualPhone" type="tel" maxlength="20" placeholder="رقم الهاتف">
-            </div>
-
-            <div class="field">
-              <label>تاريخ الحجز</label>
-              <input id="manualDate" type="date">
-            </div>
-
-            <div class="field">
-              <label>ساعة بداية الحجز</label>
-              <select id="manualStartHour"></select>
-            </div>
-
+            <div class="field"><label>اسم العميل</label><input id="manualCustomerName" type="text" maxlength="100" placeholder="اسم العميل"></div>
+            <div class="field"><label>رقم الهاتف</label><input id="manualPhone" type="tel" maxlength="20" placeholder="رقم الهاتف"></div>
+            <div class="field"><label>تاريخ الحجز</label><input id="manualDate" type="date"></div>
+            <div class="field" style="display:none"><label>ساعة بداية الحجز</label><select id="manualStartHour"></select></div>
             <div class="field">
               <label>مدة الحجز</label>
               <select id="manualDuration">
@@ -393,1280 +200,765 @@ hr{border:0;border-top:1px solid var(--border);margin:20px 0}
             </div>
           </div>
 
-          <div class="actions">
-            <button class="btn gold" id="addManualBooking">
-              إضافة وتأكيد الحجز
-            </button>
+          <div class="manual-hours-area">
+            <div class="manual-hours-title">اختر ساعة بداية الحجز</div>
+            <div class="manual-hours-legend">
+              <span class="manual-legend-item"><i class="manual-legend-dot available"></i> متاح</span>
+              <span class="manual-legend-item"><i class="manual-legend-dot pending"></i> تحت المراجعة</span>
+              <span class="manual-legend-item"><i class="manual-legend-dot booked"></i> محجوز</span>
+            </div>
+            <div id="manualHoursGrid" class="manual-hours-grid">
+              <div class="empty" style="grid-column:1/-1">اختر تاريخ الحجز لعرض الساعات.</div>
+            </div>
+            <p class="manual-hours-help" id="manualHoursHelp">اختر التاريخ أولاً، ثم اضغط على ساعة متاحة لتحديد بداية الحجز.</p>
           </div>
-        </div>
 
+          <div class="actions"><button class="btn gold" id="addManualBooking">إضافة وتأكيد الحجز</button></div>
+        </div>
         <div id="bookingsArea">جاري تحميل الحجوزات...</div>
       </div>
     </section>
 
-    <!-- الإحصائيات -->
     <section class="page" id="page-statistics">
-      <div class="panel">
-        <h2>الإحصائيات الأسبوعية</h2>
-        <div class="field">
-          <label>اختر الأسبوع</label>
-          <select id="weekSelect"></select>
-        </div>
-        <div id="weeklyStats" class="muted">جاري التحميل...</div>
-      </div>
-
-      <div class="panel">
-        <h2>الإحصائيات الشهرية</h2>
-        <div class="field">
-          <label>اختر الشهر</label>
-          <select id="monthSelect"></select>
-        </div>
-        <div id="monthlyStats" class="muted">جاري التحميل...</div>
-      </div>
+      <div class="panel"><h2>الإحصائيات الأسبوعية</h2><div class="field"><label>اختر الأسبوع</label><select id="weekSelect"></select></div><div id="weeklyStats" class="muted">جاري التحميل...</div></div>
+      <div class="panel"><h2>الإحصائيات الشهرية</h2><div class="field"><label>اختر الشهر</label><select id="monthSelect"></select></div><div id="monthlyStats" class="muted">جاري التحميل...</div></div>
     </section>
 
-    <!-- الإعدادات -->
     <section class="page" id="page-settings">
       <div class="panel">
         <h2>إعدادات الملعب</h2>
-        <p class="panel-subtitle">
-          يتم حفظ الإعدادات في قاعدة البيانات وتطبيقها على الحجوزات الجديدة.
-          الأسعار المحفوظة للحجوزات السابقة لا تتغير.
-        </p>
-
+        <p class="panel-subtitle">يتم حفظ الإعدادات في قاعدة البيانات وتطبيقها على الحجوزات الجديدة. الأسعار المحفوظة للحجوزات السابقة لا تتغير.</p>
         <div id="settingsMessage"></div>
-
         <div class="grid">
-          <div class="field">
-            <label>سعر الساعة النهارية (جنيه)</label>
-            <input id="day_price" type="number" min="1">
-          </div>
-          <div class="field">
-            <label>سعر الساعة الليلية (جنيه)</label>
-            <input id="night_price" type="number" min="1">
-          </div>
-          <div class="field">
-            <label>بداية الفترة النهارية</label>
-            <select id="day_start"></select>
-          </div>
-          <div class="field">
-            <label>بداية الفترة الليلية</label>
-            <select id="night_start"></select>
-          </div>
-          <div class="field">
-            <label>العربون (جنيه)</label>
-            <input id="deposit" type="number" min="0">
-          </div>
-          <div class="field">
-            <label>رقم واتساب</label>
-            <input id="whatsapp" type="text" placeholder="+2010...">
-          </div>
+          <div class="field"><label>سعر الساعة النهارية (جنيه)</label><input id="day_price" type="number" min="1"></div>
+          <div class="field"><label>سعر الساعة الليلية (جنيه)</label><input id="night_price" type="number" min="1"></div>
+          <div class="field"><label>بداية الفترة النهارية</label><select id="day_start"></select></div>
+          <div class="field"><label>بداية الفترة الليلية</label><select id="night_start"></select></div>
+          <div class="field"><label>العربون (جنيه)</label><input id="deposit" type="number" min="0"></div>
+          <div class="field"><label>رقم واتساب</label><input id="whatsapp" type="text" placeholder="+2010..."></div>
         </div>
-
-        <label class="check-line">
-          <input type="checkbox" id="open_24_hours">
-          الملعب مفتوح 24 ساعة
-        </label>
-
-        <div class="actions">
-          <button class="btn gold" id="saveSettings">حفظ الإعدادات</button>
-          <button class="btn gray" id="reloadSettings">إعادة تحميل القيم</button>
-        </div>
+        <label class="check-line"><input type="checkbox" id="open_24_hours"> الملعب مفتوح 24 ساعة</label>
+        <div class="actions"><button class="btn gold" id="saveSettings">حفظ الإعدادات</button><button class="btn gray" id="reloadSettings">إعادة تحميل القيم</button></div>
       </div>
     </section>
 
-    <!-- الأقسام -->
     <section class="page" id="page-sections">
       <div class="panel">
         <h2>إضافة قسم جديد</h2>
-        <p class="panel-subtitle">
-          أنشئ أقسام الموقع وحدد نوعها وترتيب ظهورها.
-        </p>
+        <p class="panel-subtitle">أنشئ أقسام الموقع وحدد نوعها وترتيب ظهورها.</p>
         <div id="sectionMessage"></div>
-
         <input type="hidden" id="sectionId">
-
-        <div class="field">
-          <label>اسم القسم</label>
-          <input id="sectionTitle" placeholder="مثال: جدول مباريات الدورة">
-        </div>
-
+        <div class="field"><label>اسم القسم</label><input id="sectionTitle" placeholder="مثال: جدول مباريات الدورة"></div>
         <div class="grid">
-          <div class="field">
-            <label>نوع القسم</label>
-            <select id="sectionType">
-              <option value="custom">قسم عام</option>
-              <option value="announcement">إعلان</option>
-              <option value="offer">عرض</option>
-              <option value="tournament">دورات وبطولات</option>
-              <option value="matches">جدول مباريات</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>ترتيب الظهور</label>
-            <input id="sectionOrder" type="number" value="0">
-          </div>
+          <div class="field"><label>نوع القسم</label><select id="sectionType"><option value="custom">قسم عام</option><option value="announcement">إعلان</option><option value="offer">عرض</option><option value="tournament">دورات وبطولات</option><option value="matches">جدول مباريات</option></select></div>
+          <div class="field"><label>ترتيب الظهور</label><input id="sectionOrder" type="number" value="0"></div>
         </div>
-
-        <div class="field">
-          <label>وصف أو محتوى القسم</label>
-          <textarea id="sectionContent" placeholder="اكتب وصف القسم هنا..."></textarea>
-        </div>
-
-        <label class="check-line">
-          <input type="checkbox" id="sectionVisible" checked>
-          القسم ظاهر
-        </label>
-
-        <div class="actions">
-          <button class="btn gold" id="saveSection">حفظ القسم</button>
-          <button class="btn gray" id="resetSection">إلغاء التعديل</button>
-        </div>
+        <div class="field"><label>وصف أو محتوى القسم</label><textarea id="sectionContent" placeholder="اكتب وصف القسم هنا..."></textarea></div>
+        <label class="check-line"><input type="checkbox" id="sectionVisible" checked> القسم ظاهر</label>
+        <div class="actions"><button class="btn gold" id="saveSection">حفظ القسم</button><button class="btn gray" id="resetSection">إلغاء التعديل</button></div>
       </div>
-
-      <div class="panel">
-        <h2>الأقسام الحالية</h2>
-        <div id="sectionsList">جاري التحميل...</div>
-      </div>
+      <div class="panel"><h2>الأقسام الحالية</h2><div id="sectionsList">جاري التحميل...</div></div>
     </section>
 
-    <!-- البطولات -->
     <section class="page" id="page-tournaments">
       <div class="panel">
-        <h2>إضافة دورة أو بطولة</h2>
-        <div id="tournamentMessage"></div>
-        <input type="hidden" id="tournamentId">
-
-        <div class="field">
-          <label>اسم الدورة</label>
-          <input id="tournamentTitle" placeholder="اسم البطولة">
-        </div>
-        <div class="field">
-          <label>وصف الدورة</label>
-          <textarea id="tournamentDescription"></textarea>
-        </div>
-        <div class="field">
-          <label>شروط الاشتراك</label>
-          <textarea id="tournamentRules"></textarea>
-        </div>
+        <h2>إضافة دورة أو بطولة</h2><div id="tournamentMessage"></div><input type="hidden" id="tournamentId">
+        <div class="field"><label>اسم الدورة</label><input id="tournamentTitle" placeholder="اسم البطولة"></div>
+        <div class="field"><label>وصف الدورة</label><textarea id="tournamentDescription"></textarea></div>
+        <div class="field"><label>شروط الاشتراك</label><textarea id="tournamentRules"></textarea></div>
         <div class="grid">
-          <div class="field">
-            <label>رسوم الاشتراك</label>
-            <input id="tournamentFee" type="number" min="0" value="0">
-          </div>
-          <div class="field">
-            <label>رابط صورة الدورة (اختياري)</label>
-            <input id="tournamentImage" type="url" placeholder="https://...">
-          </div>
+          <div class="field"><label>رسوم الاشتراك</label><input id="tournamentFee" type="number" min="0" value="0"></div>
+          <div class="field"><label>رابط صورة الدورة (اختياري)</label><input id="tournamentImage" type="url" placeholder="https://..."></div>
         </div>
-        <div class="field">
-          <label>الجوائز</label>
-          <textarea id="tournamentPrizes"></textarea>
-        </div>
-        <label class="check-line">
-          <input type="checkbox" id="tournamentVisible" checked>
-          الدورة ظاهرة للزوار
-        </label>
-        <div class="actions">
-          <button class="btn gold" id="saveTournament">حفظ الدورة</button>
-          <button class="btn gray" id="resetTournament">إلغاء التعديل</button>
-        </div>
+        <div class="field"><label>الجوائز</label><textarea id="tournamentPrizes"></textarea></div>
+        <label class="check-line"><input type="checkbox" id="tournamentVisible" checked> الدورة ظاهرة للزوار</label>
+        <div class="actions"><button class="btn gold" id="saveTournament">حفظ الدورة</button><button class="btn gray" id="resetTournament">إلغاء التعديل</button></div>
       </div>
-
-      <div class="panel">
-        <h2>الدورات المسجلة</h2>
-        <div id="tournamentsList">جاري التحميل...</div>
-      </div>
+      <div class="panel"><h2>الدورات المسجلة</h2><div id="tournamentsList">جاري التحميل...</div></div>
     </section>
 
-    <!-- المباريات -->
     <section class="page" id="page-matches">
       <div class="panel">
-        <h2>إضافة مباراة</h2>
-        <div id="matchMessage"></div>
-        <input type="hidden" id="matchId">
-
-        <div class="field">
-          <label>اختر الدورة</label>
-          <select id="matchTournament"></select>
-        </div>
-
+        <h2>إضافة مباراة</h2><div id="matchMessage"></div><input type="hidden" id="matchId">
+        <div class="field"><label>اختر الدورة</label><select id="matchTournament"></select></div>
         <div class="grid">
-          <div class="field">
-            <label>الفريق الأول</label>
-            <input id="teamA" placeholder="اسم الفريق الأول">
-          </div>
-          <div class="field">
-            <label>الفريق الثاني</label>
-            <input id="teamB" placeholder="اسم الفريق الثاني">
-          </div>
-          <div class="field">
-            <label>تاريخ المباراة</label>
-            <input id="matchDate" type="date">
-          </div>
-          <div class="field">
-            <label>وقت المباراة</label>
-            <input id="matchTime" type="time">
-          </div>
-          <div class="field">
-            <label>مكان المباراة</label>
-            <input id="matchVenue" placeholder="اسم الملعب">
-          </div>
-          <div class="field">
-            <label>حالة المباراة</label>
-            <select id="matchStatus">
-              <option value="scheduled">لم تبدأ</option>
-              <option value="live">مباشرة</option>
-              <option value="finished">انتهت</option>
-              <option value="postponed">مؤجلة</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>نتيجة الفريق الأول</label>
-            <input id="scoreA" type="number" min="0" placeholder="اتركه فارغًا إن لم تبدأ">
-          </div>
-          <div class="field">
-            <label>نتيجة الفريق الثاني</label>
-            <input id="scoreB" type="number" min="0" placeholder="اتركه فارغًا إن لم تبدأ">
-          </div>
+          <div class="field"><label>الفريق الأول</label><input id="teamA" placeholder="اسم الفريق الأول"></div>
+          <div class="field"><label>الفريق الثاني</label><input id="teamB" placeholder="اسم الفريق الثاني"></div>
+          <div class="field"><label>تاريخ المباراة</label><input id="matchDate" type="date"></div>
+          <div class="field"><label>وقت المباراة</label><input id="matchTime" type="time"></div>
+          <div class="field"><label>مكان المباراة</label><input id="matchVenue" placeholder="اسم الملعب"></div>
+          <div class="field"><label>حالة المباراة</label><select id="matchStatus"><option value="scheduled">لم تبدأ</option><option value="live">مباشرة</option><option value="finished">انتهت</option><option value="postponed">مؤجلة</option></select></div>
+          <div class="field"><label>نتيجة الفريق الأول</label><input id="scoreA" type="number" min="0" placeholder="اتركه فارغًا إن لم تبدأ"></div>
+          <div class="field"><label>نتيجة الفريق الثاني</label><input id="scoreB" type="number" min="0" placeholder="اتركه فارغًا إن لم تبدأ"></div>
         </div>
-
-        <div class="actions">
-          <button class="btn gold" id="saveMatch">حفظ المباراة</button>
-          <button class="btn gray" id="resetMatch">إلغاء التعديل</button>
-        </div>
+        <div class="actions"><button class="btn gold" id="saveMatch">حفظ المباراة</button><button class="btn gray" id="resetMatch">إلغاء التعديل</button></div>
       </div>
-
-      <div class="panel">
-        <h2>المباريات المسجلة</h2>
-        <div class="field">
-          <label>تصفية حسب الدورة</label>
-          <select id="matchesFilter"></select>
-        </div>
-        <div id="matchesList">اختر دورة لعرض مبارياتها.</div>
-      </div>
+      <div class="panel"><h2>المباريات المسجلة</h2><div class="field"><label>تصفية حسب الدورة</label><select id="matchesFilter"></select></div><div id="matchesList">اختر دورة لعرض مبارياتها.</div></div>
     </section>
-
   </main>
 </div>
 
 <script type="module">
-import { createClient } from
-"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-const SUPABASE_URL = "https://rqcvjbpxntwqhoftupat.supabase.co";
-const SUPABASE_KEY = "sb_publishable_ynKIqc436PsqVFt620RgMw_b35h5KO0";
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL="https://rqcvjbpxntwqhoftupat.supabase.co";
+const SUPABASE_KEY="sb_publishable_ynKIqc436PsqVFt620RgMw_b35h5KO0";
+const supabase=createClient(SUPABASE_URL,SUPABASE_KEY);
 
-let allBookings = [];
-let selectedDay = "";
-let weeklyHistory = [];
-let monthlyHistory = [];
-let selectedWeek = "";
-let selectedMonth = "";
-let tournamentsCache = [];
+let allBookings=[];
+let selectedDay="";
+let weeklyHistory=[];
+let monthlyHistory=[];
+let selectedWeek="";
+let selectedMonth="";
+let tournamentsCache=[];
+let selectedManualHour=null;
+let manualHoursDate="";
+const $=id=>document.getElementById(id);
 
-const $ = id => document.getElementById(id);
-
-// عرض ساعات إعدادات الفترتين بنظام 12 ساعة المصري، مع الاحتفاظ بالقيمة 0-23 داخليًا.
-function setupEgyptianHourSelects() {
-  const formatSettingsHour = hour => {
-    if (hour === 0) return "12:00 صباحًا";
-    if (hour < 12) return `${hour}:00 صباحًا`;
-    if (hour === 12) return "12:00 ظهرًا";
-    return `${hour - 12}:00 مساءً`;
+function setupEgyptianHourSelects(){
+  const formatSettingsHour=hour=>{
+    if(hour===0)return "12:00 صباحًا";
+    if(hour<12)return `${hour}:00 صباحًا`;
+    if(hour===12)return "12:00 ظهرًا";
+    return `${hour-12}:00 مساءً`;
   };
-
-  ["day_start", "night_start"].forEach(id => {
-    const select = $(id);
-    if (!select) return;
-    select.innerHTML = Array.from({length: 24}, (_, hour) =>
+  ["day_start","night_start"].forEach(id=>{
+    const select=$(id);
+    if(!select)return;
+    select.innerHTML=Array.from({length:24},(_,hour)=>
       `<option value="${hour}">${formatSettingsHour(hour)}</option>`
     ).join("");
   });
 }
 setupEgyptianHourSelects();
 
-// تجهيز ساعات الحجز اليدوي
-function setupManualBookingHours() {
-  $("manualStartHour").innerHTML = Array.from(
-    {length:24},
-    (_,hour) => `<option value="${hour}">${formatHour(hour)}</option>`
+function setupManualBookingHours(){
+  $("manualStartHour").innerHTML=Array.from({length:24},(_,hour)=>
+    `<option value="${hour}">${formatHour(hour)}</option>`
   ).join("");
-
-  $("manualDate").min = getEgyptDateKey();
+  $("manualDate").min=getEgyptDateKey();
 }
 setupManualBookingHours();
 
-function msg(id, text, type = "success") {
-  const area = $(id);
-  if (!area) return;
-  area.innerHTML = `<div class="notice ${type}">${escapeHTML(text)}</div>`;
+function msg(id,text,type="success"){
+  const area=$(id);
+  if(!area)return;
+  area.innerHTML=`<div class="notice ${type}">${escapeHTML(text)}</div>`;
 }
-
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  })[char]);
+function escapeHTML(value){
+  return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
 }
-
-function getEgyptDateKey(date = new Date()) {
-  const parts = new Intl.DateTimeFormat("en-GB", {
-    timeZone:"Africa/Cairo",year:"numeric",month:"2-digit",day:"2-digit"
-  }).formatToParts(date);
-  const values = {};
-  parts.forEach(p => values[p.type] = p.value);
+function getEgyptDateKey(date=new Date()){
+  const parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Cairo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(date);
+  const values={};parts.forEach(p=>values[p.type]=p.value);
   return `${values.year}-${values.month}-${values.day}`;
 }
-
-function dateObject(key) {
-  const [y,m,d] = key.split("-").map(Number);
+function dateObject(key){
+  const [y,m,d]=key.split("-").map(Number);
   return new Date(Date.UTC(y,m-1,d));
 }
-function dateKeyFromObject(date) {
-  return date.toISOString().slice(0,10);
+function dateKeyFromObject(date){return date.toISOString().slice(0,10)}
+function addDays(key,days){
+  const date=dateObject(key);date.setUTCDate(date.getUTCDate()+days);return dateKeyFromObject(date);
 }
-function addDays(key,days) {
-  const date = dateObject(key);
-  date.setUTCDate(date.getUTCDate()+days);
-  return dateKeyFromObject(date);
+function formatDate(key){
+  if(!key)return "غير محدد";
+  return new Intl.DateTimeFormat("ar-EG",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric",timeZone:"UTC"}).format(dateObject(key));
 }
-function formatDate(key) {
-  if (!key) return "غير محدد";
-  return new Intl.DateTimeFormat("ar-EG",{
-    weekday:"long",day:"2-digit",month:"2-digit",year:"numeric",
-    timeZone:"UTC"
-  }).format(dateObject(key));
+function getCurrentWeekStart(){
+  const today=getEgyptDateKey();const day=dateObject(today).getUTCDay();return addDays(today,-((day+1)%7));
 }
-function getCurrentWeekStart() {
-  const today = getEgyptDateKey();
-  const day = dateObject(today).getUTCDay();
-  return addDays(today,-((day+1)%7));
+function getCurrentMonthStart(){return getEgyptDateKey().slice(0,7)+"-01"}
+function getMonthEnd(start){
+  const date=dateObject(start);date.setUTCMonth(date.getUTCMonth()+1);date.setUTCDate(0);return dateKeyFromObject(date);
 }
-function getCurrentMonthStart() {
-  return getEgyptDateKey().slice(0,7)+"-01";
+function formatReceivedTime(timestamp){
+  if(!timestamp)return "غير متوفر";
+  return new Intl.DateTimeFormat("ar-EG",{timeZone:"Africa/Cairo",hour:"numeric",minute:"2-digit",hour12:true}).format(new Date(timestamp));
 }
-function getMonthEnd(start) {
-  const date = dateObject(start);
-  date.setUTCMonth(date.getUTCMonth()+1);
-  date.setUTCDate(0);
-  return dateKeyFromObject(date);
-}
-function formatReceivedTime(timestamp) {
-  if (!timestamp) return "غير متوفر";
-  return new Intl.DateTimeFormat("ar-EG",{
-    timeZone:"Africa/Cairo",hour:"numeric",minute:"2-digit",hour12:true
-  }).format(new Date(timestamp));
-}
-function formatHour(hour) {
-  const h = Number(hour);
-  if (h===0) return "12:00 صباحًا";
-  if (h<12) return `${h}:00 صباحًا`;
-  if (h===12) return "12:00 ظهرًا";
+function formatHour(hour){
+  const h=Number(hour);
+  if(h===0)return "12:00 صباحًا";
+  if(h<12)return `${h}:00 صباحًا`;
+  if(h===12)return "12:00 ظهرًا";
   return `${h-12}:00 مساءً`;
 }
-function formatAppointmentDate(date,hour) {
-  return `${formatDate(date)} - ${formatHour(hour)}`;
+function formatAppointmentDate(date,hour){return `${formatDate(date)} - ${formatHour(hour)}`}
+function statusText(status){
+  return ({pending:"تحت المراجعة",confirmed:"مؤكد - محجوز",rejected:"مرفوض"})[String(status).toLowerCase()]||status||"غير معروف";
 }
-function statusText(status) {
-  return ({
-    pending:"تحت المراجعة",
-    confirmed:"مؤكد - محجوز",
-    rejected:"مرفوض"
-  })[String(status).toLowerCase()] || status || "غير معروف";
-}
-function statusClass(status) {
-  return String(status).toLowerCase();
-}
+function statusClass(status){return String(status).toLowerCase()}
 
 /* التنقل */
-const pageNames = {
-  home:"الرئيسية",
-  bookings:"إدارة الحجوزات",
-  statistics:"الإحصائيات",
-  settings:"إعدادات الملعب",
-  sections:"أقسام الموقع",
-  tournaments:"الدورات والبطولات",
-  matches:"جدول المباريات"
-};
-
-window.navigate = function(page) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".nav-btn[data-page]").forEach(b => b.classList.remove("active"));
+const pageNames={home:"الرئيسية",bookings:"إدارة الحجوزات",statistics:"الإحصائيات",settings:"إعدادات الملعب",sections:"أقسام الموقع",tournaments:"الدورات والبطولات",matches:"جدول المباريات"};
+window.navigate=function(page){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-btn[data-page]").forEach(b=>b.classList.remove("active"));
   $("page-"+page)?.classList.add("active");
   document.querySelector(`.nav-btn[data-page="${page}"]`)?.classList.add("active");
-  $("pageTitle").textContent = pageNames[page] || "لوحة الإدارة";
+  $("pageTitle").textContent=pageNames[page]||"لوحة الإدارة";
   $("sidebar").classList.remove("open");
-
-  if (page==="settings") loadSettings();
-  if (page==="sections") loadSections();
-  if (page==="tournaments") loadTournaments();
-  if (page==="matches") loadMatchPage();
+  if(page==="settings")loadSettings();
+  if(page==="sections")loadSections();
+  if(page==="tournaments")loadTournaments();
+  if(page==="matches")loadMatchPage();
 };
-
-document.querySelectorAll(".nav-btn[data-page]").forEach(button => {
-  button.addEventListener("click",() => navigate(button.dataset.page));
-});
-$("menuBtn").addEventListener("click",() => $("sidebar").classList.toggle("open"));
+document.querySelectorAll(".nav-btn[data-page]").forEach(button=>button.addEventListener("click",()=>navigate(button.dataset.page)));
+$("menuBtn").addEventListener("click",()=>$("sidebar").classList.toggle("open"));
 
 /* الدخول */
 $("loginBtn").addEventListener("click",login);
-$("password").addEventListener("keydown",e => {
-  if (e.key==="Enter") login();
-});
-
-async function login() {
-  $("loginMessage").innerHTML = '<div class="notice">جاري تسجيل الدخول...</div>';
-  const email = $("email").value.trim();
-  const password = $("password").value;
-
-  const {error} = await supabase.auth.signInWithPassword({email,password});
-  if (error) {
-    msg("loginMessage","بيانات الدخول غير صحيحة أو تعذر تسجيل الدخول.","error");
-    return;
+$("password").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
+async function login(){
+  $("loginMessage").innerHTML='<div class="notice">جاري تسجيل الدخول...</div>';
+  const email=$("email").value.trim();const password=$("password").value;
+  const {error}=await supabase.auth.signInWithPassword({email,password});
+  if(error){msg("loginMessage","بيانات الدخول غير صحيحة أو تعذر تسجيل الدخول.","error");return}
+  const {data,error:adminError}=await supabase.rpc("is_admin");
+  if(adminError||data!==true){
+    await supabase.auth.signOut();msg("loginMessage","هذا الحساب ليس لديه صلاحيات الإدارة.","error");return;
   }
-
-  const {data,error:adminError} = await supabase.rpc("is_admin");
-  if (adminError || data!==true) {
-    await supabase.auth.signOut();
-    msg("loginMessage","هذا الحساب ليس لديه صلاحيات الإدارة.","error");
-    return;
-  }
-
-  $("loginScreen").classList.add("hidden");
-  $("app").classList.remove("hidden");
-  await startDashboard();
+  $("loginScreen").classList.add("hidden");$("app").classList.remove("hidden");await startDashboard();
 }
-
-$("logoutBtn").addEventListener("click",async() => {
-  await supabase.auth.signOut();
-  location.reload();
-});
-
-async function startDashboard() {
-  await Promise.all([loadBookings(),loadStatistics()]);
-  updateHomeStats();
-
-  const today = getEgyptDateKey();
-  setInterval(async() => {
-    if (getEgyptDateKey()!==today) {
-      await loadBookings();
-      await loadStatistics();
-    }
+$("logoutBtn").addEventListener("click",async()=>{await supabase.auth.signOut();location.reload()});
+async function startDashboard(){
+  await Promise.all([loadBookings(),loadStatistics()]);updateHomeStats();
+  const today=getEgyptDateKey();
+  setInterval(async()=>{
+    if(getEgyptDateKey()!==today){await loadBookings();await loadStatistics()}
   },60000);
 }
 
 /* الحجوزات */
-$("refreshBookings").addEventListener("click",async() => {
-  await loadBookings();
-  await loadStatistics();
+$("refreshBookings").addEventListener("click",async()=>{await loadBookings();await loadStatistics()});
+$("daySelect").addEventListener("change",e=>{selectedDay=e.target.value;renderBookings()});
+$("addManualBooking").addEventListener("click",addManualBooking);
+
+/* تحديث شبكة الساعات عند اختيار التاريخ */
+$("manualDate").addEventListener("change",()=>{
+  selectedManualHour=null;
+  manualHoursDate=$("manualDate").value;
+  $("manualStartHour").value="";
+  refreshManualHourGrid();
+  updateManualDurationOptions();
+});
+$("manualDuration").addEventListener("change",()=>{
+  if(selectedManualHour!==null&&!isManualDurationAvailable(selectedManualHour,Number($("manualDuration").value))){
+    msg("manualBookingMessage","المدة المختارة تتعارض مع موعد محجوز. اختر مدة أخرى.","error");
+    updateManualDurationOptions();
+  }
+  renderManualHourGrid();
 });
 
-$("daySelect").addEventListener("change",e => {
-  selectedDay = e.target.value;
-  renderBookings();
-});
+/*
+  إنشاء خريطة حالة الساعات:
+  confirmed = محجوز
+  pending = تحت المراجعة
+  rejected = لا يمنع الحجز
+  يتم احتساب الساعات التي تعبر إلى اليوم التالي.
+*/
+function getManualHourStatuses(dateKey){
+  const statuses=Array(24).fill("available");
 
-// إضافة حجز يدوي من لوحة الإدارة
-$("addManualBooking").addEventListener("click", addManualBooking);
+  allBookings.forEach(booking=>{
+    const status=String(booking.status||"").toLowerCase();
+    if(status!=="confirmed"&&status!=="pending")return;
 
-async function addManualBooking() {
-  const customer_name = $("manualCustomerName").value.trim();
-  const phone = $("manualPhone").value.trim();
-  const booking_date = $("manualDate").value;
-  const start_hour = Number($("manualStartHour").value);
-  const duration = Number($("manualDuration").value);
+    const start=Number(booking.start_hour);
+    const duration=Math.max(1,Number(booking.duration)||1);
+    if(!Number.isFinite(start)||start<0||start>23)return;
 
-  if (customer_name.length < 2) {
-    msg("manualBookingMessage","اكتب اسم العميل بشكل صحيح.","error");
-    return;
-  }
+    for(let i=0;i<duration;i++){
+      const absoluteHour=start+i;
+      const dayOffset=Math.floor(absoluteHour/24);
+      const hour=absoluteHour%24;
+      const occupiedDate=addDays(booking.booking_date,dayOffset);
+      if(occupiedDate!==dateKey)continue;
 
-  if (phone.length < 7 || phone.length > 20) {
-    msg("manualBookingMessage","اكتب رقم هاتف صحيحًا.","error");
-    return;
-  }
-
-  if (!booking_date) {
-    msg("manualBookingMessage","اختر تاريخ الحجز.","error");
-    return;
-  }
-
-  if (booking_date < getEgyptDateKey()) {
-    msg("manualBookingMessage","لا يمكن إضافة حجز في تاريخ سابق.","error");
-    return;
-  }
-
-  if (![1,2,3].includes(duration)) {
-    msg("manualBookingMessage","مدة الحجز غير صحيحة.","error");
-    return;
-  }
-
-  const button = $("addManualBooking");
-  button.disabled = true;
-  button.textContent = "جاري إضافة الحجز...";
-  msg("manualBookingMessage","جاري التحقق من الموعد وإضافة الحجز...");
-
-  try {
-    const { data, error } = await supabase.functions.invoke(
-      "hyper-endpoint",
-      {
-        body: {
-          action: "manual_booking",
-          customer_name,
-          phone,
-          booking_date,
-          start_hour,
-          duration
-        }
-      }
-    );
-
-    if (error) {
-      let message = "تعذر إضافة الحجز اليدوي.";
-
-      if (data?.error) {
-        message = data.error;
-      } else if (error.message) {
-        message = error.message;
-      }
-
-      throw new Error(message);
+      // الحجز المؤكد له أولوية اللون الأحمر على المراجعة.
+      if(status==="confirmed")statuses[hour]="booked";
+      else if(statuses[hour]!=="booked")statuses[hour]="pending";
     }
+  });
+  return statuses;
+}
 
-    if (data?.error) {
-      throw new Error(data.error);
-    }
+async function refreshManualHourGrid(){
+  const dateKey=$("manualDate").value;
+  manualHoursDate=dateKey;
+  selectedManualHour=null;
+  if(!dateKey){
+    $("manualHoursGrid").innerHTML='<div class="empty" style="grid-column:1/-1">اختر تاريخ الحجز لعرض الساعات.</div>';
+    $("manualHoursHelp").textContent="اختر التاريخ أولاً، ثم اضغط على ساعة متاحة لتحديد بداية الحجز.";
+    updateManualDurationOptions();
+    return;
+  }
+  $("manualHoursGrid").innerHTML='<div class="empty" style="grid-column:1/-1">جاري تحديث الساعات...</div>';
+  await loadBookingsForManualGrid();
+  renderManualHourGrid();
+  updateManualDurationOptions();
+}
 
-    $("manualCustomerName").value = "";
-    $("manualPhone").value = "";
-    $("manualDate").value = "";
-    $("manualStartHour").value = "0";
-    $("manualDuration").value = "1";
-
-    msg(
-      "manualBookingMessage",
-      `تم تأكيد الحجز بنجاح. السعر: ${Number(data.booking?.price ?? 0)} جنيه.`,
-      "success"
-    );
-
-    await loadBookings();
-    await loadStatistics();
-
-  } catch (error) {
-    msg(
-      "manualBookingMessage",
-      error.message || "حدث خطأ أثناء إضافة الحجز.",
-      "error"
-    );
-  } finally {
-    button.disabled = false;
-    button.textContent = "إضافة وتأكيد الحجز";
+async function loadBookingsForManualGrid(){
+  // الحجوزات محملة بالفعل في allBookings بواسطة loadBookings().
+  // نعيد استخدام البيانات الحالية لتجنب استعلام إضافي.
+  if(!allBookings.length){
+    const {data,error}=await supabase.from("bookings").select("*");
+    if(!error)allBookings=data||[];
   }
 }
 
-async function loadBookings() {
-  $("bookingsArea").textContent = "جاري تحميل الحجوزات...";
-  const {data,error} = await supabase
-    .from("bookings").select("*").order("created_at",{ascending:true});
+function isManualDurationAvailable(startHour,duration){
+  const dateKey=$("manualDate").value;
+  if(!dateKey||startHour===null||startHour===undefined)return false;
+  const statuses=getManualHourStatuses(dateKey);
+  for(let i=0;i<duration;i++){
+    const absoluteHour=Number(startHour)+i;
+    const dayOffset=Math.floor(absoluteHour/24);
+    const hour=absoluteHour%24;
+    const checkDate=addDays(dateKey,dayOffset);
+    let state;
+    if(dayOffset===0)state=statuses[hour];
+    else state=getManualHourStatuses(checkDate)[hour];
+    if(state!=="available")return false;
+  }
+  return true;
+}
 
-  if (error) {
-    $("bookingsArea").textContent = "تعذر تحميل الحجوزات.";
+function updateManualDurationOptions(){
+  const select=$("manualDuration");
+  const startHour=selectedManualHour;
+  const currentValue=select.value;
+
+  // قبل اختيار ساعة البداية، اترك كل المدد متاحة.
+  if(startHour===null){
+    Array.from(select.options).forEach(option=>option.disabled=false);
     return;
   }
-  allBookings = data || [];
-  if (!selectedDay) selectedDay = getEgyptDateKey();
+
+  let firstAvailable=null;
+  Array.from(select.options).forEach(option=>{
+    const duration=Number(option.value);
+    const available=isManualDurationAvailable(startHour,duration);
+    option.disabled=!available;
+    if(available&&firstAvailable===null)firstAvailable=option.value;
+  });
+
+  if(select.selectedOptions[0]?.disabled){
+    if(firstAvailable!==null)select.value=firstAvailable;
+  }
+}
+
+function renderManualHourGrid(){
+  const dateKey=$("manualDate").value;
+  if(!dateKey){
+    $("manualHoursGrid").innerHTML='<div class="empty" style="grid-column:1/-1">اختر تاريخ الحجز لعرض الساعات.</div>';
+    return;
+  }
+
+  const statuses=getManualHourStatuses(dateKey);
+  $("manualHoursGrid").innerHTML=Array.from({length:24},(_,hour)=>{
+    const state=statuses[hour];
+    const selected=selectedManualHour===hour;
+    const disabled=state!=="available";
+    const stateClass=selected?"selected":state;
+    let title="متاح";
+    if(state==="pending")title="تحت المراجعة";
+    if(state==="booked")title="محجوز";
+    return `<button type="button" class="manual-hour ${stateClass}" data-hour="${hour}" ${disabled?"disabled":""} title="${title}">${formatHour(hour)}</button>`;
+  }).join("");
+
+  $("manualHoursGrid").querySelectorAll(".manual-hour.available").forEach(button=>{
+    button.addEventListener("click",()=>{
+      selectedManualHour=Number(button.dataset.hour);
+      $("manualStartHour").value=String(selectedManualHour);
+      updateManualDurationOptions();
+      renderManualHourGrid();
+      const duration=Number($("manualDuration").value);
+      if(isManualDurationAvailable(selectedManualHour,duration)){
+        $("manualHoursHelp").textContent=`تم اختيار الساعة ${formatHour(selectedManualHour)} كبداية للحجز.`;
+      }else{
+        $("manualHoursHelp").textContent="اختر مدة متاحة لهذا الموعد.";
+      }
+      $("manualBookingMessage").innerHTML="";
+    });
+  });
+}
+
+async function addManualBooking(){
+  const customer_name=$("manualCustomerName").value.trim();
+  const phone=$("manualPhone").value.trim();
+  const booking_date=$("manualDate").value;
+  const start_hour=selectedManualHour;
+  const duration=Number($("manualDuration").value);
+
+  if(customer_name.length<2){msg("manualBookingMessage","اكتب اسم العميل بشكل صحيح.","error");return}
+  if(phone.length<7||phone.length>20){msg("manualBookingMessage","اكتب رقم هاتف صحيحًا.","error");return}
+  if(!booking_date){msg("manualBookingMessage","اختر تاريخ الحجز.","error");return}
+  if(booking_date<getEgyptDateKey()){msg("manualBookingMessage","لا يمكن إضافة حجز في تاريخ سابق.","error");return}
+  if(start_hour===null||start_hour===undefined){msg("manualBookingMessage","اختر ساعة بداية الحجز من شبكة الساعات.","error");return}
+  if(![1,2,3].includes(duration)){msg("manualBookingMessage","مدة الحجز غير صحيحة.","error");return}
+
+  // تحقق محلي قبل إرسال الحجز إلى الخادم.
+  if(!isManualDurationAvailable(start_hour,duration)){
+    msg("manualBookingMessage","هذا الموعد أو مدة الحجز يتعارضان مع حجز آخر. اختر موعدًا أو مدة مختلفة.","error");
+    await refreshManualHourGrid();
+    return;
+  }
+
+  const button=$("addManualBooking");
+  button.disabled=true;button.textContent="جاري إضافة الحجز...";
+  msg("manualBookingMessage","جاري التحقق من الموعد وإضافة الحجز...");
+
+  try{
+    const {data,error}=await supabase.functions.invoke("hyper-endpoint",{
+      body:{action:"manual_booking",customer_name,phone,booking_date,start_hour,duration}
+    });
+
+    if(error){
+      let message="تعذر إضافة الحجز اليدوي.";
+      if(data?.error)message=data.error;
+      else if(error.message)message=error.message;
+      throw new Error(message);
+    }
+    if(data?.error)throw new Error(data.error);
+
+    $("manualCustomerName").value="";
+    $("manualPhone").value="";
+    $("manualDate").value="";
+    $("manualStartHour").value="";
+    $("manualDuration").value="1";
+    selectedManualHour=null;
+    manualHoursDate="";
+    $("manualHoursGrid").innerHTML='<div class="empty" style="grid-column:1/-1">اختر تاريخ الحجز لعرض الساعات.</div>';
+    $("manualHoursHelp").textContent="اختر التاريخ أولاً، ثم اضغط على ساعة متاحة لتحديد بداية الحجز.";
+
+    msg("manualBookingMessage",`تم تأكيد الحجز بنجاح. السعر: ${Number(data.booking?.price??0)} جنيه.`,"success");
+    await loadBookings();
+    await loadStatistics();
+  }catch(error){
+    msg("manualBookingMessage",error.message||"حدث خطأ أثناء إضافة الحجز.","error");
+  }finally{
+    button.disabled=false;button.textContent="إضافة وتأكيد الحجز";
+  }
+}
+
+async function loadBookings(){
+  $("bookingsArea").textContent="جاري تحميل الحجوزات...";
+  const {data,error}=await supabase.from("bookings").select("*").order("created_at",{ascending:true});
+  if(error){$("bookingsArea").textContent="تعذر تحميل الحجوزات.";return}
+  allBookings=data||[];
+  if(!selectedDay)selectedDay=getEgyptDateKey();
   renderDayOptions();
   renderBookings();
   updateHomeStats();
-}
 
-function renderDayOptions() {
-  const today = getEgyptDateKey();
-  const days = new Set([today]);
-  allBookings.forEach(b => {
-    if (b.created_at) days.add(getEgyptDateKey(new Date(b.created_at)));
-  });
-  const sorted = Array.from(days).sort().reverse();
-  if (!days.has(selectedDay)) selectedDay = today;
-
-  $("daySelect").innerHTML = sorted.map(day => `
-    <option value="${day}" ${day===selectedDay?"selected":""}>
-      ${escapeHTML(formatDate(day))}${day===today?" - اليوم الحالي":""}
-    </option>
-  `).join("");
-}
-
-function renderBookings() {
-  const rows = allBookings.filter(b =>
-    b.created_at && getEgyptDateKey(new Date(b.created_at))===selectedDay
-  ).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
-
-  let html = `<div class="day-title">طلبات يوم ${escapeHTML(formatDate(selectedDay))}</div>`;
-  if (!rows.length) {
-    $("bookingsArea").innerHTML = html+'<div class="empty">لا توجد طلبات في هذا اليوم.</div>';
-    return;
+  // إذا كان تاريخ الحجز اليدوي مفتوحًا، حدّث ألوان الساعات بعد تحميل الحجوزات.
+  if($("manualDate").value){
+    renderManualHourGrid();
+    updateManualDurationOptions();
   }
-
-  html += rows.map(b => {
-    const status = String(b.status||"").toLowerCase();
-    let buttons = "";
-
-    if (status==="pending") {
-      buttons = `
-        <button class="btn small green" onclick="updateBooking(${Number(b.id)},'confirmed')">تأكيد الحجز</button>
-        <button class="btn small red" onclick="updateBooking(${Number(b.id)},'rejected')">رفض الحجز</button>`;
-    } else if (status==="confirmed") {
-      buttons = `<button class="btn small red" onclick="updateBooking(${Number(b.id)},'rejected')">إلغاء الحجز</button>`;
+}
+function renderDayOptions(){
+  const today=getEgyptDateKey();const days=new Set([today]);
+  allBookings.forEach(b=>{if(b.created_at)days.add(getEgyptDateKey(new Date(b.created_at)))});
+  const sorted=Array.from(days).sort().reverse();
+  if(!days.has(selectedDay))selectedDay=today;
+  $("daySelect").innerHTML=sorted.map(day=>`<option value="${day}" ${day===selectedDay?"selected":""}>${escapeHTML(formatDate(day))}${day===today?" - اليوم الحالي":""}</option>`).join("");
+}
+function renderBookings(){
+  const rows=allBookings.filter(b=>b.created_at&&getEgyptDateKey(new Date(b.created_at))===selectedDay).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+  let html=`<div class="day-title">طلبات يوم ${escapeHTML(formatDate(selectedDay))}</div>`;
+  if(!rows.length){$("bookingsArea").innerHTML=html+'<div class="empty">لا توجد طلبات في هذا اليوم.</div>';return}
+  html+=rows.map(b=>{
+    const status=String(b.status||"").toLowerCase();let buttons="";
+    if(status==="pending"){
+      buttons=`<button class="btn small green" onclick="updateBooking(${Number(b.id)},'confirmed')">تأكيد الحجز</button><button class="btn small red" onclick="updateBooking(${Number(b.id)},'rejected')">رفض الحجز</button>`;
+    }else if(status==="confirmed"){
+      buttons=`<button class="btn small red" onclick="updateBooking(${Number(b.id)},'rejected')">إلغاء الحجز</button>`;
     }
-
-    return `
-      <div class="booking">
-        <p class="received">وقت وصول الطلب: ${escapeHTML(formatReceivedTime(b.created_at))}</p>
-        ${b.booking_source === "manual"
-          ? '<span class="manual-tag">حجز يدوي من الإدارة</span>'
-          : ""}
-        <p>الاسم: ${escapeHTML(b.customer_name)}</p>
-        <p>الهاتف: ${escapeHTML(b.phone)}</p>
-        <p class="appointment">موعد الحجز: ${escapeHTML(formatAppointmentDate(b.booking_date,b.start_hour))}</p>
-        <p>المدة: ${Number(b.duration||1)} ساعة</p>
-        <p>السعر: ${Number(b.price)} جنيه</p>
-        <p class="status ${statusClass(status)}">الحالة: ${escapeHTML(statusText(status))}</p>
-        <div class="actions">${buttons}</div>
-      </div>`;
+    return `<div class="booking">
+      <p class="received">وقت وصول الطلب: ${escapeHTML(formatReceivedTime(b.created_at))}</p>
+      ${b.booking_source==="manual"?'<span class="manual-tag">حجز يدوي من الإدارة</span>':""}
+      <p>الاسم: ${escapeHTML(b.customer_name)}</p><p>الهاتف: ${escapeHTML(b.phone)}</p>
+      <p class="appointment">موعد الحجز: ${escapeHTML(formatAppointmentDate(b.booking_date,b.start_hour))}</p>
+      <p>المدة: ${Number(b.duration||1)} ساعة</p><p>السعر: ${Number(b.price)} جنيه</p>
+      <p class="status ${statusClass(status)}">الحالة: ${escapeHTML(statusText(status))}</p>
+      <div class="actions">${buttons}</div></div>`;
   }).join("");
-
-  $("bookingsArea").innerHTML = html;
+  $("bookingsArea").innerHTML=html;
 }
-
-window.updateBooking = async function(id,newStatus) {
-  if (!confirm(newStatus==="confirmed"?"تأكيد هذا الحجز؟":"هل تريد تغيير حالة الحجز؟")) return;
-
-  const {error} = await supabase.from("bookings")
-    .update({status:newStatus}).eq("id",id);
-
-  if (error) {
-    alert("تعذر تحديث حالة الحجز.");
-    return;
-  }
-
+window.updateBooking=async function(id,newStatus){
+  if(!confirm(newStatus==="confirmed"?"تأكيد هذا الحجز؟":"هل تريد تغيير حالة الحجز؟"))return;
+  const {error}=await supabase.from("bookings").update({status:newStatus}).eq("id",id);
+  if(error){alert("تعذر تحديث حالة الحجز.");return}
   alert(newStatus==="confirmed"?"تم تأكيد الحجز بنجاح":"تم تحديث حالة الحجز بنجاح");
-  await loadBookings();
-  await loadStatistics();
+  await loadBookings();await loadStatistics();
 };
 
 /* الرئيسية */
-function updateHomeStats() {
-  const today = getEgyptDateKey();
-  const todayRows = allBookings.filter(b =>
-    b.created_at && getEgyptDateKey(new Date(b.created_at))===today
-  );
-  $("homeToday").textContent = todayRows.length;
-  $("homePending").textContent = allBookings.filter(b=>b.status==="pending").length;
-  $("homeConfirmed").textContent = allBookings.filter(b=>b.status==="confirmed").length;
-  $("homeTotal").textContent = allBookings.length;
-
-  const recent = [...allBookings].sort((a,b)=>
-    new Date(b.created_at)-new Date(a.created_at)
-  ).slice(0,5);
-
-  $("homeRecent").innerHTML = recent.length ? recent.map(b=>`
-    <div class="item-card">
-      <strong>${escapeHTML(b.customer_name)}</strong>
-      <p>${escapeHTML(formatAppointmentDate(b.booking_date,b.start_hour))}</p>
-      <span class="tag">${escapeHTML(statusText(b.status))}</span>
-      ${b.booking_source === "manual"
-        ? '<span class="manual-tag">حجز يدوي من الإدارة</span>'
-        : ""}
-    </div>
-  `).join("") : '<div class="empty">لا توجد حجوزات حتى الآن.</div>';
+function updateHomeStats(){
+  const today=getEgyptDateKey();
+  const todayRows=allBookings.filter(b=>b.created_at&&getEgyptDateKey(new Date(b.created_at))===today);
+  $("homeToday").textContent=todayRows.length;
+  $("homePending").textContent=allBookings.filter(b=>b.status==="pending").length;
+  $("homeConfirmed").textContent=allBookings.filter(b=>b.status==="confirmed").length;
+  $("homeTotal").textContent=allBookings.length;
+  const recent=[...allBookings].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)).slice(0,5);
+  $("homeRecent").innerHTML=recent.length?recent.map(b=>`
+    <div class="item-card"><strong>${escapeHTML(b.customer_name)}</strong>
+    <p>${escapeHTML(formatAppointmentDate(b.booking_date,b.start_hour))}</p>
+    <span class="tag">${escapeHTML(statusText(b.status))}</span>
+    ${b.booking_source==="manual"?'<span class="manual-tag">حجز يدوي من الإدارة</span>':""}</div>
+  `).join(""):'<div class="empty">لا توجد حجوزات حتى الآن.</div>';
 }
 
 /* الإحصائيات */
-$("weekSelect").addEventListener("change",e=>{
-  selectedWeek=e.target.value;
-  loadOneStatistics("weekly",selectedWeek,"weeklyStats");
-});
-$("monthSelect").addEventListener("change",e=>{
-  selectedMonth=e.target.value;
-  loadOneStatistics("monthly",selectedMonth,"monthlyStats");
-});
-
-async function loadStatistics() {
-  const {data,error} = await supabase.from("booking_statistics")
-    .select("*").order("period_start",{ascending:false});
-
-  if (error) {
+$("weekSelect").addEventListener("change",e=>{selectedWeek=e.target.value;loadOneStatistics("weekly",selectedWeek,"weeklyStats")});
+$("monthSelect").addEventListener("change",e=>{selectedMonth=e.target.value;loadOneStatistics("monthly",selectedMonth,"monthlyStats")});
+async function loadStatistics(){
+  const {data,error}=await supabase.from("booking_statistics").select("*").order("period_start",{ascending:false});
+  if(error){
     $("weeklyStats").innerHTML='<div class="notice error">تعذر تحميل الإحصائيات الأسبوعية.</div>';
-    $("monthlyStats").innerHTML='<div class="notice error">تعذر تحميل الإحصائيات الشهرية.</div>';
-    return;
+    $("monthlyStats").innerHTML='<div class="notice error">تعذر تحميل الإحصائيات الشهرية.</div>';return;
   }
-
   weeklyHistory=(data||[]).filter(x=>x.period_type==="weekly");
   monthlyHistory=(data||[]).filter(x=>x.period_type==="monthly");
-
-  selectedWeek=selectedWeek||getCurrentWeekStart();
-  selectedMonth=selectedMonth||getCurrentMonthStart();
+  selectedWeek=selectedWeek||getCurrentWeekStart();selectedMonth=selectedMonth||getCurrentMonthStart();
   renderStatisticsOptions();
-
-  await Promise.all([
-    loadOneStatistics("weekly",selectedWeek,"weeklyStats"),
-    loadOneStatistics("monthly",selectedMonth,"monthlyStats")
-  ]);
+  await Promise.all([loadOneStatistics("weekly",selectedWeek,"weeklyStats"),loadOneStatistics("monthly",selectedMonth,"monthlyStats")]);
 }
-
-function renderStatisticsOptions() {
+function renderStatisticsOptions(){
   const weekOptions=new Map([[getCurrentWeekStart(),"الأسبوع الحالي"]]);
-  weeklyHistory.forEach(x=>weekOptions.set(
-    x.period_start,`${formatDate(x.period_start)} إلى ${formatDate(x.period_end)}`
-  ));
-
+  weeklyHistory.forEach(x=>weekOptions.set(x.period_start,`${formatDate(x.period_start)} إلى ${formatDate(x.period_end)}`));
   const monthOptions=new Map([[getCurrentMonthStart(),"الشهر الحالي"]]);
   monthlyHistory.forEach(x=>monthOptions.set(x.period_start,formatDate(x.period_start)));
-
-  if (!weekOptions.has(selectedWeek)) selectedWeek=getCurrentWeekStart();
-  if (!monthOptions.has(selectedMonth)) selectedMonth=getCurrentMonthStart();
-
-  $("weekSelect").innerHTML=Array.from(weekOptions.entries()).map(([v,l])=>
-    `<option value="${v}" ${v===selectedWeek?"selected":""}>${escapeHTML(l)}</option>`
-  ).join("");
-
-  $("monthSelect").innerHTML=Array.from(monthOptions.entries()).map(([v,l])=>
-    `<option value="${v}" ${v===selectedMonth?"selected":""}>${escapeHTML(l)}</option>`
-  ).join("");
+  if(!weekOptions.has(selectedWeek))selectedWeek=getCurrentWeekStart();
+  if(!monthOptions.has(selectedMonth))selectedMonth=getCurrentMonthStart();
+  $("weekSelect").innerHTML=Array.from(weekOptions.entries()).map(([v,l])=>`<option value="${v}" ${v===selectedWeek?"selected":""}>${escapeHTML(l)}</option>`).join("");
+  $("monthSelect").innerHTML=Array.from(monthOptions.entries()).map(([v,l])=>`<option value="${v}" ${v===selectedMonth?"selected":""}>${escapeHTML(l)}</option>`).join("");
 }
-
-async function loadOneStatistics(type,start,areaId) {
-  const area=$(areaId);
-  if (!area||!start) return;
-  area.textContent="جاري تحميل الإحصائيات...";
-
-  const weekly=type==="weekly";
-  const current=weekly?getCurrentWeekStart():getCurrentMonthStart();
-  let stats=null;
-
-  if (start===current) {
+async function loadOneStatistics(type,start,areaId){
+  const area=$(areaId);if(!area||!start)return;area.textContent="جاري تحميل الإحصائيات...";
+  const weekly=type==="weekly";const current=weekly?getCurrentWeekStart():getCurrentMonthStart();let stats=null;
+  if(start===current){
     const end=weekly?addDays(start,6):getMonthEnd(start);
-    const {data,error}=await supabase.rpc("calculate_booking_statistics",{
-      p_period_type:type,p_period_start:start,p_period_end:end
-    });
-    if (error) {
-      area.innerHTML='<div class="notice error">تعذر حساب الإحصائيات الحالية.</div>';
-      return;
-    }
+    const {data,error}=await supabase.rpc("calculate_booking_statistics",{p_period_type:type,p_period_start:start,p_period_end:end});
+    if(error){area.innerHTML='<div class="notice error">تعذر حساب الإحصائيات الحالية.</div>';return}
     stats=Array.isArray(data)?data[0]:data;
-  } else {
-    const history=weekly?weeklyHistory:monthlyHistory;
-    const record=history.find(x=>x.period_start===start);
-    if (record) stats=record;
+  }else{
+    const history=weekly?weeklyHistory:monthlyHistory;const record=history.find(x=>x.period_start===start);
+    if(record)stats=record;
   }
-
-  if (!stats) {
-    area.innerHTML='<div class="empty">لا توجد إحصائيات محفوظة لهذه الفترة.</div>';
-    return;
-  }
-
+  if(!stats){area.innerHTML='<div class="empty">لا توجد إحصائيات محفوظة لهذه الفترة.</div>';return}
   renderStatistics(area,stats,start===current);
 }
-
-function renderStatistics(area,s,isCurrent) {
-  const values=[
-    ["الحجوزات المؤكدة",Number(s.confirmed_count||0),"green-text"],
-    ["الطلبات المرفوضة",Number(s.rejected_count||0),"red-text"],
-    ["تحت المراجعة",Number(s.pending_count||0),"orange-text"],
-    ["الحجوزات الملغاة",Number(s.cancelled_count||0),"purple-text"]
-  ];
-
-  area.innerHTML=`
-    <div class="stats-grid">
-      ${values.map(v=>`
-        <div class="stat-card">
-          <div class="name">${v[0]}</div>
-          <div class="value ${v[2]}">${v[1]}</div>
-        </div>
-      `).join("")}
-      <div class="stat-card stat-wide">
-        <div class="name">إجمالي الإيرادات من الحجوزات المؤكدة</div>
-        <div class="value gold-text">${Number(s.confirmed_revenue||0).toLocaleString("en-US")} جنيه</div>
-      </div>
-    </div>
-    <p class="panel-subtitle">
-      ${isCurrent?"إحصائيات الفترة الحالية.":"إحصائيات محفوظة للفترة السابقة."}
-      الإيرادات محسوبة بالسعر الكامل قبل خصم العربون.
-    </p>`;
+function renderStatistics(area,s,isCurrent){
+  const values=[["الحجوزات المؤكدة",Number(s.confirmed_count||0),"green-text"],["الطلبات المرفوضة",Number(s.rejected_count||0),"red-text"],["تحت المراجعة",Number(s.pending_count||0),"orange-text"],["الحجوزات الملغاة",Number(s.cancelled_count||0),"purple-text"]];
+  area.innerHTML=`<div class="stats-grid">${values.map(v=>`<div class="stat-card"><div class="name">${v[0]}</div><div class="value ${v[2]}">${v[1]}</div></div>`).join("")}
+  <div class="stat-card stat-wide"><div class="name">إجمالي الإيرادات من الحجوزات المؤكدة</div><div class="value gold-text">${Number(s.confirmed_revenue||0).toLocaleString("en-US")} جنيه</div></div></div>
+  <p class="panel-subtitle">${isCurrent?"إحصائيات الفترة الحالية.":"إحصائيات محفوظة للفترة السابقة."} الإيرادات محسوبة بالسعر الكامل قبل خصم العربون.</p>`;
 }
 
 /* إعدادات الملعب */
 $("reloadSettings").addEventListener("click",loadSettings);
 $("saveSettings").addEventListener("click",saveSettings);
-
-async function loadSettings() {
+async function loadSettings(){
   $("settingsMessage").innerHTML='<div class="notice">جاري تحميل الإعدادات...</div>';
-
-  const {data,error}=await supabase.from("site_settings")
-    .select("settings").eq("id",1).single();
-
-  if (error||!data) {
-    msg("settingsMessage","تعذر تحميل الإعدادات. تأكد من وجود سجل الإعدادات وصلاحيات الحساب.","error");
-    return;
-  }
-
+  const {data,error}=await supabase.from("site_settings").select("settings").eq("id",1).single();
+  if(error||!data){msg("settingsMessage","تعذر تحميل الإعدادات. تأكد من وجود سجل الإعدادات وصلاحيات الحساب.","error");return}
   const s=data.settings||{};
-  $("day_price").value=s.day_price??150;
-  $("night_price").value=s.night_price??180;
-  $("day_start").value=s.day_start??6;
-  $("night_start").value=s.night_start??17;
-  $("deposit").value=s.deposit??20;
-  $("whatsapp").value=s.whatsapp??"+201098257528";
-  $("open_24_hours").checked=s.open_24_hours??true;
-
-  msg("settingsMessage","تم تحميل الإعدادات بنجاح.");
+  $("day_price").value=s.day_price??150;$("night_price").value=s.night_price??180;
+  $("day_start").value=s.day_start??6;$("night_start").value=s.night_start??17;
+  $("deposit").value=s.deposit??20;$("whatsapp").value=s.whatsapp??"+201098257528";
+  $("open_24_hours").checked=s.open_24_hours??true;msg("settingsMessage","تم تحميل الإعدادات بنجاح.");
 }
-
-async function saveSettings() {
-  const dayPrice=Number($("day_price").value);
-  const nightPrice=Number($("night_price").value);
-  const dayStart=Number($("day_start").value);
-  const nightStart=Number($("night_start").value);
-  const deposit=Number($("deposit").value);
-  const whatsapp=$("whatsapp").value.trim();
-
-  if (!Number.isInteger(dayPrice)||dayPrice<=0||
-      !Number.isInteger(nightPrice)||nightPrice<=0||
-      !Number.isInteger(deposit)||deposit<0) {
-    msg("settingsMessage","الأسعار يجب أن تكون أعدادًا صحيحة أكبر من صفر، والعربون لا يقل عن صفر.","error");
-    return;
+async function saveSettings(){
+  const dayPrice=Number($("day_price").value),nightPrice=Number($("night_price").value);
+  const dayStart=Number($("day_start").value),nightStart=Number($("night_start").value);
+  const deposit=Number($("deposit").value),whatsapp=$("whatsapp").value.trim();
+  if(!Number.isInteger(dayPrice)||dayPrice<=0||!Number.isInteger(nightPrice)||nightPrice<=0||!Number.isInteger(deposit)||deposit<0){
+    msg("settingsMessage","الأسعار يجب أن تكون أعدادًا صحيحة أكبر من صفر، والعربون لا يقل عن صفر.","error");return;
   }
-
-  if (!Number.isInteger(dayStart)||dayStart<0||dayStart>23||
-      !Number.isInteger(nightStart)||nightStart<0||nightStart>23) {
-    msg("settingsMessage","مواعيد بداية الفترات يجب أن تكون من 0 إلى 23.","error");
-    return;
+  if(!Number.isInteger(dayStart)||dayStart<0||dayStart>23||!Number.isInteger(nightStart)||nightStart<0||nightStart>23){
+    msg("settingsMessage","مواعيد بداية الفترات يجب أن تكون من 0 إلى 23.","error");return;
   }
-
-  if (!whatsapp) {
-    msg("settingsMessage","اكتب رقم واتساب صحيحًا.","error");
-    return;
+  if(!whatsapp){msg("settingsMessage","اكتب رقم واتساب صحيحًا.","error");return}
+  $("saveSettings").disabled=true;msg("settingsMessage","جاري حفظ الإعدادات...");
+  const {data:currentData,error:readError}=await supabase.from("site_settings").select("settings").eq("id",1).single();
+  if(readError||!currentData){
+    $("saveSettings").disabled=false;msg("settingsMessage","تعذر قراءة الإعدادات الحالية قبل الحفظ. لم يتم إجراء أي تغيير.","error");return;
   }
-
-  $("saveSettings").disabled=true;
-  msg("settingsMessage","جاري حفظ الإعدادات...");
-
-  // نقرأ أحدث إعدادات قاعدة البيانات أولًا حتى لا نحذف أي مفاتيح إضافية.
-  const {data:currentData,error:readError}=await supabase.from("site_settings")
-    .select("settings").eq("id",1).single();
-
-  if (readError||!currentData) {
-    $("saveSettings").disabled=false;
-    msg("settingsMessage","تعذر قراءة الإعدادات الحالية قبل الحفظ. لم يتم إجراء أي تغيير.","error");
-    return;
-  }
-
-  const settings={
-    ...(currentData.settings||{}),
-    day_price:dayPrice,
-    night_price:nightPrice,
-    day_start:dayStart,
-    night_start:nightStart,
-    deposit,
-    whatsapp,
-    open_24_hours:$("open_24_hours").checked
-  };
-
-  const {data,error}=await supabase.from("site_settings")
-    .update({settings,updated_at:new Date().toISOString()})
-    .eq("id",1).select("settings").single();
-
+  const settings={...(currentData.settings||{}),day_price:dayPrice,night_price:nightPrice,day_start:dayStart,night_start:nightStart,deposit,whatsapp,open_24_hours:$("open_24_hours").checked};
+  const {data,error}=await supabase.from("site_settings").update({settings,updated_at:new Date().toISOString()}).eq("id",1).select("settings").single();
   $("saveSettings").disabled=false;
-
-  if (error||!data) {
-    msg("settingsMessage","تعذر حفظ الإعدادات. راجع صلاحيات الإدارة وحاول مرة أخرى.","error");
-    return;
-  }
-
+  if(error||!data){msg("settingsMessage","تعذر حفظ الإعدادات. راجع صلاحيات الإدارة وحاول مرة أخرى.","error");return}
   msg("settingsMessage","تم حفظ إعدادات الملعب بنجاح.");
 }
 
 /* أقسام الموقع */
 $("saveSection").addEventListener("click",saveSection);
 $("resetSection").addEventListener("click",resetSection);
-
-async function loadSections() {
+async function loadSections(){
   $("sectionsList").textContent="جاري تحميل الأقسام...";
-  const {data,error}=await supabase.from("site_sections")
-    .select("*").order("display_order",{ascending:true});
-
-  if (error) {
-    $("sectionsList").innerHTML='<div class="notice error">تعذر تحميل الأقسام.</div>';
-    return;
-  }
-
-  if (!data?.length) {
-    $("sectionsList").innerHTML='<div class="empty">لم تتم إضافة أقسام بعد.</div>';
-    return;
-  }
-
-  $("sectionsList").innerHTML=data.map(s=>`
-    <div class="item-card">
-      <div class="section-heading">
-        <h3>${escapeHTML(s.title)}</h3>
-        <span class="tag">${s.is_visible?"ظاهر":"مخفي"}</span>
-      </div>
-      <p>النوع: ${escapeHTML(s.section_type)}</p>
-      <p>الترتيب: ${Number(s.display_order||0)}</p>
-      <p>${escapeHTML(s.content?.description||"")}</p>
-      <div class="actions">
-        <button class="btn small" onclick="editSection(${Number(s.id)})">تعديل</button>
-        <button class="btn small orange" onclick="toggleSection(${Number(s.id)},${!s.is_visible})">${s.is_visible?"إخفاء":"إظهار"}</button>
-        <button class="btn small red" onclick="deleteSection(${Number(s.id)})">حذف</button>
-      </div>
-    </div>
-  `).join("");
+  const {data,error}=await supabase.from("site_sections").select("*").order("display_order",{ascending:true});
+  if(error){$("sectionsList").innerHTML='<div class="notice error">تعذر تحميل الأقسام.</div>';return}
+  if(!data?.length){$("sectionsList").innerHTML='<div class="empty">لم تتم إضافة أقسام بعد.</div>';return}
+  $("sectionsList").innerHTML=data.map(s=>`<div class="item-card">
+    <div class="section-heading"><h3>${escapeHTML(s.title)}</h3><span class="tag">${s.is_visible?"ظاهر":"مخفي"}</span></div>
+    <p>النوع: ${escapeHTML(s.section_type)}</p><p>الترتيب: ${Number(s.display_order||0)}</p>
+    <p>${escapeHTML(s.content?.description||"")}</p>
+    <div class="actions"><button class="btn small" onclick="editSection(${Number(s.id)})">تعديل</button>
+    <button class="btn small orange" onclick="toggleSection(${Number(s.id)},${!s.is_visible})">${s.is_visible?"إخفاء":"إظهار"}</button>
+    <button class="btn small red" onclick="deleteSection(${Number(s.id)})">حذف</button></div></div>`).join("");
 }
-
-async function saveSection() {
-  const title=$("sectionTitle").value.trim();
-  if (!title) {
-    msg("sectionMessage","اكتب اسم القسم.","error");
-    return;
-  }
-
+async function saveSection(){
+  const title=$("sectionTitle").value.trim();if(!title){msg("sectionMessage","اكتب اسم القسم.","error");return}
   const id=$("sectionId").value;
-  const record={
-    title,
-    section_type:$("sectionType").value,
-    content:{description:$("sectionContent").value.trim()},
-    display_order:Number($("sectionOrder").value||0),
-    is_visible:$("sectionVisible").checked,
-    updated_at:new Date().toISOString()
-  };
-
-  const result=id
-    ? await supabase.from("site_sections").update(record).eq("id",id)
-    : await supabase.from("site_sections").insert(record);
-
-  if (result.error) {
-    msg("sectionMessage","تعذر حفظ القسم.","error");
-    return;
-  }
-
-  msg("sectionMessage","تم حفظ القسم بنجاح.");
-  resetSection();
-  await loadSections();
+  const record={title,section_type:$("sectionType").value,content:{description:$("sectionContent").value.trim()},display_order:Number($("sectionOrder").value||0),is_visible:$("sectionVisible").checked,updated_at:new Date().toISOString()};
+  const result=id?await supabase.from("site_sections").update(record).eq("id",id):await supabase.from("site_sections").insert(record);
+  if(result.error){msg("sectionMessage","تعذر حفظ القسم.","error");return}
+  msg("sectionMessage","تم حفظ القسم بنجاح.");resetSection();await loadSections();
 }
-
-function resetSection() {
-  $("sectionId").value="";
-  $("sectionTitle").value="";
-  $("sectionType").value="custom";
-  $("sectionContent").value="";
-  $("sectionOrder").value="0";
-  $("sectionVisible").checked=true;
+function resetSection(){
+  $("sectionId").value="";$("sectionTitle").value="";$("sectionType").value="custom";
+  $("sectionContent").value="";$("sectionOrder").value="0";$("sectionVisible").checked=true;
 }
-
-window.editSection=async function(id) {
+window.editSection=async function(id){
   const {data,error}=await supabase.from("site_sections").select("*").eq("id",id).single();
-  if (error||!data) return alert("تعذر تحميل القسم.");
-
-  $("sectionId").value=data.id;
-  $("sectionTitle").value=data.title;
-  $("sectionType").value=data.section_type;
-  $("sectionContent").value=data.content?.description||"";
-  $("sectionOrder").value=data.display_order;
-  $("sectionVisible").checked=data.is_visible;
-  window.navigate("sections");
-  window.scrollTo({top:0,behavior:"smooth"});
+  if(error||!data)return alert("تعذر تحميل القسم.");
+  $("sectionId").value=data.id;$("sectionTitle").value=data.title;$("sectionType").value=data.section_type;
+  $("sectionContent").value=data.content?.description||"";$("sectionOrder").value=data.display_order;
+  $("sectionVisible").checked=data.is_visible;window.navigate("sections");window.scrollTo({top:0,behavior:"smooth"});
 };
-
-window.toggleSection=async function(id,visible) {
-  const {error}=await supabase.from("site_sections")
-    .update({is_visible:visible,updated_at:new Date().toISOString()}).eq("id",id);
-  if (error) return alert("تعذر تحديث القسم.");
-  await loadSections();
+window.toggleSection=async function(id,visible){
+  const {error}=await supabase.from("site_sections").update({is_visible:visible,updated_at:new Date().toISOString()}).eq("id",id);
+  if(error)return alert("تعذر تحديث القسم.");await loadSections();
 };
-
-window.deleteSection=async function(id) {
-  if (!confirm("هل تريد حذف هذا القسم نهائيًا؟")) return;
+window.deleteSection=async function(id){
+  if(!confirm("هل تريد حذف هذا القسم نهائيًا؟"))return;
   const {error}=await supabase.from("site_sections").delete().eq("id",id);
-  if (error) return alert("تعذر حذف القسم.");
-  await loadSections();
+  if(error)return alert("تعذر حذف القسم.");await loadSections();
 };
 
 /* الدورات والبطولات */
 $("saveTournament").addEventListener("click",saveTournament);
 $("resetTournament").addEventListener("click",resetTournament);
-
-async function loadTournaments() {
+async function loadTournaments(){
   $("tournamentsList").textContent="جاري تحميل الدورات...";
-  const {data,error}=await supabase.from("tournaments")
-    .select("*").order("created_at",{ascending:false});
-
-  if (error) {
-    $("tournamentsList").innerHTML='<div class="notice error">تعذر تحميل الدورات.</div>';
-    return;
-  }
-
+  const {data,error}=await supabase.from("tournaments").select("*").order("created_at",{ascending:false});
+  if(error){$("tournamentsList").innerHTML='<div class="notice error">تعذر تحميل الدورات.</div>';return}
   tournamentsCache=data||[];
-
-  if (!tournamentsCache.length) {
-    $("tournamentsList").innerHTML='<div class="empty">لم تتم إضافة دورات بعد.</div>';
-    return;
-  }
-
-  $("tournamentsList").innerHTML=tournamentsCache.map(t=>`
-    <div class="item-card">
-      <div class="section-heading">
-        <h3>${escapeHTML(t.title)}</h3>
-        <span class="tag">${t.is_visible?"ظاهرة":"مخفية"}</span>
-      </div>
-      <p>${escapeHTML(t.description)}</p>
-      <p>الاشتراك: ${Number(t.subscription_fee||0)} جنيه</p>
-      <p>الجوائز: ${escapeHTML(t.prize_details)}</p>
-      <div class="actions">
-        <button class="btn small" onclick="editTournament(${Number(t.id)})">تعديل</button>
-        <button class="btn small orange" onclick="toggleTournament(${Number(t.id)},${!t.is_visible})">${t.is_visible?"إخفاء":"إظهار"}</button>
-        <button class="btn small" onclick="openTournamentMatches(${Number(t.id)})">مباريات الدورة</button>
-        <button class="btn small red" onclick="deleteTournament(${Number(t.id)})">حذف</button>
-      </div>
-    </div>
-  `).join("");
+  if(!tournamentsCache.length){$("tournamentsList").innerHTML='<div class="empty">لم تتم إضافة دورات بعد.</div>';return}
+  $("tournamentsList").innerHTML=tournamentsCache.map(t=>`<div class="item-card">
+    <div class="section-heading"><h3>${escapeHTML(t.title)}</h3><span class="tag">${t.is_visible?"ظاهرة":"مخفية"}</span></div>
+    <p>${escapeHTML(t.description)}</p><p>الاشتراك: ${Number(t.subscription_fee||0)} جنيه</p><p>الجوائز: ${escapeHTML(t.prize_details)}</p>
+    <div class="actions"><button class="btn small" onclick="editTournament(${Number(t.id)})">تعديل</button>
+    <button class="btn small orange" onclick="toggleTournament(${Number(t.id)},${!t.is_visible})">${t.is_visible?"إخفاء":"إظهار"}</button>
+    <button class="btn small" onclick="openTournamentMatches(${Number(t.id)})">مباريات الدورة</button>
+    <button class="btn small red" onclick="deleteTournament(${Number(t.id)})">حذف</button></div></div>`).join("");
 }
-
-async function saveTournament() {
-  const title=$("tournamentTitle").value.trim();
-  const fee=Number($("tournamentFee").value);
-
-  if (!title||!Number.isFinite(fee)||fee<0) {
-    msg("tournamentMessage","اكتب اسم الدورة ورسوم اشتراك صحيحة.","error");
-    return;
-  }
-
-  const record={
-    title,
-    description:$("tournamentDescription").value.trim(),
-    rules:$("tournamentRules").value.trim(),
-    subscription_fee:fee,
-    prize_details:$("tournamentPrizes").value.trim(),
-    image_url:$("tournamentImage").value.trim()||null,
-    is_visible:$("tournamentVisible").checked,
-    updated_at:new Date().toISOString()
-  };
-
+async function saveTournament(){
+  const title=$("tournamentTitle").value.trim(),fee=Number($("tournamentFee").value);
+  if(!title||!Number.isFinite(fee)||fee<0){msg("tournamentMessage","اكتب اسم الدورة ورسوم اشتراك صحيحة.","error");return}
+  const record={title,description:$("tournamentDescription").value.trim(),rules:$("tournamentRules").value.trim(),subscription_fee:fee,prize_details:$("tournamentPrizes").value.trim(),image_url:$("tournamentImage").value.trim()||null,is_visible:$("tournamentVisible").checked,updated_at:new Date().toISOString()};
   const id=$("tournamentId").value;
-  const result=id
-    ? await supabase.from("tournaments").update(record).eq("id",id)
-    : await supabase.from("tournaments").insert(record);
-
-  if (result.error) {
-    msg("tournamentMessage","تعذر حفظ الدورة.","error");
-    return;
-  }
-
-  msg("tournamentMessage","تم حفظ الدورة بنجاح.");
-  resetTournament();
-  await loadTournaments();
+  const result=id?await supabase.from("tournaments").update(record).eq("id",id):await supabase.from("tournaments").insert(record);
+  if(result.error){msg("tournamentMessage","تعذر حفظ الدورة.","error");return}
+  msg("tournamentMessage","تم حفظ الدورة بنجاح.");resetTournament();await loadTournaments();
 }
-
-function resetTournament() {
-  $("tournamentId").value="";
-  $("tournamentTitle").value="";
-  $("tournamentDescription").value="";
-  $("tournamentRules").value="";
-  $("tournamentFee").value="0";
-  $("tournamentPrizes").value="";
-  $("tournamentImage").value="";
-  $("tournamentVisible").checked=true;
+function resetTournament(){
+  $("tournamentId").value="";$("tournamentTitle").value="";$("tournamentDescription").value="";
+  $("tournamentRules").value="";$("tournamentFee").value="0";$("tournamentPrizes").value="";
+  $("tournamentImage").value="";$("tournamentVisible").checked=true;
 }
-
-window.editTournament=function(id) {
-  const t=tournamentsCache.find(x=>Number(x.id)===Number(id));
-  if (!t) return;
-
-  $("tournamentId").value=t.id;
-  $("tournamentTitle").value=t.title;
-  $("tournamentDescription").value=t.description||"";
-  $("tournamentRules").value=t.rules||"";
-  $("tournamentFee").value=t.subscription_fee||0;
-  $("tournamentPrizes").value=t.prize_details||"";
-  $("tournamentImage").value=t.image_url||"";
-  $("tournamentVisible").checked=t.is_visible;
-  window.scrollTo({top:0,behavior:"smooth"});
+window.editTournament=function(id){
+  const t=tournamentsCache.find(x=>Number(x.id)===Number(id));if(!t)return;
+  $("tournamentId").value=t.id;$("tournamentTitle").value=t.title;$("tournamentDescription").value=t.description||"";
+  $("tournamentRules").value=t.rules||"";$("tournamentFee").value=t.subscription_fee||0;
+  $("tournamentPrizes").value=t.prize_details||"";$("tournamentImage").value=t.image_url||"";
+  $("tournamentVisible").checked=t.is_visible;window.scrollTo({top:0,behavior:"smooth"});
 };
-
-window.toggleTournament=async function(id,visible) {
-  const {error}=await supabase.from("tournaments")
-    .update({is_visible:visible,updated_at:new Date().toISOString()}).eq("id",id);
-  if (error) return alert("تعذر تحديث الدورة.");
-  await loadTournaments();
+window.toggleTournament=async function(id,visible){
+  const {error}=await supabase.from("tournaments").update({is_visible:visible,updated_at:new Date().toISOString()}).eq("id",id);
+  if(error)return alert("تعذر تحديث الدورة.");await loadTournaments();
 };
-
-window.deleteTournament=async function(id) {
-  if (!confirm("حذف الدورة؟ سيتم حذف مبارياتها المرتبطة بها أيضًا.")) return;
+window.deleteTournament=async function(id){
+  if(!confirm("حذف الدورة؟ سيتم حذف مبارياتها المرتبطة بها أيضًا."))return;
   const {error}=await supabase.from("tournaments").delete().eq("id",id);
-  if (error) return alert("تعذر حذف الدورة.");
-  await loadTournaments();
+  if(error)return alert("تعذر حذف الدورة.");await loadTournaments();
 };
 
 /* المباريات */
 $("saveMatch").addEventListener("click",saveMatch);
 $("resetMatch").addEventListener("click",resetMatch);
 $("matchesFilter").addEventListener("change",loadMatches);
-
-async function loadMatchPage() {
+async function loadMatchPage(){
   await loadTournaments();
-  const options=tournamentsCache.map(t=>
-    `<option value="${t.id}">${escapeHTML(t.title)}</option>`
-  ).join("");
-
+  const options=tournamentsCache.map(t=>`<option value="${t.id}">${escapeHTML(t.title)}</option>`).join("");
   $("matchTournament").innerHTML=options||'<option value="">لا توجد دورات</option>';
   $("matchesFilter").innerHTML='<option value="">اختر كل الدورات</option>'+options;
   await loadMatches();
 }
-
-window.openTournamentMatches=function(id) {
-  navigate("matches");
-  setTimeout(()=>{
-    $("matchesFilter").value=String(id);
-    loadMatches();
-  },100);
+window.openTournamentMatches=function(id){
+  navigate("matches");setTimeout(()=>{$("matchesFilter").value=String(id);loadMatches()},100);
 };
-
-function resetMatch() {
-  $("matchId").value="";
-  $("teamA").value="";
-  $("teamB").value="";
-  $("matchDate").value="";
-  $("matchTime").value="";
-  $("matchVenue").value="";
-  $("matchStatus").value="scheduled";
-  $("scoreA").value="";
-  $("scoreB").value="";
+function resetMatch(){
+  $("matchId").value="";$("teamA").value="";$("teamB").value="";$("matchDate").value="";
+  $("matchTime").value="";$("matchVenue").value="";$("matchStatus").value="scheduled";
+  $("scoreA").value="";$("scoreB").value="";
 }
-
-async function saveMatch() {
-  const tournamentId=$("matchTournament").value;
-  const teamA=$("teamA").value.trim();
-  const teamB=$("teamB").value.trim();
-
-  if (!tournamentId||!teamA||!teamB) {
-    msg("matchMessage","اختر الدورة واكتب اسمي الفريقين.","error");
-    return;
-  }
-
-  const scoreA=$("scoreA").value;
-  const scoreB=$("scoreB").value;
-
-  const record={
-    tournament_id:Number(tournamentId),
-    team_a:teamA,
-    team_b:teamB,
-    match_date:$("matchDate").value||null,
-    match_time:$("matchTime").value||null,
-    venue:$("matchVenue").value.trim(),
-    status:$("matchStatus").value,
-    team_a_score:scoreA===""?null:Number(scoreA),
-    team_b_score:scoreB===""?null:Number(scoreB),
-    updated_at:new Date().toISOString()
-  };
-
-  if ([record.team_a_score,record.team_b_score].some(v=>v!==null&&(!Number.isInteger(v)||v<0))) {
-    msg("matchMessage","النتائج يجب أن تكون أعدادًا صحيحة غير سالبة.","error");
-    return;
-  }
-
+async function saveMatch(){
+  const tournamentId=$("matchTournament").value,teamA=$("teamA").value.trim(),teamB=$("teamB").value.trim();
+  if(!tournamentId||!teamA||!teamB){msg("matchMessage","اختر الدورة واكتب اسمي الفريقين.","error");return}
+  const scoreA=$("scoreA").value,scoreB=$("scoreB").value;
+  const record={tournament_id:Number(tournamentId),team_a:teamA,team_b:teamB,match_date:$("matchDate").value||null,match_time:$("matchTime").value||null,venue:$("matchVenue").value.trim(),status:$("matchStatus").value,team_a_score:scoreA===""?null:Number(scoreA),team_b_score:scoreB===""?null:Number(scoreB),updated_at:new Date().toISOString()};
+  if([record.team_a_score,record.team_b_score].some(v=>v!==null&&(!Number.isInteger(v)||v<0))){msg("matchMessage","النتائج يجب أن تكون أعدادًا صحيحة غير سالبة.","error");return}
   const id=$("matchId").value;
-  const result=id
-    ? await supabase.from("tournament_matches").update(record).eq("id",id)
-    : await supabase.from("tournament_matches").insert(record);
-
-  if (result.error) {
-    msg("matchMessage","تعذر حفظ المباراة.","error");
-    return;
-  }
-
-  msg("matchMessage","تم حفظ المباراة بنجاح.");
-  resetMatch();
-  await loadMatches();
+  const result=id?await supabase.from("tournament_matches").update(record).eq("id",id):await supabase.from("tournament_matches").insert(record);
+  if(result.error){msg("matchMessage","تعذر حفظ المباراة.","error");return}
+  msg("matchMessage","تم حفظ المباراة بنجاح.");resetMatch();await loadMatches();
 }
-
-async function loadMatches() {
+async function loadMatches(){
   const tournamentId=$("matchesFilter").value;
-  let query=supabase.from("tournament_matches").select("*")
-    .order("match_date",{ascending:true});
-
-  if (tournamentId) query=query.eq("tournament_id",tournamentId);
-
+  let query=supabase.from("tournament_matches").select("*").order("match_date",{ascending:true});
+  if(tournamentId)query=query.eq("tournament_id",tournamentId);
   const {data,error}=await query;
-  if (error) {
-    $("matchesList").innerHTML='<div class="notice error">تعذر تحميل المباريات.</div>';
-    return;
-  }
-
-  if (!data?.length) {
-    $("matchesList").innerHTML='<div class="empty">لا توجد مباريات مسجلة.</div>';
-    return;
-  }
-
+  if(error){$("matchesList").innerHTML='<div class="notice error">تعذر تحميل المباريات.</div>';return}
+  if(!data?.length){$("matchesList").innerHTML='<div class="empty">لا توجد مباريات مسجلة.</div>';return}
   $("matchesList").innerHTML=data.map(m=>{
     const tournament=tournamentsCache.find(t=>Number(t.id)===Number(m.tournament_id));
-    const score=m.team_a_score===null||m.team_b_score===null
-      ? "VS" : `${m.team_a_score} - ${m.team_b_score}`;
-    const states={
-      scheduled:"لم تبدأ",live:"مباشرة",finished:"انتهت",postponed:"مؤجلة"
-    };
-
-    return `
-      <div class="item-card">
-        <p class="muted">${escapeHTML(tournament?.title||"دورة")}</p>
-        <div class="match-row">
-          <strong>${escapeHTML(m.team_a)}</strong>
-          <span class="match-score">${escapeHTML(score)}</span>
-          <strong>${escapeHTML(m.team_b)}</strong>
-        </div>
-        <p>التاريخ: ${escapeHTML(m.match_date||"غير محدد")}</p>
-        <p>الوقت: ${escapeHTML(m.match_time||"غير محدد")}</p>
-        <p>المكان: ${escapeHTML(m.venue||"غير محدد")}</p>
-        <span class="tag">${states[m.status]||m.status}</span>
-        <div class="actions">
-          <button class="btn small" onclick="editMatch(${Number(m.id)})">تعديل المباراة</button>
-          <button class="btn small red" onclick="deleteMatch(${Number(m.id)})">حذف</button>
-        </div>
-      </div>`;
+    const score=m.team_a_score===null||m.team_b_score===null?"VS":`${m.team_a_score} - ${m.team_b_score}`;
+    const states={scheduled:"لم تبدأ",live:"مباشرة",finished:"انتهت",postponed:"مؤجلة"};
+    return `<div class="item-card"><p class="muted">${escapeHTML(tournament?.title||"دورة")}</p>
+      <div class="match-row"><strong>${escapeHTML(m.team_a)}</strong><span class="match-score">${escapeHTML(score)}</span><strong>${escapeHTML(m.team_b)}</strong></div>
+      <p>التاريخ: ${escapeHTML(m.match_date||"غير محدد")}</p><p>الوقت: ${escapeHTML(m.match_time||"غير محدد")}</p>
+      <p>المكان: ${escapeHTML(m.venue||"غير محدد")}</p><span class="tag">${states[m.status]||m.status}</span>
+      <div class="actions"><button class="btn small" onclick="editMatch(${Number(m.id)})">تعديل المباراة</button><button class="btn small red" onclick="deleteMatch(${Number(m.id)})">حذف</button></div></div>`;
   }).join("");
 }
-
-window.editMatch=async function(id) {
+window.editMatch=async function(id){
   const {data,error}=await supabase.from("tournament_matches").select("*").eq("id",id).single();
-  if (error||!data) return alert("تعذر تحميل المباراة.");
-
-  $("matchId").value=data.id;
-  $("matchTournament").value=data.tournament_id;
-  $("teamA").value=data.team_a;
-  $("teamB").value=data.team_b;
-  $("matchDate").value=data.match_date||"";
-  $("matchTime").value=data.match_time||"";
-  $("matchVenue").value=data.venue||"";
-  $("matchStatus").value=data.status;
-  $("scoreA").value=data.team_a_score??"";
-  $("scoreB").value=data.team_b_score??"";
+  if(error||!data)return alert("تعذر تحميل المباراة.");
+  $("matchId").value=data.id;$("matchTournament").value=data.tournament_id;$("teamA").value=data.team_a;
+  $("teamB").value=data.team_b;$("matchDate").value=data.match_date||"";$("matchTime").value=data.match_time||"";
+  $("matchVenue").value=data.venue||"";$("matchStatus").value=data.status;
+  $("scoreA").value=data.team_a_score??"";$("scoreB").value=data.team_b_score??"";
   window.scrollTo({top:0,behavior:"smooth"});
 };
-
-window.deleteMatch=async function(id) {
-  if (!confirm("هل تريد حذف المباراة؟")) return;
+window.deleteMatch=async function(id){
+  if(!confirm("هل تريد حذف المباراة؟"))return;
   const {error}=await supabase.from("tournament_matches").delete().eq("id",id);
-  if (error) return alert("تعذر حذف المباراة.");
-  await loadMatches();
+  if(error)return alert("تعذر حذف المباراة.");await loadMatches();
 };
 
 /* استعادة الجلسة */
 const {data:sessionData}=await supabase.auth.getSession();
-if (sessionData.session) {
+if(sessionData.session){
   const {data,error}=await supabase.rpc("is_admin");
-  if (!error&&data===true) {
-    $("loginScreen").classList.add("hidden");
-    $("app").classList.remove("hidden");
-    await startDashboard();
+  if(!error&&data===true){
+    $("loginScreen").classList.add("hidden");$("app").classList.remove("hidden");await startDashboard();
   }
 }
 </script>
