@@ -81,7 +81,7 @@ footer{padding:26px 15px;text-align:center;background:#050b08;color:#aeb8b0;bord
 </div></section>
 </main>
 <a class="whatsapp" id="whatsappLink" href="https://wa.me/201098257528" target="_blank" rel="noopener">واتساب للاستفسار</a>
-<footer>© <span id="yearNow">2026</span> ملعب الكلاسيكو - El Clasico<strong>تحت إدارة الكابتن هاني فنحي</strong></footer>
+<footer>© <span id="yearNow">2026</span> ملعب الكلاسيكو - El Clasico<strong>تحت إدارة الكابتن هاني فتحي</strong></footer>
 <script>
 "use strict";
 const SUPABASE_URL="https://rqcvjbpxntwqhoftupat.supabase.co";
@@ -134,9 +134,49 @@ function createHourButton(timestamp){
  if(booking&&booking.status==="pending"){button.classList.add("pending");button.textContent=hourLabel(hour)+" • تحت المراجعة";button.disabled=true;return button;}
  if(booking&&booking.status==="confirmed"){button.classList.add("booked");button.textContent=hourLabel(hour)+" • محجوز";button.disabled=true;return button;}
  if(selected){button.classList.add("selected");button.textContent="✓ "+hourLabel(hour);}else{button.classList.add("available");button.textContent=hourLabel(hour)+" • متاح";}
- button.addEventListener("click",()=>{if(loadingHours||siteSettings?.open_24_hours===false)return;if(isSlotBooked(timestamp)){formMessage.textContent="هذه الساعة لم تعد متاحة. حدّث المواعيد واختار غيرها.";return;}
- if(!selectedSlots.length)selectedSlots=[timestamp];else{const last=selectedSlots[selectedSlots.length-1],next=last+3600000;if(timestamp===next&&selectedSlots.length<3){if(isSlotBooked(timestamp)){formMessage.textContent="الساعة التالية غير متاحة.";return;}selectedSlots.push(timestamp);}else if(selectedSlots.includes(timestamp))selectedSlots=[timestamp];else selectedSlots=[timestamp];}
- formMessage.textContent="";updateSummaryAndPrice();renderHours();});return button;
+
+ button.addEventListener("click",()=>{
+  if(loadingHours||siteSettings?.open_24_hours===false)return;
+
+  if(isSlotBooked(timestamp)){
+   formMessage.textContent="هذه الساعة لم تعد متاحة. حدّث المواعيد واختار غيرها.";
+   return;
+  }
+
+  const selectedIndex=selectedSlots.indexOf(timestamp);
+
+  if(selectedIndex!==-1){
+   // إلغاء اختيار الساعة عند الضغط عليها مرة ثانية.
+   // نحافظ على الساعات المتتالية حتى لا يُرسل الحجز بمدة غير صحيحة.
+   if(selectedIndex===0){
+    selectedSlots=selectedSlots.slice(1);
+   }else{
+    selectedSlots=selectedSlots.slice(0,selectedIndex);
+   }
+   formMessage.textContent=selectedSlots.length
+    ?"تم إلغاء اختيار الساعة."
+    :"تم إلغاء جميع الساعات المختارة.";
+  }else if(!selectedSlots.length){
+   selectedSlots=[timestamp];
+   formMessage.textContent="";
+  }else{
+   const last=selectedSlots[selectedSlots.length-1];
+   const next=last+3600000;
+
+   if(timestamp===next&&selectedSlots.length<3){
+    selectedSlots.push(timestamp);
+    formMessage.textContent="";
+   }else{
+    selectedSlots=[timestamp];
+    formMessage.textContent="تم اختيار ساعة بداية جديدة.";
+   }
+  }
+
+  updateSummaryAndPrice();
+  renderHours();
+ });
+
+ return button;
 }
 function renderHours(){
  const date=dateInput.value;hoursContainer.innerHTML="";if(siteSettings?.open_24_hours===false){hoursContainer.innerHTML='<div class="closed-banner">الحجز متوقف حاليًا.</div>';return;}
